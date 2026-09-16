@@ -320,6 +320,9 @@
     watPhaLat: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Chiang_Mai_-_Wat_Pha_Lat_-_0001.jpg/960px-Chiang_Mai_-_Wat_Pha_Lat_-_0001.jpg',
     buaTong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%95%E0%B8%81%E0%B8%9A%E0%B8%B1%E0%B8%A7%E0%B8%95%E0%B8%AD%E0%B8%87_Buatong_Waterfall_Thailand_-_panoramio_%281%29.jpg/960px-%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%95%E0%B8%81%E0%B8%9A%E0%B8%B1%E0%B8%A7%E0%B8%95%E0%B8%AD%E0%B8%87_Buatong_Waterfall_Thailand_-_panoramio_%281%29.jpg',
     muayThai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg/960px-Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg',
+    rajadamnern: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Rajadamnern_Stadium.jpg/960px-Rajadamnern_Stadium.jpg',
+    lumpinee: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Bangkok_Lumpinee_Boxing_Stadium_1.jpg/960px-Bangkok_Lumpinee_Boxing_Stadium_1.jpg',
+    bangla: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Bangla_Boxing_Stadium_Patong_Thajsko_2018_2.jpg/960px-Bangla_Boxing_Stadium_Patong_Thajsko_2018_2.jpg',
     watUmong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Wat_Umong_Suan_Phutthatham.jpg/960px-Wat_Umong_Suan_Phutthatham.jpg',
     watRongKhun: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Wat_Rong_Khun_-_Chiang_Rai.jpg/960px-Wat_Rong_Khun_-_Chiang_Rai.jpg',
     watRongSueaTen: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Chiang_Rai_Blue_Temple_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B9%89%E0%B8%99.jpg/960px-Chiang_Rai_Blue_Temple_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B9%89%E0%B8%99.jpg',
@@ -2319,16 +2322,15 @@
   // Michelin — ahí solo hay recomendados, no estrellas.
   const COMER_SEED = [
     { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
-      intro: 'Bangkok tiene 43 restaurantes con estrella Michelin en la guía 2026 — esta es una selección accesible para turistas, no la lista completa.',
-      estrellas: [
-        { nombre: 'Sorn', estrellas: 3, tipo: 'Cocina del sur de Tailandia', precio: 'Menú degustación ~6.500–7.200 THB/persona', precioThb: [6500, 7200], q: 'Sorn restaurant Bangkok', loc: { lat: 13.7254, lng: 100.5717 } },
-        { nombre: 'Sühring', estrellas: 3, tipo: 'Alemana moderna', precio: 'Menú degustación ~7.800–9.800 THB/persona', precioThb: [7800, 9800], q: 'Suhring restaurant Bangkok', loc: { lat: 13.7109, lng: 100.5457 } },
-        { nombre: 'Le Normandie by Anne-Sophie Pic', estrellas: 2, tipo: 'Francesa, en el Mandarin Oriental', precio: 'Menú degustación desde ~9.700 THB/persona', precioThb: [9700, 9700], q: 'Le Normandie Mandarin Oriental Bangkok', loc: { lat: 13.7239, lng: 100.5142 } },
-        { nombre: 'Gaa', estrellas: 2, tipo: 'India-tailandesa contemporánea', precio: 'Menú degustación ~4.900 THB/persona', precioThb: [4900, 4900], q: 'Gaa restaurant Bangkok', loc: { lat: 13.7451, lng: 100.5553 } },
-        { nombre: 'Nahm', estrellas: 1, tipo: 'Tailandesa clásica', precio: 'Menú degustación ~2.900 THB/persona', precioThb: [2900, 2900], q: 'Nahm restaurant Bangkok', loc: { lat: 13.7230, lng: 100.5399 } },
-        { nombre: 'Le Du', estrellas: 1, tipo: 'Tailandesa moderna', precio: 'Menú degustación ~4.500–5.500 THB/persona', precioThb: [4500, 5500], q: 'Le Du restaurant Bangkok', loc: { lat: 13.7264, lng: 100.5312 } },
-        { nombre: 'Jay Fai', estrellas: 1, tipo: 'Street food — tortilla de cangrejo', nota: 'Colas larguísimas: reserva con mucha antelación o ve a primera hora.', precio: '~1.500–2.000 THB/persona a la carta', precioThb: [1500, 2000], q: 'Jay Fai restaurant Bangkok', loc: { lat: 13.7485, lng: 100.5036 } }
-      ], recomendados: [] },
+      intro: 'Bangkok tiene 43 restaurantes con estrella Michelin en la guía 2026, pero el menú de degustación más barato ronda los 2.900 THB (~75 €) por persona — todos superan los 40 €. En su lugar, esta es una selección de Bib Gourmand (buena comida a buen precio, reconocidos por la misma Guía Michelin) y clásicos callejeros, todos muy por debajo de esa cifra.',
+      estrellas: [],
+      recomendados: [
+        { nombre: 'Thipsamai Pad Thai', tipo: 'Bib Gourmand · el pad thai más famoso de Bangkok, desde 1966', precio: '~40–150 THB/plato', precioThb: [40, 150], q: 'Thipsamai Pad Thai Bangkok', loc: { lat: 13.7478, lng: 100.5034 } },
+        { nombre: 'Krua Apsorn', tipo: 'Bib Gourmand · cocina tailandesa casera', precio: '~150–200 THB/persona', precioThb: [150, 200], q: 'Krua Apsorn Dinso Road Bangkok', loc: { lat: 13.7582, lng: 100.5022 } },
+        { nombre: 'Nai Mong Hoi Thod', tipo: 'Bib Gourmand · tortilla de ostras crujiente, Chinatown', precio: '~100–300 THB', precioThb: [100, 300], q: 'Nai Mong Hoi Thod Bangkok', loc: { lat: 13.7440, lng: 100.5148 } },
+        { nombre: 'Jok Prince', tipo: 'Bib Gourmand · congee (arroz caldoso) con cerdo', precio: '~45–60 THB', precioThb: [45, 60], q: 'Jok Prince Bangkok', loc: { lat: 13.7317, lng: 100.5154 } },
+        { nombre: 'Go-Ang Pratunam Chicken Rice', tipo: 'Bib Gourmand · khao man kai (arroz con pollo), en Pratunam', precio: '~40–50 THB', precioThb: [40, 50], q: 'Go-Ang Pratunam Chicken Rice Bangkok', loc: { lat: 13.7496, lng: 100.5420 } }
+      ] },
     { zona: 'Chiang Mai', fechas: '29 nov – 2 dic (3 noches)',
       intro: 'Chiang Mai está en la Guía Michelin pero todavía sin ningún restaurante con estrella (edición 2026) — solo Bib Gourmand (buena comida a buen precio) y selección Michelin.',
       estrellas: [], recomendados: [
@@ -2348,12 +2350,12 @@
         { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india', precio: '~200–300 THB/plato', precioThb: [200, 300], q: 'Papaya Restaurant Koh Phi Phi Tonsai', loc: { lat: 7.7412, lng: 98.7779 } }
       ] },
     { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
-      intro: 'Phuket tiene un restaurante con estrella Michelin, en el norte de la isla — lejos de Rawai donde os alojáis; reserva con tiempo.',
-      estrellas: [
-        { nombre: 'PRU', estrellas: 1, tipo: 'Km 0 — ingredientes de la propia granja (Trisara, Cherngtalay)', nota: 'También tiene la Estrella Verde Michelin.', precio: 'Menú degustación de precio elevado (no publicado, consulta la web)', q: 'PRU restaurant Trisara Phuket', loc: { lat: 8.0349, lng: 98.2773 } }
-      ], recomendados: [
+      intro: 'Phuket tiene un restaurante con estrella Michelin (PRU, en Trisara) pero su menú de degustación va de 4.680 a 6.900 THB (~120–180 €) por persona — muy por encima de los 40 €, así que no está en la lista. En su lugar, marisco y street food bien valorados cerca de Rawai.',
+      estrellas: [],
+      recomendados: [
         { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, selección Michelin, en Rawai', precio: '~600–800 THB/persona', precioThb: [600, 800], q: 'Salaloy Seafood Restaurant Rawai Phuket', loc: { lat: 7.7719, lng: 98.3063 } },
-        { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', precio: '~900–1.000 THB/persona', precioThb: [900, 1000], q: 'Kan Eang @ Pier Phuket', loc: { lat: 7.7731, lng: 98.3071 } }
+        { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', precio: '~900–1.000 THB/persona', precioThb: [900, 1000], q: 'Kan Eang @ Pier Phuket', loc: { lat: 7.7731, lng: 98.3071 } },
+        { nombre: 'A Pong Mae Sunee', tipo: 'Bib Gourmand · khanom a pong (crepes de coco), en el casco antiguo de Phuket', nota: 'A ~18 km de Rawai, en Phuket Town.', precio: 'Muy barato, unos pocos cientos de THB', precioThb: [50, 150], q: 'A Pong Mae Sunee Phuket Town', loc: { lat: 7.8848, lng: 98.3892 } }
       ] }
   ];
 
@@ -3162,53 +3164,77 @@
     { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
       lugares: [
         { nombre: 'Rajadamnern Stadium', nota: 'Uno de los dos estadios históricos de Bangkok. Cartel todas las noches de la semana.',
-          dias: 'Cualquier noche del 25 al 28 nov.', horario: 'Puertas ~18:00, combates desde las 19:00.', web: 'https://rajadamnern.com/' },
-        { nombre: 'Lumpinee Boxing Stadium', nota: 'El otro estadio histórico, ahora bajo el sello ONE Championship. Los «ONE Friday Fights» son semanales, los viernes.',
-          dias: 'Viernes 27 nov (ese día hay excursión a Ayutthaya con vuelta ~18:30 — confirma la hora de inicio antes de ir).', horario: 'Desde las 18:30.', web: 'https://www.onefc.com/' }
+          dias: 'Cualquier noche del 25 al 28 nov.', horario: 'Puertas ~18:00, combates desde las 19:00.', web: 'https://rajadamnern.com/',
+          precio: 'Entrada ~1.500–4.500 THB según localidad', precioThb: [1500, 4500],
+          loc: { lat: 13.7640, lng: 100.5092 }, foto: FOTO.rajadamnern },
+        { nombre: 'Lumpinee Boxing Stadium', nota: 'El otro estadio histórico, ahora bajo el sello ONE Championship y trasladado a las afueras (Ram Inthra), ya no en su antigua sede de Rama IV. Los «ONE Friday Fights» son semanales, los viernes.',
+          dias: 'Viernes 27 nov (ese día hay excursión a Ayutthaya con vuelta ~18:30 — confirma la hora de inicio antes de ir).', horario: 'Desde las 18:30.', web: 'https://www.onefc.com/',
+          precio: 'Entrada ~1.000–3.500 THB según localidad', precioThb: [1000, 3500],
+          loc: { lat: 13.8630, lng: 100.6323 }, foto: FOTO.lumpinee }
       ] },
     { zona: 'Chiang Mai', fechas: '29 nov – 2 dic (3 noches)',
       lugares: [
         { nombre: 'Loi Kroh Boxing Stadium', nota: 'Céntrico, en Loi Kroh Road. Ya está entre las opciones de la noche libre del itinerario.',
-          dias: 'Lunes 30 nov (también viernes/sábado si se cambia de plan).', horario: 'Puertas ~20:00, combates desde las 21:00.', web: 'https://loikrohboxingstadium.com/' },
+          dias: 'Lunes 30 nov (también viernes/sábado si se cambia de plan).', horario: 'Puertas ~20:00, combates desde las 21:00.', web: 'https://loikrohboxingstadium.com/',
+          precio: 'Entrada ~600–1.000 THB según localidad', precioThb: [600, 1000],
+          loc: { lat: 18.7840, lng: 99.0000 }, foto: FOTO.muayThai },
         { nombre: 'Thapae Boxing Stadium', nota: 'Cerca de la puerta Thapae.',
-          dias: 'Lunes 30 nov o martes 1 dic (las fuentes no coinciden del todo en los días exactos — confírmalo el mismo día).', horario: 'Combates desde las ~21:00.', web: 'https://muaythaichiangmai.com/fight-schedule' }
+          dias: 'Lunes 30 nov o martes 1 dic (las fuentes no coinciden del todo en los días exactos — confírmalo el mismo día).', horario: 'Combates desde las ~21:00.', web: 'https://muaythaichiangmai.com/fight-schedule',
+          precio: 'Entrada ~600–1.500 THB según localidad', precioThb: [600, 1500],
+          loc: { lat: 18.7874, lng: 98.9934 }, foto: FOTO.muayThai }
       ] },
     { zona: 'Krabi / Ao Nang', fechas: '3 – 5 dic (2 noches)',
       lugares: [
         { nombre: 'Ao Nang Landmark Boxing Stadium', nota: 'Cartel martes, jueves y sábado.',
-          dias: 'Jueves 3 dic.', horario: 'Desde las 21:00.', web: 'https://www.muaythaistadium.com/ao-nang' },
+          dias: 'Jueves 3 dic.', horario: 'Desde las 21:00.', web: 'https://www.muaythaistadium.com/ao-nang',
+          precio: 'Entrada ~1.200–1.900 THB según localidad', precioThb: [1200, 1900],
+          loc: { lat: 8.0425, lng: 98.8108 }, foto: FOTO.muayThai },
         { nombre: 'Ao Nang Krabi Boxing Stadium (Krabi International)', nota: 'Uno de los estadios más grandes de Krabi, cartel los viernes.',
-          dias: 'Viernes 4 dic.', horario: 'Desde las 21:00.', web: 'https://krabiinternationalboxingstadium.com/' }
+          dias: 'Viernes 4 dic.', horario: 'Desde las 21:00.', web: 'https://krabiinternationalboxingstadium.com/',
+          precio: 'Entrada ~1.300–1.900 THB según localidad', precioThb: [1300, 1900],
+          loc: { lat: 8.0433, lng: 98.8088 }, foto: FOTO.muayThai }
       ] },
     { zona: 'Koh Phi Phi', fechas: '5 – 7 dic (2 noches)',
       lugares: [
-        { nombre: 'Phi Phi Reggae Bar', nota: 'En Tonsai Village. No es un estadio formal: combates de ambiente/amateur cada noche, entrada gratis con una consumición.',
-          dias: 'Sábado 5 dic o domingo 6 dic, cualquiera de las dos.', horario: 'Por la noche, consulta in situ.', web: '' }
+        { nombre: 'Phi Phi Reggae Bar', nota: 'En Tonsai Village. No es un estadio formal: combates de ambiente/amateur cada noche.',
+          dias: 'Sábado 5 dic o domingo 6 dic, cualquiera de las dos.', horario: 'Por la noche, consulta in situ.', web: '',
+          precio: 'Entrada gratis con una consumición (~100–150 THB la bebida)', precioThb: [100, 150],
+          loc: { lat: 7.7407, lng: 98.7784 }, foto: FOTO.muayThai }
       ] },
     { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
       lugares: [
         { nombre: 'Bangla Boxing Stadium', nota: 'En Patong, justo detrás de Jungceylon. Cartel las 7 noches de la semana.',
-          dias: 'Lunes 7 dic o martes 8 dic, cualquiera de las dos.', horario: 'Combates de 21:00 a 00:00.', web: 'https://banglaboxingstadium.com/' },
+          dias: 'Lunes 7 dic o martes 8 dic, cualquiera de las dos.', horario: 'Combates de 21:00 a 00:00.', web: 'https://banglaboxingstadium.com/',
+          precio: 'Entrada ~1.600–2.000 THB según localidad', precioThb: [1600, 2000],
+          loc: { lat: 7.8904, lng: 98.2998 }, foto: FOTO.bangla },
         { nombre: 'Patong Boxing Stadium', nota: 'También en Patong. Cartel lunes, martes, miércoles y jueves.',
-          dias: 'Lunes 7 dic o martes 8 dic.', horario: 'Desde las 21:00.', web: 'https://www.muaythaistadium.com/patong-stadium' }
+          dias: 'Lunes 7 dic o martes 8 dic.', horario: 'Desde las 21:00.', web: 'https://www.muaythaistadium.com/patong-stadium',
+          precio: 'Entrada ~1.500–1.800 THB según localidad', precioThb: [1500, 1800],
+          loc: { lat: 7.8966, lng: 98.2954 }, foto: FOTO.muayThai }
       ] }
   ];
 
-  function muayThaiCard(zona) {
+  function muayThaiVenue(l, aloj) {
+    const v = el('div', 'mt-venue');
+    const dist = comerDistTxt(aloj, l);
+    v.innerHTML =
+      `<div class="mt-venue__nombre">${esc(l.nombre)}</div>` +
+      `<div class="mt-venue__dias">📅 ${esc(l.dias)}</div>` +
+      (l.horario ? `<div class="mt-venue__meta">${esc(l.horario)}</div>` : '') +
+      (l.precio ? `<div class="mt-venue__meta">💰 ${esc(comerPrecioTxt(l))}</div>` : '') +
+      (dist ? `<div class="mt-venue__meta">📍 ${esc(dist)}</div>` : '') +
+      (l.nota ? `<div class="mt-venue__meta">${esc(l.nota)}</div>` : '') +
+      fotoImg(l.foto, l.nombre, 'slot__foto') +
+      (l.web ? `<a class="reco-link" href="${esc(l.web)}" target="_blank" rel="noopener">Más información ›</a>` : '');
+    return v;
+  }
+
+  function muayThaiCard(zona, aloj) {
     const c = el('section', 'card mt-zona');
     const head = el('h3', 'mt-zona__head');
     head.textContent = `${zona.zona} · ${zona.fechas}`;
     c.appendChild(head);
-    zona.lugares.forEach(l => {
-      const v = el('div', 'mt-venue');
-      v.innerHTML =
-        `<div class="mt-venue__nombre">${esc(l.nombre)}</div>` +
-        `<div class="mt-venue__dias">📅 ${esc(l.dias)}</div>` +
-        (l.horario ? `<div class="mt-venue__meta">${esc(l.horario)}</div>` : '') +
-        (l.nota ? `<div class="mt-venue__meta">${esc(l.nota)}</div>` : '') +
-        (l.web ? `<a class="reco-link" href="${esc(l.web)}" target="_blank" rel="noopener">Más información ›</a>` : '');
-      c.appendChild(v);
-    });
+    zona.lugares.forEach(l => c.appendChild(muayThaiVenue(l, aloj)));
     return c;
   }
 
@@ -3216,8 +3242,11 @@
     const body = $('#muaythai-body');
     if (!body) return;
     body.innerHTML = '';
-    body.appendChild(notice('Cartel y horarios orientativos (revisados en septiembre de 2026) — los estadios cambian el programa a menudo, confirma fecha y entradas más cerca del viaje.'));
-    MUAYTHAI_SEED.forEach(zona => body.appendChild(muayThaiCard(zona)));
+    body.appendChild(notice('Cartel, entradas y horarios orientativos (revisados en septiembre de 2026) — los estadios cambian el programa y el precio a menudo, confirma fecha y entradas más cerca del viaje. Distancias en línea recta desde el alojamiento, no ruta real.'));
+    MUAYTHAI_SEED.forEach(zona => {
+      const aloj = state.alojamientos.find(a => a.zona === zona.zona);
+      body.appendChild(muayThaiCard(zona, aloj));
+    });
   }
 
   /* ==========================================================
