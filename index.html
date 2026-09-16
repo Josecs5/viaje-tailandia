@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Viaje a Tailandia — Planificador</title>
+  <meta name="description" content="Planifica tu viaje a Tailandia: vuelos, alojamientos, excursiones, itinerario diario, mapas y transporte local. Funciona como app en tu móvil.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#eff7fb">
+  <meta name="color-scheme" content="light">
+
+  <!-- iOS / Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Tailandia">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Iconos -->
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- Fuentes (local) -->
+  <link rel="stylesheet" href="vendor/fonts/fonts.css">
+
+  <!-- Leaflet (local) -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+  <header class="appbar">
+    <div class="appbar__text">
+      <h1 class="appbar__title" id="appbar-title">Viaje a Tailandia</h1>
+      <p class="appbar__sub" id="appbar-sub">Sin fechas · añádelas en Datos</p>
+    </div>
+    <div class="appbar__count" id="appbar-count" hidden></div>
+  </header>
+
+  <main>
+    <!-- ============ DATOS ============ -->
+    <section class="screen" id="screen-datos" data-screen="datos">
+      <div class="screen-head">
+        <h2>Datos del viaje</h2>
+      </div>
+      <div id="datos-body"></div>
+    </section>
+
+    <!-- ============ ITINERARIO ============ -->
+    <section class="screen" id="screen-itinerario" data-screen="itinerario" hidden>
+      <div class="screen-head">
+        <h2>Itinerario</h2>
+        <p class="muted" id="itin-sub"></p>
+      </div>
+      <div id="itin-body"></div>
+    </section>
+
+    <!-- ============ MAPAS ============ -->
+    <section class="screen" id="screen-mapas" data-screen="mapas" hidden>
+      <div class="screen-head">
+        <h2>Mapas</h2>
+        <p class="muted">Elige un día para ver su recorrido en orden.</p>
+      </div>
+      <div id="map-days" class="chips"></div>
+      <div id="map" class="map"></div>
+      <div id="map-actions" class="row-actions"></div>
+      <ol id="map-legend" class="legend"></ol>
+
+      <div class="map-route">
+        <h3>Recorrido completo en Google Maps</h3>
+        <div class="ruta-card">
+          <div class="ruta-card__map" aria-hidden="true">
+            <svg viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <pattern id="rutaGrid" width="26" height="26" patternUnits="userSpaceOnUse">
+                  <path d="M26 0H0V26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.14"/>
+                </pattern>
+              </defs>
+              <rect width="320" height="190" fill="url(#rutaGrid)"/>
+              <path class="ruta-line" d="M26 150 C 74 54, 128 34, 168 92 S 256 168, 296 52"
+                    fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 11"/>
+              <circle class="ruta-pin" cx="26" cy="150" r="7"/>
+              <circle class="ruta-pin" cx="296" cy="52" r="7"/>
+            </svg>
+          </div>
+          <div class="ruta-card__body">
+            <p class="ruta-card__title">Ruta del viaje por Tailandia</p>
+            <p class="ruta-card__sub">Ábrela en Google Maps para navegar con todas las paradas del recorrido.</p>
+            <a class="btn btn--accent btn--block ruta-open" id="ruta-open"
+               href="#" target="_blank" rel="noopener">Abrir en Google Maps</a>
+            <button class="btn btn--ghost btn--block" id="ruta-copy" type="button">Copiar enlace</button>
+            <p class="ruta-card__link" id="ruta-url">Añade paradas para generar el enlace</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRANSPORTE (guías: transporte local, comida callejera, templos, temporada) ============ -->
+    <section class="screen" id="screen-transporte" data-screen="transporte" hidden>
+      <div class="screen-head">
+        <h2>Transporte y guías</h2>
+        <p class="muted">Tuk-tuk, Grab, trenes y ferris — y cómo moverte sin líos. Comida callejera, templos y temporada.</p>
+      </div>
+      <div id="transporte-body"></div>
+    </section>
+
+    <!-- ============ CLIMA ============ -->
+    <section class="screen" id="screen-clima" data-screen="clima" hidden>
+      <div class="screen-head">
+        <h2>Clima</h2>
+        <p class="muted">Sol y luna de cada día, y previsión de lluvia fuerte.</p>
+      </div>
+      <div id="clima-body"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Secciones">
+    <button class="tab" data-tab="datos" type="button" aria-current="page">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v3h6V3M8 11h8M8 15h6"/></svg>
+      <span>Datos</span>
+    </button>
+    <button class="tab" data-tab="itinerario" type="button" aria-current="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15h4"/></svg>
+      <span>Itinerario</span>
+    </button>
+    <button class="tab" data-tab="mapas" type="button" aria-current="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      <span>Mapas</span>
+    </button>
+    <button class="tab" data-tab="transporte" type="button" aria-current="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16V8a2 2 0 0 1 2-2h10l4 4v6a1 1 0 0 1-1 1h-1"/><circle cx="8" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M4 16h3M11 6v6h9"/></svg>
+      <span>Transporte</span>
+    </button>
+    <button class="tab" data-tab="clima" type="button" aria-current="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="9" r="3.2"/><path d="M8 2.5v1.6M8 13.9v1.6M2.5 9h1.6M11.9 9h1.6M4.1 5.1l1.1 1.1M10.8 11.8l1.1 1.1M11.9 5.1l-1.1 1.1M5.2 11.8l-1.1 1.1"/><path d="M20.5 14.5a5 5 0 0 1-6.4-6.1 5.4 5.4 0 1 0 6.4 6.1Z"/></svg>
+      <span>Clima</span>
+    </button>
+  </nav>
+
+  <!-- ============ Bottom sheet (formularios) ============ -->
+  <div class="sheet" id="sheet" hidden aria-hidden="true">
+    <div class="sheet__backdrop" data-close></div>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="sheet__grip"></div>
+      <header class="sheet__head">
+        <h3 id="sheet-title">Añadir</h3>
+        <button class="icon-btn" data-close type="button" aria-label="Cerrar">✕</button>
+      </header>
+      <form class="sheet__form" id="sheet-form" novalidate></form>
+      <footer class="sheet__foot">
+        <button class="btn btn--ghost" data-close type="button">Cancelar</button>
+        <button class="btn btn--accent" id="sheet-save" type="submit" form="sheet-form">Guardar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============ Confirmación ============ -->
+  <div class="confirm" id="confirm" hidden>
+    <div class="confirm__backdrop" data-cancel></div>
+    <div class="confirm__box" role="alertdialog" aria-modal="true" aria-labelledby="confirm-msg">
+      <p id="confirm-msg">¿Eliminar?</p>
+      <div class="confirm__row">
+        <button class="btn btn--ghost" data-cancel type="button">Cancelar</button>
+        <button class="btn btn--danger" data-ok type="button">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <datalist id="gaz-list"></datalist>
+
+  <noscript>
+    <p style="padding:24px;color:#2a2f3a;font-family:sans-serif">Esta aplicación necesita JavaScript para funcionar.</p>
+  </noscript>
+
+  <script src="vendor/leaflet/leaflet.js" defer></script>
+  <script src="vendor/suncalc/suncalc.js" defer></script>
+  <script src="app.js?v=1" defer></script>
+</body>
+</html>
