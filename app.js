@@ -2200,44 +2200,6 @@
   }
 
   /* ==========================================================
-     Ruta completa en Google Maps (tarjeta de Mapas). Se genera sola a
-     partir de todas las paradas con coordenadas del itinerario, en orden
-     — a diferencia del hermano de Islandia, que enlazaba una ruta fija ya
-     conocida de antemano.
-     ========================================================== */
-  function updateRutaCard(it) {
-    const open = $('#ruta-open');
-    const urlP = $('#ruta-url');
-    if (!open || !urlP) return;
-
-    const pts = [];
-    (it ? it.days : []).forEach(d => d.items.forEach(i => { if (i.loc && i.loc.lat != null) pts.push(i.loc); }));
-
-    if (pts.length < 2) {
-      open.href = '#';
-      open.setAttribute('aria-disabled', 'true');
-      urlP.textContent = 'Añade al menos 2 paradas con ubicación para generar la ruta completa.';
-      return;
-    }
-
-    open.removeAttribute('aria-disabled');
-    open.href = gmapsHref(pts);
-    urlP.textContent = `${pts.length} paradas con ubicación, en el orden del itinerario.`;
-  }
-
-  on('#ruta-copy', 'click', async () => {
-    const open = $('#ruta-open');
-    const href = open && open.getAttribute('aria-disabled') !== 'true' ? open.href : '';
-    if (!href) { toast('Añade paradas con ubicación primero.'); return; }
-    try {
-      await navigator.clipboard.writeText(href);
-      toast('Enlace copiado.');
-    } catch (e) {
-      toast('No se pudo copiar automáticamente.');
-    }
-  });
-
-  /* ==========================================================
      Pantalla: MAPAS
      ========================================================== */
   let map = null, dayLayer = null, mapData = null, selectedDay = 'all';
@@ -2303,12 +2265,10 @@
       mapEl.style.display = 'none';
       chips.appendChild(notice('Añade las fechas del viaje para ver los mapas por día.'));
       mapData = null;
-      updateRutaCard(null);
       return;
     }
     mapEl.style.display = '';
     mapData = buildItinerary();
-    updateRutaCard(mapData);
 
     if (!mapDayInit) {
       mapDayInit = true;
@@ -3017,7 +2977,16 @@
     const minOn = d => (isDate(d) ? Math.round((d.getTime() - midnight) / 60000) : null);
 
     const dawnMin = sk ? minOn(sk.civilDawn) : null;
-    const inicio = (dawnMin != null && dawnMin > SALIDA_FLOOR_MIN) ? dawnMin : SALIDA_FLOOR_MIN;
+    // Si el primer plan del día tiene una hora fija (p.ej. una excursión que
+    // recoge a las 06:00), esa hora define el inicio real del día: no tiene
+    // sentido marcarla como "no llegas" solo por no llegar a un suelo genérico.
+    const earliestAnchorMin = day.items.reduce((min, it) => {
+      const a = anchorMin(it);
+      return a != null && (min == null || a < min) ? a : min;
+    }, null);
+    const inicio = earliestAnchorMin != null
+      ? earliestAnchorMin
+      : ((dawnMin != null && dawnMin > SALIDA_FLOOR_MIN) ? dawnMin : SALIDA_FLOOR_MIN);
 
     let reloj = inicio;
     let prev = null, drivingMin = 0;

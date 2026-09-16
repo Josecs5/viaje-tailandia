@@ -70,34 +70,6 @@
       <div id="map" class="map"></div>
       <div id="map-actions" class="row-actions"></div>
       <ol id="map-legend" class="legend"></ol>
-
-      <div class="map-route">
-        <h3>Recorrido completo en Google Maps</h3>
-        <div class="ruta-card">
-          <div class="ruta-card__map" aria-hidden="true">
-            <svg viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <pattern id="rutaGrid" width="26" height="26" patternUnits="userSpaceOnUse">
-                  <path d="M26 0H0V26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.14"/>
-                </pattern>
-              </defs>
-              <rect width="320" height="190" fill="url(#rutaGrid)"/>
-              <path class="ruta-line" d="M26 150 C 74 54, 128 34, 168 92 S 256 168, 296 52"
-                    fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 11"/>
-              <circle class="ruta-pin" cx="26" cy="150" r="7"/>
-              <circle class="ruta-pin" cx="296" cy="52" r="7"/>
-            </svg>
-          </div>
-          <div class="ruta-card__body">
-            <p class="ruta-card__title">Ruta del viaje por Tailandia</p>
-            <p class="ruta-card__sub">Ábrela en Google Maps para navegar con todas las paradas del recorrido.</p>
-            <a class="btn btn--accent btn--block ruta-open" id="ruta-open"
-               href="#" target="_blank" rel="noopener">Abrir en Google Maps</a>
-            <button class="btn btn--ghost btn--block" id="ruta-copy" type="button">Copiar enlace</button>
-            <p class="ruta-card__link" id="ruta-url">Añade paradas para generar el enlace</p>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- ============ TRANSPORTE (guías: transporte local, comida callejera, templos, temporada) ============ -->
