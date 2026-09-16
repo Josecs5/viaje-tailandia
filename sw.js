@@ -5,8 +5,8 @@
  */
 'use strict';
 
-const SHELL_CACHE = 'shell-v1';
-const TILE_CACHE  = 'tiles-v1';
+const SHELL_CACHE = 'shell-v2';
+const TILE_CACHE  = 'tiles-v2';
 const TILE_MAX = 300;
 // Solo se tocan las cachés de este proyecto: en GitHub Pages el origen es
 // compartido con otros proyectos del usuario y caches.keys() no está acotado
@@ -53,8 +53,8 @@ async function tileFetch(request) {
 const SHELL_ASSETS = [
   './',                       // redundante a propósito (red de seguridad);
   './index.html',             // la navegación resuelve contra './index.html'.
-  './style.css?v=1',
-  './app.js?v=1',
+  './style.css?v=2',
+  './app.js?v=2',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',

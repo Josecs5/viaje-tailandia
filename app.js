@@ -2082,7 +2082,7 @@
       worldCopyJump: false
     }).fitBounds(THAILAND_BOUNDS);
 
-    const carto = L.tileLayer('https://{s}.basemap.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    const carto = L.tileLayer('https://{s}.basemap.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 19,
       crossOrigin: 'anonymous',   // respuesta con status real -> el SW cachea tiles sin opacas
@@ -2174,7 +2174,7 @@
   }
 
   function accentColor() {
-    return getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim() || '#bb3f00';
+    return getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim() || '#e671d9';
   }
 
   function drawSelection() {

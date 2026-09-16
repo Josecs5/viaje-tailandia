@@ -1,39 +1,41 @@
-/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4
- * macrostructure: App Shell (tabbed utility, custom/tuned theme) · genre: editorial (utility default)
- * theme: custom "Sabai" — vibe: dusk sky over the Andaman, spiced-market accent, calm and premium
- * paper: light oklch(97% 0.010 230)  ·  display: geometric-sans (Space Grotesk)  ·  accent hue: 40 (spiced amber/terracotta) on a dusk-blue neutral (hue 230)
- * tone: profesional, en calma · audiencia: viajero planificando Tailandia, uso principal en movil · nav: bottom tab bar
- * diverges from the sibling Islandia build (Midnight, dark, hue 256/168) on: paper band (light vs dark) + accent hue (40 vs 168)
+/* Hallmark · pre-emit critique: P5 H5 E5 S4 R5 V5
+ * macrostructure: App Shell (tabbed utility, custom/tuned theme) · genre: atmospheric
+ * theme: custom "Noche de Loi Krathong" — vibe: floating lanterns over a night sky, premium travel app, calm dark
+ * paper: dark oklch(13% 0.024 280)  ·  display: geometric-sans (Space Grotesk)  ·  accent hue: 332 (orquídea/magenta vivo) on an indigo-night neutral (hue 280)
+ * tone: profesional, atmosférico · audiencia: viajero planificando Tailandia, uso principal en movil · nav: bottom tab bar
+ * redesign: reemplaza el tema "Sabai" (claro, hue 230/40, plano/sin elevación) — nuevo: modo oscuro,
+ * sistema de sombra/elevación de 3 niveles + halo de acento, fondo con resplandor radial atmosférico
+ * diverges from the sibling Islandia build (Midnight, dark, hue 256/168) on: accent hue (332 vs 168) + elevation system (shadows vs flat)
  */
 
 /* ============================================================
    TOKENS
    ============================================================ */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  --c-bg:         oklch(0.97 0.010 230);
-  --c-bg-1:       oklch(0.985 0.006 230);
-  --c-surface:    oklch(0.995 0.004 230);
-  --c-surface-2:  oklch(0.955 0.012 230);
-  --c-surface-3:  oklch(0.91 0.016 230);
-  --c-border:     oklch(0.85 0.016 230);
-  --c-border-soft:oklch(0.90 0.012 230);
+  --c-bg:          oklch(0.130 0.024 280);
+  --c-bg-1:        oklch(0.160 0.022 280);
+  --c-surface:     oklch(0.190 0.022 278);
+  --c-surface-2:   oklch(0.235 0.020 278);
+  --c-surface-3:   oklch(0.280 0.018 276);
+  --c-border:      oklch(0.360 0.022 275);
+  --c-border-soft: oklch(0.270 0.018 275);
 
-  --c-text:   oklch(0.24 0.018 250);
-  --c-text-1: oklch(0.40 0.016 245);
-  --c-text-2: oklch(0.55 0.014 240);
+  --c-text:   oklch(0.945 0.010 280);
+  --c-text-1: oklch(0.800 0.014 275);
+  --c-text-2: oklch(0.620 0.016 270);
 
-  --c-accent:      oklch(0.54 0.17 40);
-  --c-accent-press:oklch(0.47 0.17 40);
-  --c-accent-ink:  oklch(0.98 0.015 40);
-  --c-accent-soft: oklch(0.93 0.045 40);
+  --c-accent:      oklch(0.720 0.190 332);
+  --c-accent-press:oklch(0.635 0.190 332);
+  --c-accent-ink:  oklch(0.150 0.035 332);
+  --c-accent-soft: oklch(0.270 0.060 332);
 
-  --c-info:    oklch(0.54 0.11 235);
-  --c-warning: oklch(0.62 0.14 85);
-  --c-danger:  oklch(0.55 0.19 25);
-  --c-danger-soft: oklch(0.94 0.045 25);
-  --c-focus:   oklch(0.55 0.17 265);
+  --c-info:    oklch(0.720 0.120 215);
+  --c-warning: oklch(0.780 0.150 85);
+  --c-danger:  oklch(0.680 0.190 25);
+  --c-danger-soft: oklch(0.280 0.070 25);
+  --c-focus:   oklch(0.830 0.150 200);
 
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body:    "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -61,6 +63,12 @@
   --radius-l: 18px;
   --radius-pill: 999px;
 
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.025);
+  --shadow-md: 0 6px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--c-accent) 45%, transparent),
+                 0 8px 28px color-mix(in oklab, var(--c-accent) 24%, transparent);
+
   --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in:     cubic-bezier(0.55, 0, 1, 0.45);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -83,6 +91,7 @@ html, body {
 }
 html { -webkit-text-size-adjust: 100%; }
 body {
+  position: relative;
   min-height: 100dvh;
   background: var(--c-bg);
   color: var(--c-text);
@@ -95,11 +104,26 @@ body {
 }
 body.no-scroll { overflow: hidden; }
 
+/* Resplandor atmosférico fijo — dos halos suaves (acento + info) que dan
+   profundidad al fondo índigo sin competir con el contenido. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(52% 34% at 18% -6%, color-mix(in oklab, var(--c-accent) 20%, transparent), transparent 70%),
+    radial-gradient(46% 30% at 100% 18%, color-mix(in oklab, var(--c-info) 12%, transparent), transparent 72%),
+    radial-gradient(60% 36% at 50% 112%, color-mix(in oklab, var(--c-accent) 10%, transparent), transparent 75%);
+  pointer-events: none;
+}
+
 h1, h2, h3 {
   font-family: var(--font-display);
   font-weight: 600;
   font-style: normal;
   line-height: 1.2;
+  letter-spacing: -0.012em;
   margin: 0;
   overflow-wrap: anywhere;
 }
@@ -252,7 +276,7 @@ main {
   cursor: pointer;
   transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
 }
-.btn--accent { --_bg: var(--c-accent); --_fg: var(--c-accent-ink); }
+.btn--accent { --_bg: var(--c-accent); --_fg: var(--c-accent-ink); box-shadow: var(--shadow-glow); }
 .btn--ghost  { --_bg: var(--c-surface); --_fg: var(--c-text-1); --_bd: var(--c-border); }
 .btn--danger { --_bg: var(--c-danger-soft); --_fg: var(--c-danger); --_bd: color-mix(in oklab, var(--c-danger) 45%, transparent); }
 .btn--block  { width: 100%; }
@@ -304,6 +328,7 @@ main {
   border-radius: var(--radius-m);
   padding: var(--space-16);
   margin-bottom: var(--space-12);
+  box-shadow: var(--shadow-sm);
 }
 .meta-card { display: grid; gap: var(--space-12); margin-bottom: var(--space-16); }
 .meta-card--ro { gap: var(--space-8); }
@@ -322,6 +347,7 @@ main {
   border-radius: var(--radius-l);
   overflow: hidden;
   margin-bottom: var(--space-12);
+  box-shadow: var(--shadow-md);
 }
 .group__head {
   appearance: none;
@@ -1045,8 +1071,8 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
    ============================================================ */
 .reco-cat {
   --rc: 40;
-  --rc-accent: oklch(0.48 0.15 var(--rc));
-  --rc-soft: oklch(0.93 0.045 var(--rc));
+  --rc-accent: oklch(0.720 0.150 var(--rc));
+  --rc-soft: oklch(0.260 0.060 var(--rc));
   margin-bottom: var(--space-24);
 }
 .reco-cat__head {
@@ -1332,6 +1358,7 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
   border-bottom: 0;
   border-radius: var(--radius-l) var(--radius-l) 0 0;
   padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: var(--shadow-lg);
   transform: translateY(100%);
   transition: transform var(--dur-3) var(--ease-out);
 }

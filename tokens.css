@@ -1,35 +1,35 @@
-/* Hallmark · tokens — tema "Sabai" (custom, light · geometric-sans · acento ámbar-terracota 40
- * sobre neutros azul-atardecer 230)
+/* Hallmark · tokens — tema "Noche de Loi Krathong" (custom, dark · geometric-sans · acento
+ * orquídea/magenta 332 sobre neutros índigo-noche 280)
  * Exportado del build de app.js/style.css. style.css es autónomo y ya incluye estos
  * valores; este archivo existe solo para reutilizar el sistema en otro proyecto.
  */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Superficies */
-  --c-bg:          oklch(0.97 0.010 230);
-  --c-bg-1:        oklch(0.985 0.006 230);
-  --c-surface:     oklch(0.995 0.004 230);
-  --c-surface-2:   oklch(0.955 0.012 230);
-  --c-surface-3:   oklch(0.91 0.016 230);
-  --c-border:      oklch(0.85 0.016 230);
-  --c-border-soft: oklch(0.90 0.012 230);
+  /* Superficies — índigo-noche muy oscuro, cada capa un peldaño más clara */
+  --c-bg:          oklch(0.130 0.024 280);
+  --c-bg-1:        oklch(0.160 0.022 280);
+  --c-surface:     oklch(0.190 0.022 278);
+  --c-surface-2:   oklch(0.235 0.020 278);
+  --c-surface-3:   oklch(0.280 0.018 276);
+  --c-border:      oklch(0.360 0.022 275);
+  --c-border-soft: oklch(0.270 0.018 275);
 
   /* Texto */
-  --c-text:   oklch(0.24 0.018 250);
-  --c-text-1: oklch(0.40 0.016 245);
-  --c-text-2: oklch(0.55 0.014 240);
+  --c-text:   oklch(0.945 0.010 280);
+  --c-text-1: oklch(0.800 0.014 275);
+  --c-text-2: oklch(0.620 0.016 270);
 
-  /* Acento + semánticos */
-  --c-accent:       oklch(0.54 0.17 40);
-  --c-accent-press: oklch(0.47 0.17 40);
-  --c-accent-ink:   oklch(0.98 0.015 40);
-  --c-accent-soft:  oklch(0.93 0.045 40);
-  --c-info:         oklch(0.54 0.11 235);
-  --c-warning:      oklch(0.62 0.14 85);
-  --c-danger:       oklch(0.55 0.19 25);
-  --c-danger-soft:  oklch(0.94 0.045 25);
-  --c-focus:        oklch(0.55 0.17 265);
+  /* Acento + semánticos — orquídea vivo (farolillo de Loi Krathong sobre el cielo nocturno) */
+  --c-accent:       oklch(0.720 0.190 332);
+  --c-accent-press: oklch(0.635 0.190 332);
+  --c-accent-ink:   oklch(0.150 0.035 332);
+  --c-accent-soft:  oklch(0.270 0.060 332);
+  --c-info:         oklch(0.720 0.120 215);
+  --c-warning:      oklch(0.780 0.150 85);
+  --c-danger:       oklch(0.680 0.190 25);
+  --c-danger-soft:  oklch(0.280 0.070 25);
+  --c-focus:        oklch(0.830 0.150 200);
 
   /* Tipografía — 2 + 1 (mismas fuentes vendorizadas que el proyecto hermano) */
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -54,6 +54,14 @@
   --radius-m: 12px;
   --radius-l: 18px;
   --radius-pill: 999px;
+
+  /* Elevación — la app hermana (Islandia) no tenía sistema de sombra; aquí sí,
+     porque en modo oscuro el contraste entre capas es lo que da profundidad. */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.025);
+  --shadow-md: 0 6px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--c-accent) 45%, transparent),
+                 0 8px 28px color-mix(in oklab, var(--c-accent) 24%, transparent);
 
   /* Movimiento */
   --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
