@@ -16,10 +16,12 @@ islas, alquiler de scooter), comida callejera, etiqueta en los templos, un
 calendario de **temporada por región** (el patrón de monzón cambia según la
 zona del país, incluido el patrón invertido del Golfo de Tailandia), un plan
 B para días de lluvia fuerte, trucos de dinero en THB y tus propias notas.
-La pestaña **Clima** da, por día, salida/puesta de sol, hora dorada, ventana
-de oscuridad y luna (cálculo local con SunCalc, en hora de Tailandia) y el
-Itinerario avisa de **lluvia fuerte** por día (Open-Meteo) con la acción
-concreta — poncho, posibles calles anegadas o ferris cancelados. Datos
+El Itinerario avisa de **lluvia fuerte** por día (Open-Meteo) y de la
+**viabilidad de cada día** con salida/puesta de sol (cálculo local con
+SunCalc), con la acción concreta — poncho, posibles calles anegadas o
+ferris cancelados. La pestaña **Muay Thai** reúne los estadios cerca de
+cada alojamiento con los días de la semana en los que suelen tener cartel,
+para saber qué noche de la estancia encaja. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del
 pasaporte, vacunas, facturar los vuelos con su fecha límite calculada en
 cuanto los añadas...) y una **lista de equipaje** curada para el clima

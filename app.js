@@ -258,42 +258,28 @@
   ];
 
   const ALOJ_SEED = [
-    { id: 'seed-al-bkk', nombre: 'Hotel Prince Palace Bangkok', loc: { texto: 'Prince Palace Bangkok, Bangkok', lat: 13.7563, lng: 100.5018 },
+    { id: 'seed-al-bkk', nombre: 'Prince Palace Hotel Bangkok',
+      loc: { texto: '488/800 Bo Bae Tower, Damrongrak Road, Mahanak, Pomprab Sattrupai, Pom Prap Sattru Phai, 10100 Bangkok, Tailandia', lat: 13.7563, lng: 100.5018 },
       checkin: '2026-11-25', checkout: '2026-11-29', zona: 'Bangkok', reserva: '',
-      notas: '4 noches. ~21 €/noche aprox. (referencia de planificación). Ubicación aproximada al centro de Bangkok: ajusta el pin exacto del hotel con «Buscar» desde la app.' },
-    { id: 'seed-al-cnx', nombre: 'Comfy Boutique House', loc: { texto: 'Comfy Boutique House, Chiang Mai', lat: 18.7883, lng: 98.9853 },
+      link: 'https://www.booking.com/Share-VuYYDO',
+      notas: '4 noches. Suite para 6 + habitación superior para 2. Total: 593€ (las dos habitaciones, 4 noches), a pagar en el hotel. Ubicación aproximada: ajusta el pin exacto del hotel con «Buscar» desde la app.' },
+    { id: 'seed-al-cnx', nombre: 'Comfy Boutique House',
+      loc: { texto: '10 Wiangbua Soi 6, Chang Phueak, 50300 Chiang Mai, Tailandia', lat: 18.7883, lng: 98.9853 },
       checkin: '2026-11-29', checkout: '2026-12-02', zona: 'Chiang Mai', reserva: '',
-      notas: '3 noches. ~33 €/noche aprox. Check-in disponible sobre las 11:00. Ubicación aproximada al centro histórico.' },
-    { id: 'seed-al-krabi', nombre: 'Villa en Ao Nang', loc: { texto: 'Ao Nang, Krabi', lat: 8.0313, lng: 98.8228 },
+      link: 'https://www.booking.com/Share-lx4upr',
+      notas: '3 noches. Check-in disponible sobre las 11:00. Ubicación aproximada al centro histórico: ajusta el pin exacto del hotel con «Buscar» desde la app.' },
+    { id: 'seed-al-krabi', nombre: 'KG Private Pool Villas (KG-91)', loc: { texto: 'Ao Nang, Krabi', lat: 8.0313, lng: 98.8228 },
       checkin: '2026-12-03', checkout: '2026-12-05', zona: 'Krabi / Ao Nang', reserva: '',
-      notas: '2 noches. ~43 €/noche aprox. Ubicación aproximada a Ao Nang.' },
-    { id: 'seed-al-phiphi', nombre: 'Villa en Koh Phi Phi', loc: { texto: 'Koh Phi Phi', lat: 7.7407, lng: 98.7784 },
+      link: 'https://www.booking.com/hotel/th/kg-91.es.html',
+      notas: '2 noches. Ubicación aproximada a Ao Nang: ajusta el pin exacto de la villa con «Buscar» desde la app.' },
+    { id: 'seed-al-phiphi', nombre: 'Phi Phi Maiyada Resort', loc: { texto: 'Koh Phi Phi', lat: 7.7407, lng: 98.7784 },
       checkin: '2026-12-05', checkout: '2026-12-07', zona: 'Koh Phi Phi', reserva: '',
-      notas: '2 noches. ~25 €/noche aprox. Ubicación aproximada a la isla.' },
-    { id: 'seed-al-phuket', nombre: 'Villa en Phuket', loc: { texto: 'Phuket', lat: 7.8850, lng: 98.3900 },
+      link: 'https://www.booking.com/hotel/th/phi-phi-maiyada-resort.es.html',
+      notas: '2 noches. Ubicación aproximada a la isla: ajusta el pin exacto del hotel con «Buscar» desde la app.' },
+    { id: 'seed-al-phuket', nombre: 'Andaman Seafront Villa Phuket (Rawai)', loc: { texto: 'Rawai, Phuket', lat: 7.7714, lng: 98.3231 },
       checkin: '2026-12-07', checkout: '2026-12-09', zona: 'Phuket', reserva: '',
-      notas: '2 noches, última etapa del viaje. ~33 €/noche aprox. Ubicación aproximada al casco antiguo de Phuket.' }
-  ];
-
-  const EXC_SEED = [
-    { id: 'seed-ex-ayutthaya', nombre: 'Excursión de día a Ayutthaya', fecha: '2026-11-27', hora: '', duracion: '',
-      encuentro: {}, proveedor: '', reserva: '',
-      notas: 'Recorrido en bici o moto por el parque histórico. Coste aproximado de entradas: ~290 THB/persona en total (sumando las de cada templo). Vuelta a Bangkok sobre las 18:30.' },
-    { id: 'seed-ex-chiangrai', nombre: 'Excursión de día a Chiang Rai', fecha: '2026-12-02', hora: '06:00', duracion: '',
-      encuentro: {}, proveedor: '', reserva: '',
-      notas: 'Salida desde Chiang Mai ~06:00, llegada a Chiang Rai ~09:30.' },
-    { id: 'seed-ex-elefantes', nombre: 'Elephant Jungle Sanctuary', fecha: '2026-12-01', hora: '', duracion: '',
-      encuentro: {}, proveedor: '', reserva: '',
-      notas: 'Día completo, incluye comida. ~2.500–3.500 THB según el santuario/paquete elegido — comparar opciones de bienestar animal antes de reservar.' },
-    { id: 'seed-ex-railay', nombre: 'Excursión a Railay (longtail boat desde Ao Nang)', fecha: '2026-12-04', hora: '09:00', duracion: '30',
-      encuentro: { texto: 'Playa de Ao Nang (embarcadero de longtail boats)', lat: 8.0313, lng: 98.8228 }, proveedor: '', reserva: '',
-      notas: 'Trayecto en longtail boat, 20-30 min. Vuelta a Ao Nang antes de las 19:30.' },
-    { id: 'seed-ex-mayabay', nombre: 'Tour en barco: Maya Bay y alrededores', fecha: '2026-12-06', hora: '', duracion: '',
-      encuentro: {}, proveedor: '', reserva: '',
-      notas: 'Paradas: Loh Samah Bay, Pi Leh Lagoon, Viking Cave, Monkey Beach y Bamboo Island.' },
-    { id: 'seed-ex-phangnga', nombre: 'Tour a Phang Nga Bay ("James Bond Island")', fecha: '2026-12-07', hora: '', duracion: '',
-      encuentro: {}, proveedor: '', reserva: '',
-      notas: 'Tour de día completo por Phang Nga Bay, incluye la conocida «James Bond Island» (Koh Tapu).' }
+      link: 'https://www.booking.com/hotel/th/andaman-seafront-villa-phuket.es.html',
+      notas: '2 noches, última etapa del viaje. Ubicación aproximada a Rawai: ajusta el pin exacto de la villa con «Buscar» desde la app.' }
   ];
 
   // loc() sin lat/lng: solo se guarda el nombre. La app permite geocodificar
@@ -301,73 +287,169 @@
   // pin inventado para templos y miradores menos conocidos.
   const gl = (texto, lat, lng) => (lat != null ? { texto, lat, lng } : { texto });
 
+  // Fotos: URLs directas de Wikimedia Commons (vía la API pageimages de
+  // Wikipedia), un archivo real y verificado por sitio. Si un lugar no tiene
+  // una foto suya fiable en Commons, se deja sin `foto` en vez de forzar una
+  // imagen que no sea la del sitio.
+  const FOTO = {
+    granPalacio: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/0005574_-_Wat_Phra_Kaew_006.jpg/960px-0005574_-_Wat_Phra_Kaew_006.jpg',
+    watPhraKaew: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Wat_Phra_Kaew_by_Ninara_TSP_edit_crop.jpg/960px-Wat_Phra_Kaew_by_Ninara_TSP_edit_crop.jpg',
+    watPho: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%9E%E0%B8%B8%E0%B8%97%E0%B8%98%E0%B9%84%E0%B8%AA%E0%B8%A2%E0%B8%B2%E0%B8%AA%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%8A%E0%B8%95%E0%B8%B8%E0%B8%9E%E0%B8%99.jpg/960px-%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%9E%E0%B8%B8%E0%B8%97%E0%B8%98%E0%B9%84%E0%B8%AA%E0%B8%A2%E0%B8%B2%E0%B8%AA%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%8A%E0%B8%95%E0%B8%B8%E0%B8%9E%E0%B8%99.jpg',
+    watArun: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AD%E0%B8%A3%E0%B8%B8%E0%B8%932.jpg/960px-%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AD%E0%B8%A3%E0%B8%B8%E0%B8%932.jpg',
+    pakKhlongTalat: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Flowermarket.jpg/960px-Flowermarket.jpg',
+    lohaPrasat: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/03-%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B8%B2%E0%B8%8A%E0%B8%99%E0%B8%B1%E0%B8%94%E0%B8%94%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%A1.jpg/960px-03-%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B8%B2%E0%B8%8A%E0%B8%99%E0%B8%B1%E0%B8%94%E0%B8%94%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%A1.jpg',
+    watSaket: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AA%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%81%E0%B8%A8-2.jpg/960px-%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AA%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%81%E0%B8%A8-2.jpg',
+    watYaiChaiMongkhon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88%E0%B8%8A%E0%B8%B1%E0%B8%A2%E0%B8%A1%E0%B8%87%E0%B8%84%E0%B8%A5.jpg/960px-%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88%E0%B8%8A%E0%B8%B1%E0%B8%A2%E0%B8%A1%E0%B8%87%E0%B8%84%E0%B8%A5.jpg',
+    watPhananChoeng: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Wat_Phanan_Choeng_2019-01-15.jpg/960px-Wat_Phanan_Choeng_2019-01-15.jpg',
+    watRatchaburana: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Entrance_of_Wat_Ratchaburana_%28Ayutthaya%29.jpg/960px-Entrance_of_Wat_Ratchaburana_%28Ayutthaya%29.jpg',
+    watMahathat: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Buddha_Head_in_Tree_Roots%2C_Wat_Mahathat%2C_Ayutthaya.jpg/960px-Buddha_Head_in_Tree_Roots%2C_Wat_Mahathat%2C_Ayutthaya.jpg',
+    watPhraRam: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Templo_Phra_Ram%2C_Ayutthaya%2C_Tailandia%2C_2013-08-23%2C_DD_02.jpg/960px-Templo_Phra_Ram%2C_Ayutthaya%2C_Tailandia%2C_2013-08-23%2C_DD_02.jpg',
+    watPhraSiSanphet: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Three_Chedi%28s%29_of_Wat_Phra_Si_Sanphet.jpg/960px-Three_Chedi%28s%29_of_Wat_Phra_Si_Sanphet.jpg',
+    watLokayasutharam: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Wat_Lokaya_Suttha_in_Ayutthaya_Thailand_001.jpg',
+    watChaiwatthanaram: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Wat_Chaiwatthanaram_by_drone.jpg/960px-Wat_Chaiwatthanaram_by_drone.jpg',
+    watBenchamabophit: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Wat_Benjamabophit1.jpg/960px-Wat_Benjamabophit1.jpg',
+    chatuchak: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Bangkok_-_Jatujak_Market_02.JPG/960px-Bangkok_-_Jatujak_Market_02.JPG',
+    watTraimit: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/0005387_-_Wat_Traimitr_Withayaram_002.jpg/960px-0005387_-_Wat_Traimitr_Withayaram_002.jpg',
+    talatNoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Rong_Kuak_Shrine_Talat_Noi_%E0%B8%A8%E0%B8%B2%E0%B8%A5%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%81%E0%B8%B7%E0%B8%AD%E0%B8%81_%E0%B8%95%E0%B8%A5%E0%B8%B2%E0%B8%94%E0%B8%99%E0%B9%89%E0%B8%AD%E0%B8%A2_2021_June.jpg/960px-Rong_Kuak_Shrine_Talat_Noi_%E0%B8%A8%E0%B8%B2%E0%B8%A5%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%81%E0%B8%B7%E0%B8%AD%E0%B8%81_%E0%B8%95%E0%B8%A5%E0%B8%B2%E0%B8%94%E0%B8%99%E0%B9%89%E0%B8%AD%E0%B8%A2_2021_June.jpg',
+    yaowarat: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/%282022%29_%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%A3%E0%B8%B4%E0%B8%A1%E0%B8%96%E0%B8%99%E0%B8%99%E0%B9%80%E0%B8%A2%E0%B8%B2%E0%B8%A7%E0%B8%A3%E0%B8%B2%E0%B8%8A_%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B8%A7%E0%B8%87%E0%B8%A8%E0%B9%8C_%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%A3_%284%29.jpg/960px-%282022%29_%E0%B8%95%E0%B8%B6%E0%B8%81%E0%B9%81%E0%B8%96%E0%B8%A7%E0%B8%A3%E0%B8%B4%E0%B8%A1%E0%B8%96%E0%B8%99%E0%B8%99%E0%B9%80%E0%B8%A2%E0%B8%B2%E0%B8%A7%E0%B8%A3%E0%B8%B2%E0%B8%8A_%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B8%A7%E0%B8%87%E0%B8%A8%E0%B9%8C_%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%A3_%284%29.jpg',
+    watChiangMan: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Wat_Chiang_Man_%28I%29.jpg/960px-Wat_Chiang_Man_%28I%29.jpg',
+    watPhraSingh: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Wat_Phra_Sing%2C_Chiang_Mai_%28I%29.jpg/960px-Wat_Phra_Sing%2C_Chiang_Mai_%28I%29.jpg',
+    watPhanTao: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/%282022%29_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B9%80%E0%B8%95%E0%B8%B2_%E0%B8%AD.%E0%B9%80%E0%B8%A1%E0%B8%B7%E0%B8%AD%E0%B8%87_%E0%B8%88.%E0%B9%80%E0%B8%8A%E0%B8%B5%E0%B8%A2%E0%B8%87%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88%2CWat_Pan_Tao_%281%29.jpg/960px-%282022%29_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B9%80%E0%B8%95%E0%B8%B2_%E0%B8%AD.%E0%B9%80%E0%B8%A1%E0%B8%B7%E0%B8%AD%E0%B8%87_%E0%B8%88.%E0%B9%80%E0%B8%8A%E0%B8%B5%E0%B8%A2%E0%B8%87%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88%2CWat_Pan_Tao_%281%29.jpg',
+    watChediLuang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%AB%E0%B8%A5%E0%B8%A7%E0%B8%87.jpg/960px-%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%AB%E0%B8%A5%E0%B8%A7%E0%B8%87.jpg',
+    doiSuthep: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Wat_Phra_That_Doi_Suthep_-_Chiang_Mai.jpg/960px-Wat_Phra_That_Doi_Suthep_-_Chiang_Mai.jpg',
+    watPhaLat: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Chiang_Mai_-_Wat_Pha_Lat_-_0001.jpg/960px-Chiang_Mai_-_Wat_Pha_Lat_-_0001.jpg',
+    buaTong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%95%E0%B8%81%E0%B8%9A%E0%B8%B1%E0%B8%A7%E0%B8%95%E0%B8%AD%E0%B8%87_Buatong_Waterfall_Thailand_-_panoramio_%281%29.jpg/960px-%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%95%E0%B8%81%E0%B8%9A%E0%B8%B1%E0%B8%A7%E0%B8%95%E0%B8%AD%E0%B8%87_Buatong_Waterfall_Thailand_-_panoramio_%281%29.jpg',
+    muayThai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg/960px-Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg',
+    watUmong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Wat_Umong_Suan_Phutthatham.jpg/960px-Wat_Umong_Suan_Phutthatham.jpg',
+    watRongKhun: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Wat_Rong_Khun_-_Chiang_Rai.jpg/960px-Wat_Rong_Khun_-_Chiang_Rai.jpg',
+    watRongSueaTen: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Chiang_Rai_Blue_Temple_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B9%89%E0%B8%99.jpg/960px-Chiang_Rai_Blue_Temple_%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%A3%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B9%89%E0%B8%99.jpg',
+    baanDam: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Muzeum_Baan_Dam%2C_nazywane_%E2%80%9ECzarnym_Domem%E2%80%9D_w_Chiang_Rai%2C_Tajlandia.jpg/960px-Muzeum_Baan_Dam%2C_nazywane_%E2%80%9ECzarnym_Domem%E2%80%9D_w_Chiang_Rai%2C_Tajlandia.jpg',
+    aoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Ao_Nang_beach_panorama_1.jpg/960px-Ao_Nang_beach_panorama_1.jpg',
+    railay: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Railay_Beach_5.jpg/960px-Railay_Beach_5.jpg',
+    mayaBay: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Maya_Bay%2C_Thailand_by_Mike_Clegg_Photography.jpg/960px-Maya_Bay%2C_Thailand_by_Mike_Clegg_Photography.jpg',
+    khaoPhingKan: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Isla_Tapu%2C_Phuket%2C_Tailandia%2C_2013-08-20%2C_DD_36.JPG/960px-Isla_Tapu%2C_Phuket%2C_Tailandia%2C_2013-08-20%2C_DD_36.JPG',
+    watChalong: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Wat_chalong_pagoda.jpg',
+    kataBeach: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Kata_beach_morning_2.jpg/960px-Kata_beach_morning_2.jpg',
+    patong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/Patong_Beach.jpg/960px-Patong_Beach.jpg',
+    bigBuddhaPhuket: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/The_Big_Buddha%2C_Phuket.jpg/960px-The_Big_Buddha%2C_Phuket.jpg',
+    promthepCape: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Sunset_at_Promthep_cape%2C_Phuket_island%2C_Thailand.jpg/960px-Sunset_at_Promthep_cape%2C_Phuket_island%2C_Thailand.jpg',
+    naiHarn: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Phuket_-_Nai_Harn_Beach_008.jpg/960px-Phuket_-_Nai_Harn_Beach_008.jpg',
+    khaoSoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Khao_Soi_Northern_Thai_food_%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A7%E0%B8%8B%E0%B8%AD%E0%B8%A2_%E0%B8%9C%E0%B8%B1%E0%B8%81%E0%B8%94%E0%B8%AD%E0%B8%87.jpg/960px-Khao_Soi_Northern_Thai_food_%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B8%A7%E0%B8%8B%E0%B8%AD%E0%B8%A2_%E0%B8%9C%E0%B8%B1%E0%B8%81%E0%B8%94%E0%B8%AD%E0%B8%87.jpg',
+    loyKrathong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Thai_people_setting_their_candle-lit_krathongs_in_the_Ping_river_at_night_during_Loy_Krathong_2015-10_%2822715933524%29.jpg/960px-Thai_people_setting_their_candle-lit_krathongs_in_the_Ping_river_at_night_during_Loy_Krathong_2015-10_%2822715933524%29.jpg',
+    asiatique: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Asiatique_%28II%29.jpg/960px-Asiatique_%28II%29.jpg',
+    iconsiam: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Magnolias_Waterfront_Residences_Iconsiam.jpg',
+    elephantSanctuary: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Navann_was_born_at_the_park_Oct_2012.jpg/960px-Navann_was_born_at_the_park_Oct_2012.jpg'
+  };
+
+  const EXC_SEED = [
+    { id: 'seed-ex-ayutthaya', nombre: 'Excursión de día a Ayutthaya', fecha: '2026-11-27', hora: '', duracion: '',
+      encuentro: {}, proveedor: '', reserva: '',
+      notas: 'Recorrido en bici o moto por el parque histórico. Coste aproximado de entradas: ~290 THB/persona en total (sumando las de cada templo). Vuelta a Bangkok sobre las 18:30.' },
+    { id: 'seed-ex-chiangrai', nombre: 'Excursión de día a Chiang Rai', fecha: '2026-12-02', hora: '06:00', duracion: '',
+      encuentro: {}, proveedor: '', reserva: '',
+      notas: 'Salida desde Chiang Mai ~06:00, llegada a Chiang Rai ~09:30.', foto: FOTO.watRongKhun },
+    { id: 'seed-ex-elefantes', nombre: 'Elephant Jungle Sanctuary', fecha: '2026-12-01', hora: '', duracion: '',
+      encuentro: {}, proveedor: '', reserva: '',
+      notas: 'Día completo, incluye comida. ~2.500–3.500 THB según el santuario/paquete elegido — comparar opciones de bienestar animal antes de reservar.', foto: FOTO.elephantSanctuary },
+    { id: 'seed-ex-railay', nombre: 'Excursión a Railay (longtail boat desde Ao Nang)', fecha: '2026-12-04', hora: '09:00', duracion: '30',
+      encuentro: { texto: 'Playa de Ao Nang (embarcadero de longtail boats)', lat: 8.0313, lng: 98.8228 }, proveedor: '', reserva: '',
+      notas: 'Trayecto en longtail boat, 20-30 min. Vuelta a Ao Nang antes de las 19:30.', foto: FOTO.railay },
+    { id: 'seed-ex-mayabay', nombre: 'Tour en barco: Maya Bay y alrededores', fecha: '2026-12-06', hora: '', duracion: '',
+      encuentro: {}, proveedor: '', reserva: '',
+      notas: 'Paradas: Loh Samah Bay, Pi Leh Lagoon, Viking Cave, Monkey Beach y Bamboo Island.', foto: FOTO.mayaBay },
+    { id: 'seed-ex-phangnga', nombre: 'Tour a Phang Nga Bay ("James Bond Island")', fecha: '2026-12-07', hora: '', duracion: '',
+      encuentro: {}, proveedor: '', reserva: '',
+      notas: 'Tour de día completo por Phang Nga Bay, incluye la conocida «James Bond Island» (Koh Tapu).', foto: FOTO.khaoPhingKan }
+  ];
+
   const LUGAR_SEED = [
     // 25 nov — llegada
     { id: 'seed-lg-loykrathong', nombre: 'Festival de los faroles (Loy Krathong) — elige una opción', loc: gl('Bangkok'), fecha: '2026-11-25', hora: '20:00', visita: '150', prioridad: 'Media',
-      notas: 'Tres opciones: ICONSIAM (más tranquilo), Tha Maharaj / Wat Pho (más auténtico) o Asiatique (más animado). Llegada a Bangkok 19:25 — elige según el cansancio del vuelo.' },
+      notas: 'Llegada a Bangkok 19:25 — elige según el cansancio del vuelo.', foto: FOTO.loyKrathong,
+      opciones: [
+        { nombre: 'ICONSIAM', notas: 'Más tranquilo.', foto: FOTO.iconsiam },
+        { nombre: 'Tha Maharaj / Wat Pho', notas: 'Más auténtico.', foto: FOTO.watPho },
+        { nombre: 'Asiatique', notas: 'Más animado.', foto: FOTO.asiatique }
+      ] },
     // 26 nov — Bangkok monumental
     { id: 'seed-lg-granpalacio', nombre: 'Gran Palacio', loc: gl('Gran Palacio, Bangkok', 13.7500, 100.4913), fecha: '2026-11-26', hora: '08:00', visita: '90', prioridad: 'Alta',
-      notas: '500 THB. Código de vestimenta obligatorio (hombros y rodillas cubiertos). Ir temprano.' },
+      notas: '500 THB. Código de vestimenta obligatorio (hombros y rodillas cubiertos). Ir temprano.', foto: FOTO.granPalacio },
     { id: 'seed-lg-watphrakaew', nombre: 'Wat Phra Kaew (Buda Esmeralda)', loc: gl('Wat Phra Kaew, Bangkok', 13.7500, 100.4913), fecha: '2026-11-26', hora: '09:15', visita: '30', prioridad: 'Alta',
-      notas: 'Incluido en la entrada del Gran Palacio.' },
-    { id: 'seed-lg-watpho', nombre: 'Wat Pho (Buda Reclinado)', loc: gl('Wat Pho, Bangkok', 13.7465, 100.4930), fecha: '2026-11-26', hora: '10:00', visita: '60', prioridad: 'Alta', notas: '200 THB.' },
+      notas: 'Incluido en la entrada del Gran Palacio.', foto: FOTO.watPhraKaew },
+    { id: 'seed-lg-watpho', nombre: 'Wat Pho (Buda Reclinado)', loc: gl('Wat Pho, Bangkok', 13.7465, 100.4930), fecha: '2026-11-26', hora: '10:00', visita: '60', prioridad: 'Alta', notas: '200 THB.', foto: FOTO.watPho },
     { id: 'seed-lg-watarun', nombre: 'Wat Arun (cruce en ferry)', loc: gl('Wat Arun, Bangkok', 13.7437, 100.4888), fecha: '2026-11-26', hora: '11:15', visita: '45', prioridad: 'Alta',
-      notas: '200 THB. Ferry desde el muelle cerca de Wat Pho (Tha Tien).' },
-    { id: 'seed-lg-pakkhlong', nombre: 'Pak Khlong Talat (mercado de flores)', loc: gl('Pak Khlong Talat, Bangkok'), fecha: '2026-11-26', hora: '14:00', visita: '45', prioridad: 'Baja', notas: '' },
-    { id: 'seed-lg-lohaprasat', nombre: 'Loha Prasat', loc: gl('Loha Prasat, Bangkok'), fecha: '2026-11-26', hora: '15:00', visita: '30', prioridad: 'Media', notas: '20 THB.' },
-    { id: 'seed-lg-watsaket', nombre: 'Wat Saket (Monte Dorado)', loc: gl('Wat Saket, Bangkok'), fecha: '2026-11-26', hora: '15:45', visita: '45', prioridad: 'Media', notas: '100 THB.' },
+      notas: '200 THB. Ferry desde el muelle cerca de Wat Pho (Tha Tien).', foto: FOTO.watArun },
+    { id: 'seed-lg-pakkhlong', nombre: 'Pak Khlong Talat (mercado de flores)', loc: gl('Pak Khlong Talat, Bangkok'), fecha: '2026-11-26', hora: '14:00', visita: '45', prioridad: 'Baja', notas: '', foto: FOTO.pakKhlongTalat },
+    { id: 'seed-lg-lohaprasat', nombre: 'Loha Prasat', loc: gl('Loha Prasat, Bangkok'), fecha: '2026-11-26', hora: '15:00', visita: '30', prioridad: 'Media', notas: '20 THB.', foto: FOTO.lohaPrasat },
+    { id: 'seed-lg-watsaket', nombre: 'Wat Saket (Monte Dorado)', loc: gl('Wat Saket, Bangkok'), fecha: '2026-11-26', hora: '15:45', visita: '45', prioridad: 'Media', notas: '100 THB.', foto: FOTO.watSaket },
     { id: 'seed-lg-rca', nombre: 'Ambiente nocturno en RCA', loc: gl('RCA (Royal City Avenue), Bangkok'), fecha: '2026-11-26', hora: '22:00', visita: '', prioridad: 'Baja', notas: 'Zona de discotecas y bares.' },
     // 27 nov — Ayutthaya (mismo punto general del parque histórico para todos; ajustar por templo con «Buscar»)
-    { id: 'seed-lg-ayu1', nombre: 'Wat Yai Chai Mongkhon', loc: gl('Wat Yai Chai Mongkhon, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '09:00', visita: '30', prioridad: 'Media', notas: '20 THB.' },
-    { id: 'seed-lg-ayu2', nombre: 'Wat Phanan Choeng', loc: gl('Wat Phanan Choeng, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '09:45', visita: '30', prioridad: 'Media', notas: '20 THB.' },
-    { id: 'seed-lg-ayu3', nombre: 'Wat Ratchaburana', loc: gl('Wat Ratchaburana, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '10:30', visita: '30', prioridad: 'Media', notas: '50 THB.' },
-    { id: 'seed-lg-ayu4', nombre: 'Wat Mahathat', loc: gl('Wat Mahathat, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '11:15', visita: '30', prioridad: 'Alta', notas: '50 THB. La cabeza de Buda entre las raíces del árbol.' },
-    { id: 'seed-lg-ayu5', nombre: 'Wat Phra Ram', loc: gl('Wat Phra Ram, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '12:00', visita: '20', prioridad: 'Baja', notas: '50 THB.' },
-    { id: 'seed-lg-ayu6', nombre: 'Wat Phra Si Sanphet', loc: gl('Wat Phra Si Sanphet, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '14:00', visita: '30', prioridad: 'Media', notas: '50 THB.' },
-    { id: 'seed-lg-ayu7', nombre: 'Wat Lokayasutharam', loc: gl('Wat Lokayasutharam, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '14:45', visita: '20', prioridad: 'Baja', notas: 'Entrada gratuita. Buda reclinado al aire libre.' },
+    { id: 'seed-lg-ayu1', nombre: 'Wat Yai Chai Mongkhon', loc: gl('Wat Yai Chai Mongkhon, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '09:00', visita: '30', prioridad: 'Media', notas: '20 THB.', foto: FOTO.watYaiChaiMongkhon },
+    { id: 'seed-lg-ayu2', nombre: 'Wat Phanan Choeng', loc: gl('Wat Phanan Choeng, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '09:45', visita: '30', prioridad: 'Media', notas: '20 THB.', foto: FOTO.watPhananChoeng },
+    { id: 'seed-lg-ayu3', nombre: 'Wat Ratchaburana', loc: gl('Wat Ratchaburana, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '10:30', visita: '30', prioridad: 'Media', notas: '50 THB.', foto: FOTO.watRatchaburana },
+    { id: 'seed-lg-ayu4', nombre: 'Wat Mahathat', loc: gl('Wat Mahathat, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '11:15', visita: '30', prioridad: 'Alta', notas: '50 THB. La cabeza de Buda entre las raíces del árbol.', foto: FOTO.watMahathat },
+    { id: 'seed-lg-ayu5', nombre: 'Wat Phra Ram', loc: gl('Wat Phra Ram, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '12:00', visita: '20', prioridad: 'Baja', notas: '50 THB.', foto: FOTO.watPhraRam },
+    { id: 'seed-lg-ayu6', nombre: 'Wat Phra Si Sanphet', loc: gl('Wat Phra Si Sanphet, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '14:00', visita: '30', prioridad: 'Media', notas: '50 THB.', foto: FOTO.watPhraSiSanphet },
+    { id: 'seed-lg-ayu7', nombre: 'Wat Lokayasutharam', loc: gl('Wat Lokayasutharam, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '14:45', visita: '20', prioridad: 'Baja', notas: 'Entrada gratuita. Buda reclinado al aire libre.', foto: FOTO.watLokayasutharam },
     { id: 'seed-lg-ayu8', nombre: 'Wat Chaiwatthanaram', loc: gl('Wat Chaiwatthanaram, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '17:00', visita: '45', prioridad: 'Alta',
-      notas: '50 THB. Puesta de sol — uno de los templos más fotogénicos de Ayutthaya. Vuelta a Bangkok sobre las 18:30.' },
+      notas: '50 THB. Puesta de sol — uno de los templos más fotogénicos de Ayutthaya. Vuelta a Bangkok sobre las 18:30.', foto: FOTO.watChaiwatthanaram },
     // 28 nov — último día en Bangkok
-    { id: 'seed-lg-marmol', nombre: 'Wat Benchamabophit (Templo de Mármol)', loc: gl('Wat Benchamabophit, Bangkok'), fecha: '2026-11-28', hora: '08:30', visita: '30', prioridad: 'Media', notas: '50 THB.' },
-    { id: 'seed-lg-chatuchak', nombre: 'Mercado de Chatuchak', loc: gl('Mercado de Chatuchak, Bangkok', 13.7999, 100.5501), fecha: '2026-11-28', hora: '09:30', visita: '150', prioridad: 'Media', notas: 'Uno de los mercados más grandes del mundo — solo abre fines de semana, confirma que coincide con el paso por aquí.' },
-    { id: 'seed-lg-traimit', nombre: 'Wat Traimit (Buda de Oro)', loc: gl('Wat Traimit, Bangkok'), fecha: '2026-11-28', hora: '14:00', visita: '30', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-talatnoi', nombre: 'Talat Noi (barrio chino antiguo)', loc: gl('Talat Noi, Bangkok'), fecha: '2026-11-28', hora: '15:00', visita: '60', prioridad: 'Media', notas: 'Callejones y arte urbano del casco antiguo chino.' },
+    { id: 'seed-lg-marmol', nombre: 'Wat Benchamabophit (Templo de Mármol)', loc: gl('Wat Benchamabophit, Bangkok'), fecha: '2026-11-28', hora: '08:30', visita: '30', prioridad: 'Media', notas: '50 THB.', foto: FOTO.watBenchamabophit },
+    { id: 'seed-lg-chatuchak', nombre: 'Mercado de Chatuchak', loc: gl('Mercado de Chatuchak, Bangkok', 13.7999, 100.5501), fecha: '2026-11-28', hora: '09:30', visita: '150', prioridad: 'Media', notas: 'Uno de los mercados más grandes del mundo — solo abre fines de semana, confirma que coincide con el paso por aquí.', foto: FOTO.chatuchak },
+    { id: 'seed-lg-traimit', nombre: 'Wat Traimit (Buda de Oro)', loc: gl('Wat Traimit, Bangkok'), fecha: '2026-11-28', hora: '14:00', visita: '30', prioridad: 'Media', notas: '', foto: FOTO.watTraimit },
+    { id: 'seed-lg-talatnoi', nombre: 'Talat Noi (barrio chino antiguo)', loc: gl('Talat Noi, Bangkok'), fecha: '2026-11-28', hora: '15:00', visita: '60', prioridad: 'Media', notas: 'Callejones y arte urbano del casco antiguo chino.', foto: FOTO.talatNoi },
     { id: 'seed-lg-mahanakhon', nombre: 'Mahanakhon SkyWalk', loc: gl('Mahanakhon SkyWalk, Bangkok'), fecha: '2026-11-28', hora: '17:30', visita: '60', prioridad: 'Alta', notas: 'Entrada recomendada a las 17:30 para el atardecer desde el mirador.' },
-    { id: 'seed-lg-yaowarat', nombre: 'Yaowarat / Chinatown de noche', loc: gl('Yaowarat, Bangkok'), fecha: '2026-11-28', hora: '19:30', visita: '90', prioridad: 'Media', notas: '' },
+    { id: 'seed-lg-yaowarat', nombre: 'Yaowarat / Chinatown de noche', loc: gl('Yaowarat, Bangkok'), fecha: '2026-11-28', hora: '19:30', visita: '90', prioridad: 'Media', notas: '', foto: FOTO.yaowarat },
     // 29 nov — traslado a Chiang Mai
-    { id: 'seed-lg-chiangman', nombre: 'Wat Chiang Man', loc: gl('Wat Chiang Man, Chiang Mai', 18.7910, 98.9871), fecha: '2026-11-29', hora: '12:00', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita. El templo más antiguo de Chiang Mai.' },
-    { id: 'seed-lg-phrasingh', nombre: 'Wat Phra Singh', loc: gl('Wat Phra Singh, Chiang Mai', 18.7873, 98.9821), fecha: '2026-11-29', hora: '12:45', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.' },
-    { id: 'seed-lg-phantao', nombre: 'Wat Phan Tao', loc: gl('Wat Phan Tao, Chiang Mai', 18.7885, 98.9862), fecha: '2026-11-29', hora: '13:30', visita: '20', prioridad: 'Baja', notas: 'Entrada gratuita. Templo de madera de teca.' },
-    { id: 'seed-lg-chedluang', nombre: 'Wat Chedi Luang', loc: gl('Wat Chedi Luang, Chiang Mai', 18.7873, 98.9853), fecha: '2026-11-29', hora: '15:30', visita: '45', prioridad: 'Alta', notas: '50 THB.' },
-    { id: 'seed-lg-sunday', nombre: 'Sunday Walking Street / Zoe in Yellow', loc: gl('Chiang Mai'), fecha: '2026-11-29', hora: '19:00', visita: '', prioridad: 'Media',
-      notas: 'Si coincide en domingo: Sunday Walking Street (18:00-23:00). Ambiente nocturno en Zoe in Yellow.' },
+    { id: 'seed-lg-chiangman', nombre: 'Wat Chiang Man', loc: gl('Wat Chiang Man, Chiang Mai', 18.7910, 98.9871), fecha: '2026-11-29', hora: '12:00', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita. El templo más antiguo de Chiang Mai.', foto: FOTO.watChiangMan },
+    { id: 'seed-lg-phrasingh', nombre: 'Wat Phra Singh', loc: gl('Wat Phra Singh, Chiang Mai', 18.7873, 98.9821), fecha: '2026-11-29', hora: '12:45', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.', foto: FOTO.watPhraSingh },
+    { id: 'seed-lg-phantao', nombre: 'Wat Phan Tao', loc: gl('Wat Phan Tao, Chiang Mai', 18.7885, 98.9862), fecha: '2026-11-29', hora: '13:30', visita: '20', prioridad: 'Baja', notas: 'Entrada gratuita. Templo de madera de teca.', foto: FOTO.watPhanTao },
+    { id: 'seed-lg-chedluang', nombre: 'Wat Chedi Luang', loc: gl('Wat Chedi Luang, Chiang Mai', 18.7873, 98.9853), fecha: '2026-11-29', hora: '15:30', visita: '45', prioridad: 'Alta', notas: '50 THB.', foto: FOTO.watChediLuang },
+    { id: 'seed-lg-sunday', nombre: 'Noche en Chiang Mai — elige un plan', loc: gl('Chiang Mai'), fecha: '2026-11-29', hora: '19:00', visita: '', prioridad: 'Media',
+      notas: '',
+      opciones: [
+        { nombre: 'Sunday Walking Street', notas: '18:00–23:00, solo si el día cae en domingo.' },
+        { nombre: 'Zoe in Yellow', notas: 'Ambiente nocturno.' }
+      ] },
     // 30 nov — Chiang Mai clásico
-    { id: 'seed-lg-doisuthep', nombre: 'Wat Phra That Doi Suthep', loc: gl('Doi Suthep, Chiang Mai', 18.8047, 98.9217), fecha: '2026-11-30', hora: '08:30', visita: '90', prioridad: 'Alta', notas: '30 THB. 306 escalones o funicular.' },
-    { id: 'seed-lg-phalat', nombre: 'Wat Pha Lat', loc: gl('Wat Pha Lat, Chiang Mai'), fecha: '2026-11-30', hora: '10:30', visita: '60', prioridad: 'Media', notas: 'Entrada gratuita. Opción: Monkey Trail desde Doi Suthep (~1,5h, 100 THB).' },
-    { id: 'seed-lg-buatong', nombre: 'Bua Tong Sticky Waterfalls', loc: gl('Bua Tong Sticky Waterfalls'), fecha: '2026-11-30', hora: '14:00', visita: '90', prioridad: 'Media', notas: 'Llevar bañador. Las rocas son antideslizantes de forma natural.' },
-    { id: 'seed-lg-muaythai1', nombre: 'Muay Thai (Loi Kroh Stadium) o Nimman Road', loc: gl('Chiang Mai'), fecha: '2026-11-30', hora: '20:00', visita: '', prioridad: 'Media',
-      notas: 'Dos opciones para la noche: espectáculo de Muay Thai en Loi Kroh Stadium (500 THB) o Nimman Road (bares y street food).' },
+    { id: 'seed-lg-doisuthep', nombre: 'Wat Phra That Doi Suthep', loc: gl('Doi Suthep, Chiang Mai', 18.8047, 98.9217), fecha: '2026-11-30', hora: '08:30', visita: '90', prioridad: 'Alta', notas: '30 THB. 306 escalones o funicular.', foto: FOTO.doiSuthep },
+    { id: 'seed-lg-phalat', nombre: 'Wat Pha Lat', loc: gl('Wat Pha Lat, Chiang Mai'), fecha: '2026-11-30', hora: '10:30', visita: '60', prioridad: 'Media', notas: 'Entrada gratuita. Opción: Monkey Trail desde Doi Suthep (~1,5h, 100 THB).', foto: FOTO.watPhaLat },
+    { id: 'seed-lg-buatong', nombre: 'Bua Tong Sticky Waterfalls', loc: gl('Bua Tong Sticky Waterfalls'), fecha: '2026-11-30', hora: '14:00', visita: '90', prioridad: 'Media', notas: 'Llevar bañador. Las rocas son antideslizantes de forma natural.', foto: FOTO.buaTong },
+    { id: 'seed-lg-muaythai1', nombre: 'Noche libre — elige un plan', loc: gl('Chiang Mai'), fecha: '2026-11-30', hora: '20:00', visita: '', prioridad: 'Media',
+      notas: '',
+      opciones: [
+        { nombre: 'Muay Thai en Loi Kroh Stadium', notas: '500 THB.', foto: FOTO.muayThai },
+        { nombre: 'Nimman Road', notas: 'Bares y street food.' }
+      ] },
     // 1 dic — elefantes
-    { id: 'seed-lg-watumong', nombre: 'Tarde libre (Wat Umong u otra actividad)', loc: gl('Wat Umong, Chiang Mai'), fecha: '2026-12-01', hora: '15:00', visita: '', prioridad: 'Baja', notas: 'Tarde libre tras el santuario de elefantes.' },
-    { id: 'seed-lg-muaythai2', nombre: 'Muay Thai (Loi Kroh Stadium) o Nimman Road', loc: gl('Chiang Mai'), fecha: '2026-12-01', hora: '20:00', visita: '', prioridad: 'Media', notas: 'Mismas opciones que el día anterior.' },
+    { id: 'seed-lg-watumong', nombre: 'Tarde libre (Wat Umong u otra actividad)', loc: gl('Wat Umong, Chiang Mai'), fecha: '2026-12-01', hora: '15:00', visita: '', prioridad: 'Baja', notas: 'Tarde libre tras el santuario de elefantes.', foto: FOTO.watUmong },
+    { id: 'seed-lg-muaythai2', nombre: 'Noche libre — elige un plan', loc: gl('Chiang Mai'), fecha: '2026-12-01', hora: '20:00', visita: '', prioridad: 'Media', notas: 'Mismas opciones que el día anterior.',
+      opciones: [
+        { nombre: 'Muay Thai en Loi Kroh Stadium', notas: '500 THB.', foto: FOTO.muayThai },
+        { nombre: 'Nimman Road', notas: 'Bares y street food.' }
+      ] },
     // 2 dic — Chiang Rai
-    { id: 'seed-lg-rongkhun', nombre: 'Wat Rong Khun (Templo Blanco)', loc: gl('Wat Rong Khun, Chiang Rai', 19.8355, 99.7897), fecha: '2026-12-02', hora: '09:30', visita: '60', prioridad: 'Alta', notas: '200 THB.' },
-    { id: 'seed-lg-ruatuen', nombre: 'Wat Rong Suea Ten (Templo Azul)', loc: gl('Wat Rong Suea Ten, Chiang Rai', 19.9310, 99.8171), fecha: '2026-12-02', hora: '11:00', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.' },
+    { id: 'seed-lg-rongkhun', nombre: 'Wat Rong Khun (Templo Blanco)', loc: gl('Wat Rong Khun, Chiang Rai', 19.8355, 99.7897), fecha: '2026-12-02', hora: '09:30', visita: '60', prioridad: 'Alta', notas: '200 THB.', foto: FOTO.watRongKhun },
+    { id: 'seed-lg-ruatuen', nombre: 'Wat Rong Suea Ten (Templo Azul)', loc: gl('Wat Rong Suea Ten, Chiang Rai', 19.9310, 99.8171), fecha: '2026-12-02', hora: '11:00', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.', foto: FOTO.watRongSueaTen },
     { id: 'seed-lg-huayplakang', nombre: 'Wat Huay Pla Kang', loc: gl('Wat Huay Pla Kang, Chiang Rai'), fecha: '2026-12-02', hora: '11:45', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.' },
-    { id: 'seed-lg-baandam', nombre: 'Baan Dam (Casa Negra)', loc: gl('Baan Dam, Chiang Rai'), fecha: '2026-12-02', hora: '14:00', visita: '60', prioridad: 'Media', notas: '80 THB.' },
+    { id: 'seed-lg-baandam', nombre: 'Baan Dam (Casa Negra)', loc: gl('Baan Dam, Chiang Rai'), fecha: '2026-12-02', hora: '14:00', visita: '60', prioridad: 'Media', notas: '80 THB.', foto: FOTO.baanDam },
     { id: 'seed-lg-crcentro', nombre: 'Wat Phra Kaew / Wat Phra Singh / Torre del Reloj (Chiang Rai)', loc: gl('Chiang Rai'), fecha: '2026-12-02', hora: '15:30', visita: '', prioridad: 'Baja', notas: 'Si da tiempo antes de volver a Chiang Mai.' },
     // 3 dic — Krabi / Ao Nang
     { id: 'seed-lg-aonangbeach', nombre: 'Playa de Ao Nang', loc: gl('Ao Nang, Krabi', 8.0313, 98.8228), fecha: '2026-12-03', hora: '12:00', visita: '', prioridad: 'Media',
-      notas: 'Mediodía en la playa. Posibilidad de clase de cocina thai o tour de las 4 islas (opcional, no reservado).' },
+      notas: 'Mediodía en la playa.', foto: FOTO.aoNang,
+      opciones: [
+        { nombre: 'Clase de cocina thailandesa', notas: 'Opcional, no reservada.' },
+        { nombre: 'Tour de las 4 islas', notas: 'Opcional, no reservado.' }
+      ] },
     { id: 'seed-lg-monkeytrail', nombre: 'Monkey Trail hasta Pai Plong Beach', loc: gl('Pai Plong Beach, Ao Nang'), fecha: '2026-12-03', hora: '16:00', visita: '60', prioridad: 'Baja', notas: 'Sendero corto hasta una playa más tranquila.' },
-    { id: 'seed-lg-aonangsunset', nombre: 'Atardecer en Ao Nang', loc: gl('Ao Nang, Krabi', 8.0313, 98.8228), fecha: '2026-12-03', hora: '17:30', visita: '', prioridad: 'Media', notas: '' },
+    { id: 'seed-lg-aonangsunset', nombre: 'Atardecer en Ao Nang', loc: gl('Ao Nang, Krabi', 8.0313, 98.8228), fecha: '2026-12-03', hora: '17:30', visita: '', prioridad: 'Media', notas: '', foto: FOTO.aoNang },
     // 4 dic — Railay
-    { id: 'seed-lg-railaywest1', nombre: 'Railay West', loc: gl('Railay West, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '09:30', visita: '', prioridad: 'Alta', notas: '' },
+    { id: 'seed-lg-railaywest1', nombre: 'Railay West', loc: gl('Railay West, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '09:30', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.railay },
     { id: 'seed-lg-railayeast', nombre: 'Railay East', loc: gl('Railay East, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '10:15', visita: '', prioridad: 'Media', notas: '' },
     { id: 'seed-lg-phranang', nombre: 'Phra Nang Beach & Cave', loc: gl('Phra Nang Beach, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '11:00', visita: '', prioridad: 'Alta', notas: '' },
     { id: 'seed-lg-princesslagoon', nombre: 'Princess Lagoon', loc: gl('Princess Lagoon, Railay', 8.0113, 98.8372), fecha: '2026-12-04', hora: '12:00', visita: '', prioridad: 'Media', notas: '' },
     { id: 'seed-lg-escalada', nombre: 'Escalada o playa (tarde libre)', loc: gl('Railay'), fecha: '2026-12-04', hora: '14:00', visita: '', prioridad: 'Baja', notas: 'Tarde libre: escalada en roca o playa.' },
-    { id: 'seed-lg-railaysunset', nombre: 'Atardecer en Railay West Beach', loc: gl('Railay West, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '17:30', visita: '', prioridad: 'Alta', notas: 'Volver a Ao Nang antes de las 19:30.' },
+    { id: 'seed-lg-railaysunset', nombre: 'Atardecer en Railay West Beach', loc: gl('Railay West, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '17:30', visita: '', prioridad: 'Alta', notas: 'Volver a Ao Nang antes de las 19:30.', foto: FOTO.railay },
     // 5 dic — Phi Phi (llegada)
     { id: 'seed-lg-tonsai', nombre: 'Tonsai Pier / Tonsai Village', loc: gl('Tonsai, Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '10:00', visita: '', prioridad: 'Media', notas: 'Ferry/lancha desde Ao Nang ~08:00, llegada ~10:00.' },
     { id: 'seed-lg-walkingstreet', nombre: 'Phi Phi Walking Street', loc: gl('Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '11:00', visita: '', prioridad: 'Baja', notas: '' },
@@ -375,29 +457,33 @@
     { id: 'seed-lg-longbeach', nombre: 'Long Beach', loc: gl('Long Beach, Koh Phi Phi'), fecha: '2026-12-05', hora: '15:00', visita: '', prioridad: 'Media', notas: '' },
     { id: 'seed-lg-viewpoints', nombre: 'Miradores Phi Phi Viewpoint 1 y 2', loc: gl('Phi Phi Viewpoint, Koh Phi Phi'), fecha: '2026-12-05', hora: '16:30', visita: '60', prioridad: 'Alta', notas: 'Atardecer desde los miradores.' },
     // 6 dic — Phi Phi, tour en barco
-    { id: 'seed-lg-mayabay', nombre: 'Maya Bay', loc: gl('Maya Bay, Koh Phi Phi Leh', 7.6791, 98.7622), fecha: '2026-12-06', hora: '09:00', visita: '', prioridad: 'Alta', notas: '' },
+    { id: 'seed-lg-mayabay', nombre: 'Maya Bay', loc: gl('Maya Bay, Koh Phi Phi Leh', 7.6791, 98.7622), fecha: '2026-12-06', hora: '09:00', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.mayaBay },
     { id: 'seed-lg-lohsamah', nombre: 'Loh Samah Bay', loc: gl('Loh Samah Bay, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '10:00', visita: '', prioridad: 'Media', notas: '' },
     { id: 'seed-lg-pileh', nombre: 'Pi Leh Lagoon', loc: gl('Pi Leh Lagoon, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '11:00', visita: '', prioridad: 'Alta', notas: '' },
     { id: 'seed-lg-vikingcave', nombre: 'Viking Cave', loc: gl('Viking Cave, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '12:00', visita: '', prioridad: 'Baja', notas: '' },
     { id: 'seed-lg-monkeybeach', nombre: 'Monkey Beach', loc: gl('Monkey Beach, Koh Phi Phi'), fecha: '2026-12-06', hora: '13:00', visita: '', prioridad: 'Media', notas: '' },
     { id: 'seed-lg-bambooisland', nombre: 'Bamboo Island', loc: gl('Bamboo Island, Koh Phi Phi'), fecha: '2026-12-06', hora: '14:00', visita: '', prioridad: 'Media', notas: '' },
     // 8 dic — Phuket, ruta por la isla (horas explícitas del usuario)
-    { id: 'seed-lg-bigbuddha', nombre: 'Big Buddha', loc: gl('Big Buddha, Phuket', 7.8278, 98.3121), fecha: '2026-12-08', hora: '08:30', visita: '', prioridad: 'Alta', notas: '' },
-    { id: 'seed-lg-watchalong', nombre: 'Wat Chalong', loc: gl('Wat Chalong, Phuket', 7.8467, 98.3374), fecha: '2026-12-08', hora: '10:00', visita: '', prioridad: 'Media', notas: '' },
+    { id: 'seed-lg-bigbuddha', nombre: 'Big Buddha', loc: gl('Big Buddha, Phuket', 7.8278, 98.3121), fecha: '2026-12-08', hora: '08:30', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.bigBuddhaPhuket },
+    { id: 'seed-lg-watchalong', nombre: 'Wat Chalong', loc: gl('Wat Chalong, Phuket', 7.8467, 98.3374), fecha: '2026-12-08', hora: '10:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.watChalong },
     { id: 'seed-lg-karonview', nombre: 'Karon Viewpoint', loc: gl('Karon Viewpoint, Phuket'), fecha: '2026-12-08', hora: '11:30', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-kata', nombre: 'Kata / Kata Noi', loc: gl('Kata, Phuket'), fecha: '2026-12-08', hora: '12:00', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-naiharn', nombre: 'Nai Harn', loc: gl('Nai Harn, Phuket'), fecha: '2026-12-08', hora: '15:00', visita: '', prioridad: 'Media', notas: '' },
+    { id: 'seed-lg-kata', nombre: 'Kata / Kata Noi', loc: gl('Kata, Phuket'), fecha: '2026-12-08', hora: '12:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.kataBeach },
+    { id: 'seed-lg-naiharn', nombre: 'Nai Harn', loc: gl('Nai Harn, Phuket'), fecha: '2026-12-08', hora: '15:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.naiHarn },
     { id: 'seed-lg-yanui', nombre: 'Ya Nui', loc: gl('Ya Nui, Phuket'), fecha: '2026-12-08', hora: '16:00', visita: '', prioridad: 'Baja', notas: '' },
     { id: 'seed-lg-windmill', nombre: 'Windmill Viewpoint', loc: gl('Windmill Viewpoint, Phuket'), fecha: '2026-12-08', hora: '16:30', visita: '', prioridad: 'Baja', notas: '' },
-    { id: 'seed-lg-promthep', nombre: 'Promthep Cape', loc: gl('Promthep Cape, Phuket', 7.7629, 98.2967), fecha: '2026-12-08', hora: '17:30', visita: '', prioridad: 'Alta', notas: 'Uno de los mejores puntos de la isla para el atardecer.' },
-    { id: 'seed-lg-patong', nombre: 'Patong / mercado / beach club', loc: gl('Patong, Phuket', 7.8965, 98.2965), fecha: '2026-12-08', hora: '20:30', visita: '', prioridad: 'Media', notas: '' }
+    { id: 'seed-lg-promthep', nombre: 'Promthep Cape', loc: gl('Promthep Cape, Phuket', 7.7629, 98.2967), fecha: '2026-12-08', hora: '17:30', visita: '', prioridad: 'Alta', notas: 'Uno de los mejores puntos de la isla para el atardecer.', foto: FOTO.promthepCape },
+    { id: 'seed-lg-patong', nombre: 'Patong / mercado / beach club', loc: gl('Patong, Phuket', 7.8965, 98.2965), fecha: '2026-12-08', hora: '20:30', visita: '', prioridad: 'Media', notas: '', foto: FOTO.patong }
   ];
 
   const COMIDA_SEED = [
-    { id: 'seed-cm-watarun', nombre: 'Comida cerca de Wat Arun o en Wang Lang Market', tipo: 'Almuerzo', loc: gl('Bangkok'), fecha: '2026-11-26', horario: '12:30', notas: '' },
+    { id: 'seed-cm-watarun', nombre: 'Comida — elige un sitio', tipo: 'Almuerzo', loc: gl('Bangkok'), fecha: '2026-11-26', horario: '12:30', notas: '',
+      opciones: [
+        { nombre: 'Cerca de Wat Arun', foto: FOTO.watArun },
+        { nombre: 'Wang Lang Market' }
+      ] },
     { id: 'seed-cm-sukhumvit', nombre: 'Cena en Sukhumvit / Soi 11', tipo: 'Cena', loc: gl('Sukhumvit Soi 11, Bangkok'), fecha: '2026-11-26', horario: '20:00', notas: '' },
-    { id: 'seed-cm-khaosoi', nombre: 'Khao Soi (fideos con curry del norte)', tipo: 'Almuerzo', loc: gl('Chiang Mai'), fecha: '2026-11-29', horario: '14:15', notas: 'Plato típico del norte de Tailandia.' },
-    { id: 'seed-cm-aonangmarket', nombre: 'Cena y paseo por el Ao Nang Landmark Night Market', tipo: 'Mercado nocturno', loc: gl('Ao Nang Landmark, Krabi'), fecha: '2026-12-03', horario: '19:30', notas: '' },
+    { id: 'seed-cm-khaosoi', nombre: 'Khao Soi (fideos con curry del norte)', tipo: 'Almuerzo', loc: gl('Chiang Mai'), fecha: '2026-11-29', horario: '14:15', notas: 'Plato típico del norte de Tailandia.', foto: FOTO.khaoSoi },
+    { id: 'seed-cm-aonangmarket', nombre: 'Cena y paseo por el Ao Nang Landmark Night Market', tipo: 'Mercado nocturno', loc: gl('Ao Nang Landmark, Krabi'), fecha: '2026-12-03', horario: '19:30', notas: '', foto: FOTO.aoNang },
     { id: 'seed-cm-phuket1', nombre: 'Comida (ruta por Phuket)', tipo: 'Almuerzo', loc: gl('Phuket'), fecha: '2026-12-08', horario: '13:30', notas: '' },
     { id: 'seed-cm-phuket2', nombre: 'Cena (ruta por Phuket)', tipo: 'Cena', loc: gl('Phuket'), fecha: '2026-12-08', horario: '19:00', notas: '' }
   ];
@@ -596,6 +682,7 @@
         { k: 'checkout', l: 'Salida (check-out)', t: 'date', req: true },
         { k: 'zona', l: 'Zona', t: 'text', ph: 'Sukhumvit, Bangkok' },
         { k: 'reserva', l: 'Localizador / reserva', t: 'text', mono: true },
+        { k: 'link', l: 'Enlace (opcional)', t: 'text', ph: 'https://…' },
         { k: 'notas', l: 'Notas', t: 'textarea' }
       ]
     },
@@ -1134,7 +1221,7 @@
 
   // Checklist de equipaje. No usa SCHEMAS/openSheet porque no es una ficha
   // con formulario, sino ítems de tap-to-marcar; solo renderDatos() hace
-  // falta tras cada cambio, el equipaje no afecta a Itinerario/Mapas/Clima.
+  // falta tras cada cambio, el equipaje no afecta a Itinerario/Mapas/Muay Thai.
   function equipajeBlock() {
     const g = el('div', 'group');
     const openKey = 'open_equipaje';
@@ -1487,7 +1574,8 @@
       <div class="item__meta">${a.checkin ? fmtFecha(a.checkin, true) : '—'} → ${a.checkout ? fmtFecha(a.checkout, true) : '—'}${noches ? ' · ' + noches + ' noche' + (noches !== 1 ? 's' : '') : ''}</div>
       <div class="item__meta">${locLine(a.loc)}${a.zona ? ' · ' + esc(a.zona) : ''}</div>
       ${a.notas ? `<div class="item__meta">${escLines(a.notas)}</div>` : ''}
-      ${a.reserva ? `<div class="item__meta">Reserva: ${esc(a.reserva)}</div>` : ''}`;
+      ${a.reserva ? `<div class="item__meta">Reserva: ${esc(a.reserva)}</div>` : ''}
+      ${a.link ? `<a class="btn btn--accent btn--sm aloj-link" href="${esc(a.link)}" target="_blank" rel="noopener">Ver alojamiento ›</a>` : ''}`;
   }
 
   function cocheSummary(v) {
@@ -1698,7 +1786,9 @@
         notas: e.notas || '',
         loc: e.encuentro && e.encuentro.lat != null ? e.encuentro : null,
         tag: 'Excursión',
-        costMin: e.duracion ? +e.duracion : EXCURSION_MIN
+        costMin: e.duracion ? +e.duracion : EXCURSION_MIN,
+        foto: e.foto || null,
+        opciones: e.opciones || null
       };
       if (e.fecha && inRange(e.fecha)) push(e.fecha, item);
       else unassigned.push(Object.assign({ nota: e.fecha ? 'fecha fuera del rango' : 'sin fecha' }, item));
@@ -1716,7 +1806,9 @@
         notas: c.notas || '',
         loc: c.loc && c.loc.lat != null ? c.loc : null,
         tag: 'Comida',
-        costMin: COMIDA_MIN
+        costMin: COMIDA_MIN,
+        foto: c.foto || null,
+        opciones: c.opciones || null
       };
       if (c.fecha && inRange(c.fecha)) push(c.fecha, item);
       else unassigned.push(Object.assign({ nota: 'sin fecha' }, item));
@@ -1736,7 +1828,9 @@
         notas: l.notas || '',
         loc: l.loc && l.loc.lat != null ? l.loc : null,
         tag: 'Lugar',
-        costMin: l.visita ? +l.visita : LUGAR_MIN
+        costMin: l.visita ? +l.visita : LUGAR_MIN,
+        foto: l.foto || null,
+        opciones: l.opciones || null
       };
       if (l.fecha && inRange(l.fecha)) push(l.fecha, item);
       else unassigned.push(Object.assign({ nota: 'sin fecha' }, item));
@@ -1763,10 +1857,9 @@
   let selectedItinDay = 'all';
   let selectedDatosTopic = 'all';
   let selectedGuiaTopic = 'all';
-  let selectedClimaDay = 'all';
   // La primera vez que se pinta cada sección, si hoy cae dentro del viaje,
   // se abre directamente ese día en vez de «Todos». Después el usuario manda.
-  let itinDayInit = false, mapDayInit = false, climaScrolled = false;
+  let itinDayInit = false, mapDayInit = false;
 
   // YMD de hoy si el viaje está en curso hoy; null en caso contrario.
   function diaHoyYMD() {
@@ -1798,19 +1891,6 @@
       if (selectedGuiaTopic === key) return;
       selectedGuiaTopic = key;
       renderTransporte();
-    });
-    return b;
-  }
-
-  function climaChip(key, label) {
-    const b = el('button', 'chip');
-    b.type = 'button';
-    b.textContent = label;
-    b.setAttribute('aria-pressed', String(selectedClimaDay === key));
-    b.addEventListener('click', () => {
-      if (selectedClimaDay === key) return;
-      selectedClimaDay = key;
-      renderClima();
     });
     return b;
   }
@@ -2114,6 +2194,24 @@
     return wrap;
   }
 
+  // <img> con onerror para ocultarse sola si la URL de Commons deja de
+  // servir el archivo (public page, sin control sobre terceros).
+  const fotoImg = (foto, alt, cls) =>
+    foto ? `<img class="${cls}" src="${esc(foto)}" alt="${esc(alt || '')}" loading="lazy" onerror="this.remove()">` : '';
+
+  function opcionesHtml(opciones) {
+    if (!opciones || !opciones.length) return '';
+    return `<div class="slot__opciones"><p class="slot__opciones-label">Elige una opción</p>` +
+      opciones.map(o =>
+        `<div class="slot__opcion">` +
+        `<div class="slot__opcion-nombre">${esc(o.nombre || '')}</div>` +
+        (o.notas ? `<div class="slot__opcion-notas">${esc(o.notas)}</div>` : '') +
+        fotoImg(o.foto, o.nombre, 'slot__opcion-foto') +
+        `</div>`
+      ).join('') +
+      `</div>`;
+  }
+
   function slotRow(it) {
     const r = el('div', 'slot slot--' + it.t + (it.quiet ? ' slot--quiet' : ''));
     const time = el('div', 'slot__time');
@@ -2123,7 +2221,9 @@
       `<div class="slot__tag">${esc(it.tag)}${it.nota ? ' · ' + esc(it.nota) : ''}</div>` +
       `<div class="slot__title">${esc(it.titulo)}</div>` +
       (it.sub ? `<div class="slot__sub">${esc(it.sub)}</div>` : '') +
-      (it.notas ? `<details class="slot__notes"><summary>Info importante</summary><p>${esc(it.notas)}</p></details>` : '');
+      (it.notas ? `<details class="slot__notes"><summary>Info importante</summary><p>${esc(it.notas)}</p></details>` : '') +
+      fotoImg(it.foto, it.titulo, 'slot__foto') +
+      opcionesHtml(it.opciones);
     if (it.loc && it.loc.lat != null) {
       const nav = el('div', 'slot__nav');
       const g = mapsLink('g', [it.loc]); g.className = 'slot__go'; g.textContent = 'Google Maps ›';
@@ -2649,7 +2749,7 @@
   /* ==========================================================
      Navegación por pestañas
      ========================================================== */
-  const SCREENS = ['datos', 'itinerario', 'mapas', 'transporte', 'clima'];
+  const SCREENS = ['datos', 'itinerario', 'mapas', 'transporte', 'muaythai'];
 
   function showScreen(name) {
     if (!SCREENS.includes(name)) name = 'datos';
@@ -2667,16 +2767,7 @@
       setTimeout(() => { if (map) map.invalidateSize(); }, 300);
     }
     window.scrollTo(0, 0);
-    if (name === 'clima' || name === 'itinerario') refreshMeteo();
-    // La primera vez que se abre "Clima" con el viaje en curso, centra la
-    // tarjeta de hoy (aquí, no en renderClima: allí la sección aún está oculta).
-    if (name === 'clima' && !climaScrolled) {
-      climaScrolled = true;
-      setTimeout(() => {
-        const hoyCard = $('#clima-body .sky-card.day--hoy');
-        if (hoyCard) hoyCard.scrollIntoView({ block: 'center' });
-      }, 120);
-    }
+    if (name === 'itinerario') refreshMeteo();
     if (location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);
   }
 
@@ -2836,7 +2927,7 @@
     renderItinerario();
     renderMapas();
     renderTransporte();
-    renderClima();
+    renderMuayThai();
   }
 
   /* ==========================================================
@@ -2874,16 +2965,6 @@
     if (p < 0.76) return 'Cuarto menguante';
     return 'Menguante';
   }
-
-  // Formatea un instante absoluto como hora local de Tailandia (ICT, UTC+7
-  // fijo), sea cual sea la zona horaria del dispositivo que consulta la app
-  // — importante aquí porque, a diferencia de Islandia (casi UTC+0), Tailandia
-  // está a horas de distancia de la zona horaria de quien planifica el viaje.
-  const hhmm = d => {
-    if (!isDate(d)) return '—';
-    const t = new Date(d.getTime() + TH_TZ_OFFSET_MS);
-    return `${pad2(t.getUTCHours())}:${pad2(t.getUTCMinutes())}`;
-  };
 
   function dayLenMin(dateNoon, loc) {
     const t = SunCalc.getTimes(dateNoon, loc.lat, loc.lng);
@@ -3065,62 +3146,71 @@
     return ''; // verde: solo el punto
   }
 
-  function skyLine(icon, html) {
-    const p = el('p', 'sky-line');
-    p.innerHTML = `<span class="sky-ic" aria-hidden="true">${icon}</span><span>${html}</span>`;
-    return p;
+  // Sitios cercanos a cada alojamiento para ver combates de Muay Thai, con
+  // los días de la semana en los que suelen tener cartel y qué noche de la
+  // estancia encaja. Investigado y verificado en septiembre de 2026 —
+  // los estadios cambian de cartel a menudo: confirma horario y entradas
+  // más cerca de la fecha.
+  const MUAYTHAI_SEED = [
+    { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
+      lugares: [
+        { nombre: 'Rajadamnern Stadium', nota: 'Uno de los dos estadios históricos de Bangkok. Cartel todas las noches de la semana.',
+          dias: 'Cualquier noche del 25 al 28 nov.', horario: 'Puertas ~18:00, combates desde las 19:00.', web: 'https://rajadamnern.com/' },
+        { nombre: 'Lumpinee Boxing Stadium', nota: 'El otro estadio histórico, ahora bajo el sello ONE Championship. Los «ONE Friday Fights» son semanales, los viernes.',
+          dias: 'Viernes 27 nov (ese día hay excursión a Ayutthaya con vuelta ~18:30 — confirma la hora de inicio antes de ir).', horario: 'Desde las 18:30.', web: 'https://www.onefc.com/' }
+      ] },
+    { zona: 'Chiang Mai', fechas: '29 nov – 2 dic (3 noches)',
+      lugares: [
+        { nombre: 'Loi Kroh Boxing Stadium', nota: 'Céntrico, en Loi Kroh Road. Ya está entre las opciones de la noche libre del itinerario.',
+          dias: 'Lunes 30 nov (también viernes/sábado si se cambia de plan).', horario: 'Puertas ~20:00, combates desde las 21:00.', web: 'https://loikrohboxingstadium.com/' },
+        { nombre: 'Thapae Boxing Stadium', nota: 'Cerca de la puerta Thapae.',
+          dias: 'Lunes 30 nov o martes 1 dic (las fuentes no coinciden del todo en los días exactos — confírmalo el mismo día).', horario: 'Combates desde las ~21:00.', web: 'https://muaythaichiangmai.com/fight-schedule' }
+      ] },
+    { zona: 'Krabi / Ao Nang', fechas: '3 – 5 dic (2 noches)',
+      lugares: [
+        { nombre: 'Ao Nang Landmark Boxing Stadium', nota: 'Cartel martes, jueves y sábado.',
+          dias: 'Jueves 3 dic.', horario: 'Desde las 21:00.', web: 'https://www.muaythaistadium.com/ao-nang' },
+        { nombre: 'Ao Nang Krabi Boxing Stadium (Krabi International)', nota: 'Uno de los estadios más grandes de Krabi, cartel los viernes.',
+          dias: 'Viernes 4 dic.', horario: 'Desde las 21:00.', web: 'https://krabiinternationalboxingstadium.com/' }
+      ] },
+    { zona: 'Koh Phi Phi', fechas: '5 – 7 dic (2 noches)',
+      lugares: [
+        { nombre: 'Phi Phi Reggae Bar', nota: 'En Tonsai Village. No es un estadio formal: combates de ambiente/amateur cada noche, entrada gratis con una consumición.',
+          dias: 'Sábado 5 dic o domingo 6 dic, cualquiera de las dos.', horario: 'Por la noche, consulta in situ.', web: '' }
+      ] },
+    { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
+      lugares: [
+        { nombre: 'Bangla Boxing Stadium', nota: 'En Patong, justo detrás de Jungceylon. Cartel las 7 noches de la semana.',
+          dias: 'Lunes 7 dic o martes 8 dic, cualquiera de las dos.', horario: 'Combates de 21:00 a 00:00.', web: 'https://banglaboxingstadium.com/' },
+        { nombre: 'Patong Boxing Stadium', nota: 'También en Patong. Cartel lunes, martes, miércoles y jueves.',
+          dias: 'Lunes 7 dic o martes 8 dic.', horario: 'Desde las 21:00.', web: 'https://www.muaythaistadium.com/patong-stadium' }
+      ] }
+  ];
+
+  function muayThaiCard(zona) {
+    const c = el('section', 'card mt-zona');
+    const head = el('h3', 'mt-zona__head');
+    head.textContent = `${zona.zona} · ${zona.fechas}`;
+    c.appendChild(head);
+    zona.lugares.forEach(l => {
+      const v = el('div', 'mt-venue');
+      v.innerHTML =
+        `<div class="mt-venue__nombre">${esc(l.nombre)}</div>` +
+        `<div class="mt-venue__dias">📅 ${esc(l.dias)}</div>` +
+        (l.horario ? `<div class="mt-venue__meta">${esc(l.horario)}</div>` : '') +
+        (l.nota ? `<div class="mt-venue__meta">${esc(l.nota)}</div>` : '') +
+        (l.web ? `<a class="reco-link" href="${esc(l.web)}" target="_blank" rel="noopener">Más información ›</a>` : '');
+      c.appendChild(v);
+    });
+    return c;
   }
 
-  function climaCard(s) {
-    const c = el('section', 'card sky-card');
-    if (s.date === hoyYMD()) c.classList.add('day--hoy');
-
-    const head = el('h3', 'sky-card__head');
-    head.textContent = `${cap(fmtDiaSemana(s.date))}, ${fmtFecha(s.date)} · ${s.locLabel}`;
-    c.appendChild(head);
-
-    // Sol
-    let sol = `${hhmm(s.sunrise)} – ${hhmm(s.sunset)}`;
-    if (s.dayLengthMin != null) sol += `  ·  ${fmtDur(s.dayLengthMin)}`;
-    if (s.deltaVsPrevMin != null) {
-      const d = s.deltaVsPrevMin;
-      const cls = d > 0 ? 'sky-delta sky-delta--up' : 'sky-delta';
-      const sign = d > 0 ? '+' : d < 0 ? '−' : '±';
-      sol += `  ·  <span class="${cls}">${sign}${Math.abs(d)} min</span>`;
-    }
-    c.appendChild(skyLine('☀️', sol));
-
-    // Hora dorada
-    if (isDate(s.goldenAM.start) && isDate(s.goldenAM.end) && isDate(s.goldenPM.start) && isDate(s.goldenPM.end)) {
-      c.appendChild(skyLine('📸',
-        `dorada  ${hhmm(s.goldenAM.start)}–${hhmm(s.goldenAM.end)}   ·   ${hhmm(s.goldenPM.start)}–${hhmm(s.goldenPM.end)}`));
-    }
-
-    // Ventana de oscuridad
-    if (s.darkWindow) {
-      c.appendChild(skyLine('🌑', `oscuridad  ${hhmm(s.darkWindow.start)} – ${hhmm(s.darkWindow.end)}`));
-    }
-
-    // Luna
-    let luna = `${esc(s.moon.phaseName)} ${s.moon.illumPct}%`;
-    if (s.moon.alwaysUp) {
-      luna += '  ·  sobre el horizonte toda la noche';
-    } else if (s.moon.alwaysDown) {
-      luna += '  ·  no sale';
-    } else {
-      if (s.moon.rise) luna += `  ·  sale ${hhmm(s.moon.rise)}`;
-      if (s.moon.set) luna += `  ·  se pone ${hhmm(s.moon.set)}`;
-    }
-    c.appendChild(skyLine('🌙', luna));
-
-    if (s.moon.inDarkWindow) {
-      const p = el('p', 'sky-line sky-line--sub');
-      const cls = s.moon.inDarkWindow === 'no' ? 'is-dim' : '';
-      p.innerHTML = `<span class="sky-ic"></span><span class="${cls}">en la ventana oscura: ${esc(s.moon.inDarkWindow)}</span>`;
-      c.appendChild(p);
-    }
-
-    return c;
+  function renderMuayThai() {
+    const body = $('#muaythai-body');
+    if (!body) return;
+    body.innerHTML = '';
+    body.appendChild(notice('Cartel y horarios orientativos (revisados en septiembre de 2026) — los estadios cambian el programa a menudo, confirma fecha y entradas más cerca del viaje.'));
+    MUAYTHAI_SEED.forEach(zona => body.appendChild(muayThaiCard(zona)));
   }
 
   /* ==========================================================
@@ -3198,7 +3288,6 @@
 
         state.meteo = { clouds, precip, fetched: new Date().toISOString() };
         save();
-        renderClima();
         const hayDatos = Object.keys(clouds).some(k => clouds[k].length) || Object.keys(precip).some(k => precip[k].length);
         if (hayDatos) {
           const ae = document.activeElement;
@@ -3206,32 +3295,6 @@
           if (!(ae && itin && itin.contains(ae))) renderItinerario();
         }
       });
-  }
-
-  function renderClima() {
-    const body = $('#clima-body');
-    if (!body) return;
-    body.innerHTML = '';
-
-    if (!state.meta.fechaInicio || !state.meta.fechaFin) {
-      body.appendChild(notice('Añade las fechas de inicio y fin en «Datos del viaje» para ver la luz y la luna de cada día.'));
-      return;
-    }
-    if (typeof SunCalc === 'undefined') {
-      body.appendChild(notice('No se pudo cargar el cálculo de sol y luna. Recarga la app.'));
-      return;
-    }
-
-    const dates = eachDay(state.meta.fechaInicio, state.meta.fechaFin);
-    if (selectedClimaDay !== 'all' && dates.indexOf(selectedClimaDay) === -1) selectedClimaDay = 'all';
-
-    const chips = el('div', 'chips chips--itin');
-    chips.appendChild(climaChip('all', 'Todos'));
-    dates.forEach((d, i) => chips.appendChild(climaChip(d, 'Día ' + (i + 1))));
-    body.appendChild(chips);
-
-    const show = selectedClimaDay === 'all' ? dates : dates.filter(d => d === selectedClimaDay);
-    show.forEach(d => body.appendChild(climaCard(sky(d))));
   }
 
   function initGazList() {

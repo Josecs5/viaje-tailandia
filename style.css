@@ -954,6 +954,48 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
 }
 .slot__go:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; border-radius: 4px; }
 
+.slot__foto {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-m);
+  margin-top: var(--space-8);
+  border: 1px solid var(--c-border);
+}
+.slot__opciones {
+  margin-top: var(--space-10);
+  padding-top: var(--space-10);
+  border-top: 1px dashed var(--c-border);
+}
+.slot__opciones-label {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--c-text-2);
+}
+.slot__opcion {
+  padding: var(--space-10) var(--space-12);
+  margin-bottom: var(--space-8);
+  background: var(--c-bg-1);
+  border: 1px solid var(--c-border-soft);
+  border-radius: var(--radius-s);
+}
+.slot__opcion:last-child { margin-bottom: 0; }
+.slot__opcion-nombre { font-weight: 600; font-size: var(--step-0); }
+.slot__opcion-notas { margin-top: 2px; color: var(--c-text-2); font-size: var(--step--1); }
+.slot__opcion-foto {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-s);
+  margin-top: var(--space-8);
+}
+
 .leg {
   display: flex;
   align-items: center;
@@ -1157,6 +1199,10 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
   color: var(--c-accent);
   text-decoration: none;
 }
+.aloj-link {
+  margin-top: var(--space-12);
+  text-decoration: none;
+}
 
 /* Teléfonos importantes ("Ideas") --------------------------- */
 .emerg-lead {
@@ -1235,30 +1281,27 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
 .coche-when__loc { color: var(--c-text-2); font-size: var(--step-0); margin-top: 2px; }
 
 /* ============================================================
-   CLIMA — Luz y luna
+   MUAY THAI — estadios cerca de cada alojamiento
    ============================================================ */
-.sky-card { margin-bottom: var(--space-12); }
-.sky-card__head {
+.mt-zona { margin-bottom: var(--space-12); }
+.mt-zona__head {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: var(--step-1);
-  margin: 0 0 var(--space-8);
+  margin: 0 0 var(--space-10);
 }
-.sky-line {
-  display: flex;
-  gap: var(--space-8);
-  align-items: baseline;
-  margin: 2px 0;
-  font-size: var(--step-0);
-  line-height: 1.4;
+.mt-venue {
+  padding: var(--space-10) var(--space-12);
+  margin-bottom: var(--space-8);
+  background: var(--c-bg-1);
+  border: 1px solid var(--c-border-soft);
+  border-radius: var(--radius-s);
 }
-.sky-line--sub { color: var(--c-text-2); font-size: var(--step--1); }
-.sky-ic { flex: 0 0 1.4em; text-align: center; }
-.sky-delta { color: var(--c-text-2); }
-.sky-delta--up { color: var(--c-accent); }
-.sky-line .is-dim { color: var(--c-text-2); }
-.sky-card.day--hoy { border-color: var(--c-accent); }
-.sky-card.day--hoy .sky-card__head { color: var(--c-accent); }
+.mt-venue:last-child { margin-bottom: 0; }
+.mt-venue__nombre { font-family: var(--font-display); font-weight: 600; font-size: var(--step-0); }
+.mt-venue__dias { margin-top: 4px; color: var(--c-accent); font-size: var(--step-0); font-weight: 500; }
+.mt-venue__meta { margin-top: 3px; color: var(--c-text-2); font-size: var(--step--1); line-height: 1.4; }
+.mt-venue .reco-link { display: inline-block; margin-top: var(--space-6); }
 
 /* ============================================================
    BOTTOM SHEET

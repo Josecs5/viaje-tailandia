@@ -5,7 +5,7 @@
  */
 'use strict';
 
-const SHELL_CACHE = 'shell-v4';
+const SHELL_CACHE = 'shell-v5';
 const TILE_CACHE  = 'tiles-v2';
 const TILE_MAX = 300;
 // Solo se tocan las cachés de este proyecto: en GitHub Pages el origen es
@@ -53,7 +53,7 @@ async function tileFetch(request) {
 const SHELL_ASSETS = [
   './',                       // redundante a propósito (red de seguridad);
   './index.html',             // la navegación resuelve contra './index.html'.
-  './style.css?v=4',
+  './style.css?v=5',
   './app.js?v=4',
   './manifest.json',
   './icons/icon-192.png',
