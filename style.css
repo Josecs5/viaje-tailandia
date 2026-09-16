@@ -1061,6 +1061,14 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
   border-radius: var(--radius-m);
   overflow: hidden;
   margin-top: var(--space-12);
+  /* Aísla el mapa en su propio contexto de apilamiento: si no, los
+     z-index internos de Leaflet (hasta 1000, para controles y popups)
+     compiten con el z-index de la barra inferior fija (40) en el mismo
+     contexto ambiente y ganan, aunque el mapa tenga overflow:hidden
+     (el overflow recorta el contenido que se sale de su caja, pero no
+     baja su prioridad de apilamiento frente a otros elementos fijos). */
+  position: relative;
+  isolation: isolate;
 }
 .leaflet-container { background: var(--c-bg-1); font-family: var(--font-body); }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
