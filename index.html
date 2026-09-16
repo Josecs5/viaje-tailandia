@@ -27,7 +27,10 @@
   <!-- Fuentes (local) -->
   <link rel="stylesheet" href="vendor/fonts/fonts.css">
 
-  <link rel="stylesheet" href="style.css?v=6">
+  <!-- Leaflet (local) — mapas pequeños de la pestaña "Comer" -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -61,7 +64,7 @@
     <section class="screen" id="screen-comer" data-screen="comer" hidden>
       <div class="screen-head">
         <h2>Dónde comer</h2>
-        <p class="muted">Estrellas Michelin y recomendados cerca de cada alojamiento.</p>
+        <p class="muted">Estrellas Michelin y recomendados cerca de cada alojamiento, con distancia, precio medio y mapa.</p>
       </div>
       <div id="comer-body"></div>
     </section>
@@ -145,7 +148,8 @@
     <p style="padding:24px;color:#2a2f3a;font-family:sans-serif">Esta aplicación necesita JavaScript para funcionar.</p>
   </noscript>
 
+  <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="vendor/suncalc/suncalc.js" defer></script>
-  <script src="app.js?v=5" defer></script>
+  <script src="app.js?v=6" defer></script>
 </body>
 </html>

@@ -2321,51 +2321,62 @@
     { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
       intro: 'Bangkok tiene 43 restaurantes con estrella Michelin en la guía 2026 — esta es una selección accesible para turistas, no la lista completa.',
       estrellas: [
-        { nombre: 'Sorn', estrellas: 3, tipo: 'Cocina del sur de Tailandia', q: 'Sorn restaurant Bangkok' },
-        { nombre: 'Sühring', estrellas: 3, tipo: 'Alemana moderna', q: 'Suhring restaurant Bangkok' },
-        { nombre: 'Le Normandie by Anne-Sophie Pic', estrellas: 2, tipo: 'Francesa, en el Mandarin Oriental', q: 'Le Normandie Mandarin Oriental Bangkok' },
-        { nombre: 'Gaa', estrellas: 2, tipo: 'India-tailandesa contemporánea', q: 'Gaa restaurant Bangkok' },
-        { nombre: 'Nahm', estrellas: 1, tipo: 'Tailandesa clásica', q: 'Nahm restaurant Bangkok' },
-        { nombre: 'Le Du', estrellas: 1, tipo: 'Tailandesa moderna', q: 'Le Du restaurant Bangkok' },
-        { nombre: 'Jay Fai', estrellas: 1, tipo: 'Street food — tortilla de cangrejo', nota: 'Colas larguísimas: reserva con mucha antelación o ve a primera hora.', q: 'Jay Fai restaurant Bangkok' }
+        { nombre: 'Sorn', estrellas: 3, tipo: 'Cocina del sur de Tailandia', precio: 'Menú degustación ~6.500–7.200 THB/persona', q: 'Sorn restaurant Bangkok', loc: { lat: 13.7254, lng: 100.5717 } },
+        { nombre: 'Sühring', estrellas: 3, tipo: 'Alemana moderna', precio: 'Menú degustación ~7.800–9.800 THB/persona', q: 'Suhring restaurant Bangkok', loc: { lat: 13.7109, lng: 100.5457 } },
+        { nombre: 'Le Normandie by Anne-Sophie Pic', estrellas: 2, tipo: 'Francesa, en el Mandarin Oriental', precio: 'Menú degustación desde ~9.700 THB/persona', q: 'Le Normandie Mandarin Oriental Bangkok', loc: { lat: 13.7239, lng: 100.5142 } },
+        { nombre: 'Gaa', estrellas: 2, tipo: 'India-tailandesa contemporánea', precio: 'Menú degustación ~4.900 THB/persona', q: 'Gaa restaurant Bangkok', loc: { lat: 13.7451, lng: 100.5553 } },
+        { nombre: 'Nahm', estrellas: 1, tipo: 'Tailandesa clásica', precio: 'Menú degustación ~2.900 THB/persona', q: 'Nahm restaurant Bangkok', loc: { lat: 13.7230, lng: 100.5399 } },
+        { nombre: 'Le Du', estrellas: 1, tipo: 'Tailandesa moderna', precio: 'Menú degustación ~4.500–5.500 THB/persona', q: 'Le Du restaurant Bangkok', loc: { lat: 13.7264, lng: 100.5312 } },
+        { nombre: 'Jay Fai', estrellas: 1, tipo: 'Street food — tortilla de cangrejo', nota: 'Colas larguísimas: reserva con mucha antelación o ve a primera hora.', precio: '~1.500–2.000 THB/persona a la carta', q: 'Jay Fai restaurant Bangkok', loc: { lat: 13.7485, lng: 100.5036 } }
       ], recomendados: [] },
     { zona: 'Chiang Mai', fechas: '29 nov – 2 dic (3 noches)',
       intro: 'Chiang Mai está en la Guía Michelin pero todavía sin ningún restaurante con estrella (edición 2026) — solo Bib Gourmand (buena comida a buen precio) y selección Michelin.',
       estrellas: [], recomendados: [
-        { nombre: 'Khao Soi Mae Sai', tipo: 'Bib Gourmand · khao soi del norte', q: 'Khao Soi Mae Sai Chiang Mai' },
-        { nombre: 'Huan Soontaree', tipo: 'Bib Gourmand · cocina Lanna del norte', q: 'Huan Soontaree Chiang Mai' }
+        { nombre: 'Khao Soi Mae Sai', tipo: 'Bib Gourmand · khao soi del norte', precio: '~50–60 THB/plato', q: 'Khao Soi Mae Sai Chiang Mai', loc: { lat: 18.8408, lng: 98.9872 } },
+        { nombre: 'Huan Soontaree', tipo: 'Bib Gourmand · cocina Lanna del norte', precio: '~400–600 THB/persona', q: 'Huan Soontaree Chiang Mai', loc: { lat: 18.8308, lng: 98.9943 } }
       ] },
     { zona: 'Krabi / Ao Nang', fechas: '3 – 5 dic (2 noches)',
       intro: 'Krabi no está cubierto todavía por la Guía Michelin — recomendaciones locales bien valoradas, no son estrellas Michelin.',
       estrellas: [], recomendados: [
-        { nombre: 'The Last Fisherman', tipo: 'Marisco con vistas, bueno para el atardecer', q: 'The Last Fisherman Ao Nang' },
-        { nombre: 'KoDam Kitchen', tipo: 'Cocina tailandesa tradicional', q: 'KoDam Kitchen Ao Nang' }
+        { nombre: 'The Last Fisherman', tipo: 'Marisco con vistas, bueno para el atardecer', precio: 'Precio moderado (sin cifra oficial)', q: 'The Last Fisherman Ao Nang', loc: { lat: 8.0311, lng: 98.8219 } },
+        { nombre: 'KoDam Kitchen', tipo: 'Cocina tailandesa tradicional', precio: '~200–400 THB/persona', q: 'KoDam Kitchen Ao Nang', loc: { lat: 8.0326, lng: 98.8237 } }
       ] },
     { zona: 'Koh Phi Phi', fechas: '5 – 7 dic (2 noches)',
       intro: 'Phi Phi tampoco está en la Guía Michelin — recomendaciones locales bien valoradas.',
       estrellas: [], recomendados: [
-        { nombre: 'Tonsai Seafood Restaurant', tipo: 'Marisco frente a la playa, buena puesta de sol', q: 'Tonsai Seafood Restaurant Koh Phi Phi' },
-        { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india', q: 'Papaya Restaurant Koh Phi Phi Tonsai' }
+        { nombre: 'Tonsai Seafood Restaurant', tipo: 'Marisco frente a la playa, buena puesta de sol', precio: '~700–900 THB/persona', q: 'Tonsai Seafood Restaurant Koh Phi Phi', loc: { lat: 7.7401, lng: 98.7789 } },
+        { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india', precio: '~200–300 THB/plato', q: 'Papaya Restaurant Koh Phi Phi Tonsai', loc: { lat: 7.7412, lng: 98.7779 } }
       ] },
     { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
-      intro: 'Phuket tiene un restaurante con estrella Michelin, en el norte de la isla — lejos de Rawai donde os alojáis (~1 h en coche); reserva con tiempo.',
+      intro: 'Phuket tiene un restaurante con estrella Michelin, en el norte de la isla — lejos de Rawai donde os alojáis; reserva con tiempo.',
       estrellas: [
-        { nombre: 'PRU', estrellas: 1, tipo: 'Km 0 — ingredientes de la propia granja (Trisara, Cherngtalay)', nota: 'También tiene la Estrella Verde Michelin. A ~1 h en coche desde Rawai.', q: 'PRU restaurant Trisara Phuket' }
+        { nombre: 'PRU', estrellas: 1, tipo: 'Km 0 — ingredientes de la propia granja (Trisara, Cherngtalay)', nota: 'También tiene la Estrella Verde Michelin.', precio: 'Menú degustación de precio elevado (no publicado, consulta la web)', q: 'PRU restaurant Trisara Phuket', loc: { lat: 8.0349, lng: 98.2773 } }
       ], recomendados: [
-        { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, selección Michelin, en Rawai', q: 'Salaloy Seafood Restaurant Rawai Phuket' },
-        { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', q: 'Kan Eang @ Pier Phuket' }
+        { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, selección Michelin, en Rawai', precio: '~600–800 THB/persona', q: 'Salaloy Seafood Restaurant Rawai Phuket', loc: { lat: 7.7719, lng: 98.3063 } },
+        { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', precio: '~900–1.000 THB/persona', q: 'Kan Eang @ Pier Phuket', loc: { lat: 7.7731, lng: 98.3071 } }
       ] }
   ];
 
   const gmapsSearchHref = q => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
   const appleMapsSearchHref = q => `https://maps.apple.com/?q=${encodeURIComponent(q)}`;
 
-  function comerVenue(v) {
+  // Distancia en línea recta desde el alojamiento de esa zona (mismo cálculo
+  // que usa el Itinerario para los trayectos entre paradas).
+  function comerDistTxt(aloj, v) {
+    if (!aloj || !aloj.loc || aloj.loc.lat == null || !v.loc) return '';
+    const km = haversine(aloj.loc, v.loc);
+    return km < 0.5 ? 'A pie desde el alojamiento' : `~${km.toFixed(1)} km del alojamiento en línea recta`;
+  }
+
+  function comerVenue(v, aloj) {
     const w = el('div', 'comer-venue');
     const estrellas = v.estrellas ? '⭐'.repeat(v.estrellas) + ' ' : '';
+    const dist = comerDistTxt(aloj, v);
     w.innerHTML =
       `<div class="comer-venue__nombre">${estrellas}${esc(v.nombre)}</div>` +
       (v.tipo ? `<div class="comer-venue__meta">${esc(v.tipo)}</div>` : '') +
+      (v.precio ? `<div class="comer-venue__meta">💰 ${esc(v.precio)}</div>` : '') +
+      (dist ? `<div class="comer-venue__meta">📍 ${esc(dist)}</div>` : '') +
       (v.nota ? `<div class="comer-venue__meta">${esc(v.nota)}</div>` : '') +
       `<div class="comer-venue__go">` +
       `<a class="reco-link" href="${esc(gmapsSearchHref(v.q))}" target="_blank" rel="noopener">Google Maps ›</a>` +
@@ -2374,7 +2385,7 @@
     return w;
   }
 
-  function comerCard(zona) {
+  function comerCard(zona, idx, aloj) {
     const c = el('section', 'card mt-zona');
     const head = el('h3', 'mt-zona__head');
     head.textContent = `${zona.zona} · ${zona.fechas}`;
@@ -2388,14 +2399,17 @@
       const lab = el('p', 'slot__opciones-label');
       lab.textContent = 'Estrellas Michelin';
       c.appendChild(lab);
-      zona.estrellas.forEach(v => c.appendChild(comerVenue(v)));
+      zona.estrellas.forEach(v => c.appendChild(comerVenue(v, aloj)));
     }
     if (zona.recomendados.length) {
       const lab = el('p', 'slot__opciones-label');
       lab.textContent = 'También recomendados';
       c.appendChild(lab);
-      zona.recomendados.forEach(v => c.appendChild(comerVenue(v)));
+      zona.recomendados.forEach(v => c.appendChild(comerVenue(v, aloj)));
     }
+    const mapa = el('div', 'comer-mapa');
+    mapa.id = 'comer-mapa-' + idx;
+    c.appendChild(mapa);
     return c;
   }
 
@@ -2403,8 +2417,68 @@
     const body = $('#comer-body');
     if (!body) return;
     body.innerHTML = '';
-    body.appendChild(notice('Guía Michelin Thailand 2026 y recomendaciones locales, revisadas en septiembre de 2026 — confirma disponibilidad y reserva con tiempo, sobre todo en los restaurantes con estrella.'));
-    COMER_SEED.forEach(zona => body.appendChild(comerCard(zona)));
+    body.appendChild(notice('Guía Michelin Thailand 2026 y recomendaciones locales, revisadas en septiembre de 2026 — confirma disponibilidad y reserva con tiempo, sobre todo en los restaurantes con estrella. Distancias en línea recta desde el alojamiento, no ruta real.'));
+    COMER_SEED.forEach((zona, idx) => {
+      const aloj = state.alojamientos.find(a => a.zona === zona.zona);
+      body.appendChild(comerCard(zona, idx, aloj));
+    });
+    refreshComerMaps();
+  }
+
+  // Un mapa pequeño por ciudad con el alojamiento (🏠) y los restaurantes
+  // numerados. Igual que antes con el mapa del Itinerario: no se puede crear
+  // un mapa de Leaflet en un contenedor oculto (tamaño 0), así que se reintenta
+  // cuando la pestaña "Comer" se hace visible.
+  const comerMaps = {};
+  function ensureComerMap(idx, aloj, venues) {
+    if (comerMaps[idx] || typeof L === 'undefined') return;
+    const elMap = document.getElementById('comer-mapa-' + idx);
+    if (!elMap || !elMap.clientHeight) return;
+
+    const pts = [];
+    if (aloj && aloj.loc && aloj.loc.lat != null) pts.push({ lat: aloj.loc.lat, lng: aloj.loc.lng, label: aloj.nombre || 'Alojamiento', home: true });
+    venues.forEach((v, i) => { if (v.loc) pts.push({ lat: v.loc.lat, lng: v.loc.lng, label: v.nombre, n: i + 1 }); });
+    if (!pts.length) { elMap.remove(); return; }
+
+    const map = L.map(elMap.id, { zoomControl: true, scrollWheelZoom: false, maxZoom: 18 })
+      .setView([pts[0].lat, pts[0].lng], 14);
+    const carto = L.tileLayer('https://{s}.basemap.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd', maxZoom: 19, crossOrigin: 'anonymous',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    });
+    let errs = 0, fallenBack = false;
+    carto.on('tileerror', () => {
+      // CARTO es un servicio gratuito compartido y a veces da 503: tras varios
+      // fallos, cambia a los tiles (claros) de OpenStreetMap en vez de dejar
+      // el mapa en blanco.
+      if (fallenBack || ++errs < 4) return;
+      fallenBack = true;
+      map.removeLayer(carto);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, crossOrigin: 'anonymous',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
+    });
+    carto.addTo(map);
+    pts.forEach(p => {
+      const icon = L.divIcon({
+        className: '',
+        html: `<div class="num-marker${p.home ? ' num-marker--home' : ''}">${p.home ? '🏠' : p.n}</div>`,
+        iconSize: [26, 26], iconAnchor: [13, 13]
+      });
+      L.marker([p.lat, p.lng], { icon }).addTo(map).bindPopup(`<b>${esc(p.label)}</b>`);
+    });
+    map.fitBounds(L.latLngBounds(pts.map(p => [p.lat, p.lng])), { padding: [28, 28], maxZoom: 15 });
+    comerMaps[idx] = map;
+  }
+
+  function refreshComerMaps() {
+    COMER_SEED.forEach((zona, idx) => {
+      const aloj = state.alojamientos.find(a => a.zona === zona.zona);
+      const venues = zona.estrellas.concat(zona.recomendados);
+      ensureComerMap(idx, aloj, venues);
+      if (comerMaps[idx]) comerMaps[idx].invalidateSize();
+    });
   }
 
   /* ==========================================================
@@ -2667,6 +2741,13 @@
       const tab = $(`.tab[data-tab="${s}"]`);
       if (tab) tab.setAttribute('aria-current', s === name ? 'page' : 'false');
     });
+    if (name === 'comer') {
+      // La sección ya es visible: crea/redimensiona tras el reflujo.
+      // Doble pasada (60 ms y 300 ms) para que Leaflet mida bien los contenedores.
+      refreshComerMaps();
+      setTimeout(refreshComerMaps, 60);
+      setTimeout(refreshComerMaps, 300);
+    }
     window.scrollTo(0, 0);
     if (name === 'itinerario') refreshMeteo();
     if (location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);

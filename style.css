@@ -1055,6 +1055,44 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
 .comer-venue__nombre { font-family: var(--font-display); font-weight: 600; font-size: var(--step-0); }
 .comer-venue__meta { margin-top: 3px; color: var(--c-text-2); font-size: var(--step--1); line-height: 1.4; }
 .comer-venue__go { display: flex; gap: var(--space-16); margin-top: var(--space-6); }
+.comer-mapa {
+  height: 220px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  margin-top: var(--space-12);
+}
+.leaflet-container { background: var(--c-bg-1); font-family: var(--font-body); }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.leaflet-popup-content { font-size: var(--step-0); }
+.leaflet-bar a, .leaflet-bar a:hover {
+  background: var(--c-surface-2);
+  color: var(--c-text);
+  border-bottom-color: var(--c-border);
+}
+.leaflet-control-attribution {
+  background: color-mix(in oklab, var(--c-bg) 70%, transparent) !important;
+  color: var(--c-text-2) !important;
+}
+.leaflet-control-attribution a { color: var(--c-text-1) !important; }
+.num-marker {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  color: var(--c-accent-ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 26px;
+  text-align: center;
+  border: 2px solid var(--c-bg);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.55);
+}
+.num-marker--home { background: var(--c-warning); color: var(--c-bg); font-size: 14px; }
 
 /* ============================================================
    RECOMENDACIONES  ("Ideas")

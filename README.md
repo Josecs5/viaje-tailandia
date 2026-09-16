@@ -19,8 +19,10 @@ El Itinerario avisa de **lluvia fuerte** por día (Open-Meteo) y de la
 **viabilidad de cada día** con salida/puesta de sol (cálculo local con
 SunCalc), con la acción concreta — poncho, posibles calles anegadas o
 ferris cancelados. La pestaña **Dónde comer** reúne las estrellas Michelin
-y los sitios mejor valorados cerca de cada alojamiento, con enlace directo
-a Google Maps y Apple Maps. La pestaña **Muay Thai** reúne los estadios
+y los sitios mejor valorados cerca de cada alojamiento, con la distancia
+en línea recta desde el alojamiento, el precio medio, un mapa por ciudad
+(Leaflet) y enlace directo a Google Maps y Apple Maps. La pestaña
+**Muay Thai** reúne los estadios
 cerca de cada alojamiento con los días de la semana en los que suelen
 tener cartel, para saber qué noche de la estancia encaja. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del
@@ -56,16 +58,18 @@ comer, Muay Thai) se genera solo.
 | `style.css` | Tema claro propio ("Sabai"), tokens OKLCH, responsive (autónomo) |
 | `app.js` | Lógica: CRUD, motor de itinerario, dónde comer, Muay Thai, transporte y guías |
 | `sw.js` | Service worker: precache del shell |
-| `vendor/` | SunCalc 1.9.0 y fuentes web servidos desde el repo |
+| `vendor/` | Leaflet 1.9.4, SunCalc 1.9.0 y fuentes web servidos desde el repo |
 | `manifest.json` | Manifiesto PWA |
 | `icons/` | Iconos 192 / 512 / maskable + apple-touch-icon + SVG |
 | `tokens.css` | Sistema de diseño portable (no lo usa la app; solo referencia) |
 
 Solo HTML, CSS y JavaScript. Sin frameworks. Service worker para uso sin
-conexión; SunCalc y las fuentes van incluidos en el repo.
+conexión; Leaflet, SunCalc y las fuentes van incluidos en el repo.
 
-El shell (HTML/CSS/JS, SunCalc, fuentes) se guarda en la primera visita con
-conexión, así que la app arranca sin cobertura.
+El shell (HTML/CSS/JS, Leaflet, SunCalc, fuentes) se guarda en la primera
+visita con conexión, así que la app arranca sin cobertura. Los mapas de
+"Dónde comer" necesitan conexión para cargar los tiles la primera vez que
+se ven (no se precachean, a diferencia del shell).
 
 La app se actualiza sola: al detectar una versión nueva se recarga cuando no
 hay ningún formulario abierto. Si la tienes abierta en varias pestañas, se
