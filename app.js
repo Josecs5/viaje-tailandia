@@ -338,13 +338,20 @@
     loyKrathong: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Thai_people_setting_their_candle-lit_krathongs_in_the_Ping_river_at_night_during_Loy_Krathong_2015-10_%2822715933524%29.jpg/960px-Thai_people_setting_their_candle-lit_krathongs_in_the_Ping_river_at_night_during_Loy_Krathong_2015-10_%2822715933524%29.jpg',
     asiatique: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Asiatique_%28II%29.jpg/960px-Asiatique_%28II%29.jpg',
     iconsiam: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Magnolias_Waterfront_Residences_Iconsiam.jpg',
-    elephantSanctuary: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Navann_was_born_at_the_park_Oct_2012.jpg/960px-Navann_was_born_at_the_park_Oct_2012.jpg'
+    elephantSanctuary: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Navann_was_born_at_the_park_Oct_2012.jpg/960px-Navann_was_born_at_the_park_Oct_2012.jpg',
+    mahanakhon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Maha_Nakhon_Building_07.23.jpg/960px-Maha_Nakhon_Building_07.23.jpg',
+    watHuayPlaKang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Chiang_Rai_-_Wat_Huay_Pla_Kang_-_Great_Guan_Yin_Statue_%282026%29_-_img_01.jpg/960px-Chiang_Rai_-_Wat_Huay_Pla_Kang_-_Great_Guan_Yin_Statue_%282026%29_-_img_01.jpg',
+    chiangRaiClockTower: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/Chiang_Rai_Clock_Tower.JPG/960px-Chiang_Rai_Clock_Tower.JPG',
+    phraNangCave: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Phra_Nang_cave_P1120058.JPG/960px-Phra_Nang_cave_P1120058.JPG',
+    sukhumvit: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Sukhumvit_Road_-01.jpg/960px-Sukhumvit_Road_-01.jpg',
+    kohPhiPhiDon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Isla_Ko_Phi_Phi_Don%2C_Tailandia%2C_2013-08-19%2C_DD_02.JPG/960px-Isla_Ko_Phi_Phi_Don%2C_Tailandia%2C_2013-08-19%2C_DD_02.JPG',
+    sundayWalkingStreet: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/Chiang_Mai_sunday_evening_walking_street.jpg/960px-Chiang_Mai_sunday_evening_walking_street.jpg'
   };
 
   const EXC_SEED = [
     { id: 'seed-ex-ayutthaya', nombre: 'Excursión de día a Ayutthaya', fecha: '2026-11-27', hora: '', duracion: '',
       encuentro: {}, proveedor: '', reserva: '',
-      notas: 'Recorrido en bici o moto por el parque histórico. Coste aproximado de entradas: ~290 THB/persona en total (sumando las de cada templo). Vuelta a Bangkok sobre las 18:30.' },
+      notas: 'Recorrido en bici o moto por el parque histórico. Coste aproximado de entradas: ~290 THB/persona en total (sumando las de cada templo). Vuelta a Bangkok sobre las 18:30.', foto: FOTO.watMahathat },
     { id: 'seed-ex-chiangrai', nombre: 'Excursión de día a Chiang Rai', fecha: '2026-12-02', hora: '06:00', duracion: '',
       encuentro: {}, proveedor: '', reserva: '',
       notas: 'Salida desde Chiang Mai ~06:00, llegada a Chiang Rai ~09:30.', foto: FOTO.watRongKhun },
@@ -382,7 +389,7 @@
     { id: 'seed-lg-pakkhlong', nombre: 'Pak Khlong Talat (mercado de flores)', loc: gl('Pak Khlong Talat, Bangkok'), fecha: '2026-11-26', hora: '14:00', visita: '45', prioridad: 'Baja', notas: '', foto: FOTO.pakKhlongTalat },
     { id: 'seed-lg-lohaprasat', nombre: 'Loha Prasat', loc: gl('Loha Prasat, Bangkok'), fecha: '2026-11-26', hora: '15:00', visita: '30', prioridad: 'Media', notas: '20 THB.', foto: FOTO.lohaPrasat },
     { id: 'seed-lg-watsaket', nombre: 'Wat Saket (Monte Dorado)', loc: gl('Wat Saket, Bangkok'), fecha: '2026-11-26', hora: '15:45', visita: '45', prioridad: 'Media', notas: '100 THB.', foto: FOTO.watSaket },
-    { id: 'seed-lg-rca', nombre: 'Ambiente nocturno en RCA', loc: gl('RCA (Royal City Avenue), Bangkok'), fecha: '2026-11-26', hora: '22:00', visita: '', prioridad: 'Baja', notas: 'Zona de discotecas y bares.' },
+    { id: 'seed-lg-rca', nombre: 'Ambiente nocturno en RCA', loc: gl('RCA (Royal City Avenue), Bangkok'), fecha: '2026-11-26', hora: '22:00', visita: '', prioridad: 'Baja', notas: 'Zona de discotecas y bares.', foto: FOTO.yaowarat },
     // 27 nov — Ayutthaya (mismo punto general del parque histórico para todos; ajustar por templo con «Buscar»)
     { id: 'seed-lg-ayu1', nombre: 'Wat Yai Chai Mongkhon', loc: gl('Wat Yai Chai Mongkhon, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '09:00', visita: '30', prioridad: 'Media', notas: '20 THB.', foto: FOTO.watYaiChaiMongkhon },
     { id: 'seed-lg-ayu2', nombre: 'Wat Phanan Choeng', loc: gl('Wat Phanan Choeng, Ayutthaya', 14.3532, 100.5689), fecha: '2026-11-27', hora: '09:45', visita: '30', prioridad: 'Media', notas: '20 THB.', foto: FOTO.watPhananChoeng },
@@ -398,7 +405,7 @@
     { id: 'seed-lg-chatuchak', nombre: 'Mercado de Chatuchak', loc: gl('Mercado de Chatuchak, Bangkok', 13.7999, 100.5501), fecha: '2026-11-28', hora: '09:30', visita: '150', prioridad: 'Media', notas: 'Uno de los mercados más grandes del mundo — solo abre fines de semana, confirma que coincide con el paso por aquí.', foto: FOTO.chatuchak },
     { id: 'seed-lg-traimit', nombre: 'Wat Traimit (Buda de Oro)', loc: gl('Wat Traimit, Bangkok'), fecha: '2026-11-28', hora: '14:00', visita: '30', prioridad: 'Media', notas: '', foto: FOTO.watTraimit },
     { id: 'seed-lg-talatnoi', nombre: 'Talat Noi (barrio chino antiguo)', loc: gl('Talat Noi, Bangkok'), fecha: '2026-11-28', hora: '15:00', visita: '60', prioridad: 'Media', notas: 'Callejones y arte urbano del casco antiguo chino.', foto: FOTO.talatNoi },
-    { id: 'seed-lg-mahanakhon', nombre: 'Mahanakhon SkyWalk', loc: gl('Mahanakhon SkyWalk, Bangkok'), fecha: '2026-11-28', hora: '17:30', visita: '60', prioridad: 'Alta', notas: 'Entrada recomendada a las 17:30 para el atardecer desde el mirador.' },
+    { id: 'seed-lg-mahanakhon', nombre: 'Mahanakhon SkyWalk', loc: gl('Mahanakhon SkyWalk, Bangkok'), fecha: '2026-11-28', hora: '17:30', visita: '60', prioridad: 'Alta', notas: 'Entrada recomendada a las 17:30 para el atardecer desde el mirador.', foto: FOTO.mahanakhon },
     { id: 'seed-lg-yaowarat', nombre: 'Yaowarat / Chinatown de noche', loc: gl('Yaowarat, Bangkok'), fecha: '2026-11-28', hora: '19:30', visita: '90', prioridad: 'Media', notas: '', foto: FOTO.yaowarat },
     // 29 nov — traslado a Chiang Mai
     { id: 'seed-lg-chiangman', nombre: 'Wat Chiang Man', loc: gl('Wat Chiang Man, Chiang Mai', 18.7910, 98.9871), fecha: '2026-11-29', hora: '12:00', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita. El templo más antiguo de Chiang Mai.', foto: FOTO.watChiangMan },
@@ -408,7 +415,7 @@
     { id: 'seed-lg-sunday', nombre: 'Noche en Chiang Mai — elige un plan', loc: gl('Chiang Mai'), fecha: '2026-11-29', hora: '19:00', visita: '', prioridad: 'Media',
       notas: '',
       opciones: [
-        { nombre: 'Sunday Walking Street', notas: '18:00–23:00, solo si el día cae en domingo.' },
+        { nombre: 'Sunday Walking Street', notas: '18:00–23:00, solo si el día cae en domingo.', foto: FOTO.sundayWalkingStreet },
         { nombre: 'Zoe in Yellow', notas: 'Ambiente nocturno.' }
       ] },
     // 30 nov — Chiang Mai clásico
@@ -431,9 +438,9 @@
     // 2 dic — Chiang Rai
     { id: 'seed-lg-rongkhun', nombre: 'Wat Rong Khun (Templo Blanco)', loc: gl('Wat Rong Khun, Chiang Rai', 19.8355, 99.7897), fecha: '2026-12-02', hora: '09:30', visita: '60', prioridad: 'Alta', notas: '200 THB.', foto: FOTO.watRongKhun },
     { id: 'seed-lg-ruatuen', nombre: 'Wat Rong Suea Ten (Templo Azul)', loc: gl('Wat Rong Suea Ten, Chiang Rai', 19.9310, 99.8171), fecha: '2026-12-02', hora: '11:00', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.', foto: FOTO.watRongSueaTen },
-    { id: 'seed-lg-huayplakang', nombre: 'Wat Huay Pla Kang', loc: gl('Wat Huay Pla Kang, Chiang Rai'), fecha: '2026-12-02', hora: '11:45', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.' },
+    { id: 'seed-lg-huayplakang', nombre: 'Wat Huay Pla Kang', loc: gl('Wat Huay Pla Kang, Chiang Rai'), fecha: '2026-12-02', hora: '11:45', visita: '30', prioridad: 'Media', notas: 'Entrada gratuita.', foto: FOTO.watHuayPlaKang },
     { id: 'seed-lg-baandam', nombre: 'Baan Dam (Casa Negra)', loc: gl('Baan Dam, Chiang Rai'), fecha: '2026-12-02', hora: '14:00', visita: '60', prioridad: 'Media', notas: '80 THB.', foto: FOTO.baanDam },
-    { id: 'seed-lg-crcentro', nombre: 'Wat Phra Kaew / Wat Phra Singh / Torre del Reloj (Chiang Rai)', loc: gl('Chiang Rai'), fecha: '2026-12-02', hora: '15:30', visita: '', prioridad: 'Baja', notas: 'Si da tiempo antes de volver a Chiang Mai.' },
+    { id: 'seed-lg-crcentro', nombre: 'Wat Phra Kaew / Wat Phra Singh / Torre del Reloj (Chiang Rai)', loc: gl('Chiang Rai'), fecha: '2026-12-02', hora: '15:30', visita: '', prioridad: 'Baja', notas: 'Si da tiempo antes de volver a Chiang Mai.', foto: FOTO.chiangRaiClockTower },
     // 3 dic — Krabi / Ao Nang
     { id: 'seed-lg-aonangbeach', nombre: 'Playa de Ao Nang', loc: gl('Ao Nang, Krabi', 8.0313, 98.8228), fecha: '2026-12-03', hora: '12:00', visita: '', prioridad: 'Media',
       notas: 'Mediodía en la playa.', foto: FOTO.aoNang,
@@ -441,36 +448,36 @@
         { nombre: 'Clase de cocina thailandesa', notas: 'Opcional, no reservada.' },
         { nombre: 'Tour de las 4 islas', notas: 'Opcional, no reservado.' }
       ] },
-    { id: 'seed-lg-monkeytrail', nombre: 'Monkey Trail hasta Pai Plong Beach', loc: gl('Pai Plong Beach, Ao Nang'), fecha: '2026-12-03', hora: '16:00', visita: '60', prioridad: 'Baja', notas: 'Sendero corto hasta una playa más tranquila.' },
+    { id: 'seed-lg-monkeytrail', nombre: 'Monkey Trail hasta Pai Plong Beach', loc: gl('Pai Plong Beach, Ao Nang'), fecha: '2026-12-03', hora: '16:00', visita: '60', prioridad: 'Baja', notas: 'Sendero corto hasta una playa más tranquila.', foto: FOTO.aoNang },
     { id: 'seed-lg-aonangsunset', nombre: 'Atardecer en Ao Nang', loc: gl('Ao Nang, Krabi', 8.0313, 98.8228), fecha: '2026-12-03', hora: '17:30', visita: '', prioridad: 'Media', notas: '', foto: FOTO.aoNang },
     // 4 dic — Railay
     { id: 'seed-lg-railaywest1', nombre: 'Railay West', loc: gl('Railay West, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '09:30', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.railay },
-    { id: 'seed-lg-railayeast', nombre: 'Railay East', loc: gl('Railay East, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '10:15', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-phranang', nombre: 'Phra Nang Beach & Cave', loc: gl('Phra Nang Beach, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '11:00', visita: '', prioridad: 'Alta', notas: '' },
-    { id: 'seed-lg-princesslagoon', nombre: 'Princess Lagoon', loc: gl('Princess Lagoon, Railay', 8.0113, 98.8372), fecha: '2026-12-04', hora: '12:00', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-escalada', nombre: 'Escalada o playa (tarde libre)', loc: gl('Railay'), fecha: '2026-12-04', hora: '14:00', visita: '', prioridad: 'Baja', notas: 'Tarde libre: escalada en roca o playa.' },
+    { id: 'seed-lg-railayeast', nombre: 'Railay East', loc: gl('Railay East, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '10:15', visita: '', prioridad: 'Media', notas: '', foto: FOTO.railay },
+    { id: 'seed-lg-phranang', nombre: 'Phra Nang Beach & Cave', loc: gl('Phra Nang Beach, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '11:00', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.phraNangCave },
+    { id: 'seed-lg-princesslagoon', nombre: 'Princess Lagoon', loc: gl('Princess Lagoon, Railay', 8.0113, 98.8372), fecha: '2026-12-04', hora: '12:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.railay },
+    { id: 'seed-lg-escalada', nombre: 'Escalada o playa (tarde libre)', loc: gl('Railay'), fecha: '2026-12-04', hora: '14:00', visita: '', prioridad: 'Baja', notas: 'Tarde libre: escalada en roca o playa.', foto: FOTO.railay },
     { id: 'seed-lg-railaysunset', nombre: 'Atardecer en Railay West Beach', loc: gl('Railay West, Krabi', 8.0113, 98.8372), fecha: '2026-12-04', hora: '17:30', visita: '', prioridad: 'Alta', notas: 'Volver a Ao Nang antes de las 19:30.', foto: FOTO.railay },
     // 5 dic — Phi Phi (llegada)
-    { id: 'seed-lg-tonsai', nombre: 'Tonsai Pier / Tonsai Village', loc: gl('Tonsai, Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '10:00', visita: '', prioridad: 'Media', notas: 'Ferry/lancha desde Ao Nang ~08:00, llegada ~10:00.' },
-    { id: 'seed-lg-walkingstreet', nombre: 'Phi Phi Walking Street', loc: gl('Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '11:00', visita: '', prioridad: 'Baja', notas: '' },
-    { id: 'seed-lg-lohdalum', nombre: 'Loh Dalum', loc: gl('Loh Dalum, Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '12:00', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-longbeach', nombre: 'Long Beach', loc: gl('Long Beach, Koh Phi Phi'), fecha: '2026-12-05', hora: '15:00', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-viewpoints', nombre: 'Miradores Phi Phi Viewpoint 1 y 2', loc: gl('Phi Phi Viewpoint, Koh Phi Phi'), fecha: '2026-12-05', hora: '16:30', visita: '60', prioridad: 'Alta', notas: 'Atardecer desde los miradores.' },
+    { id: 'seed-lg-tonsai', nombre: 'Tonsai Pier / Tonsai Village', loc: gl('Tonsai, Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '10:00', visita: '', prioridad: 'Media', notas: 'Ferry/lancha desde Ao Nang ~08:00, llegada ~10:00.', foto: FOTO.kohPhiPhiDon },
+    { id: 'seed-lg-walkingstreet', nombre: 'Phi Phi Walking Street', loc: gl('Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '11:00', visita: '', prioridad: 'Baja', notas: '', foto: FOTO.kohPhiPhiDon },
+    { id: 'seed-lg-lohdalum', nombre: 'Loh Dalum', loc: gl('Loh Dalum, Koh Phi Phi', 7.7407, 98.7784), fecha: '2026-12-05', hora: '12:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.kohPhiPhiDon },
+    { id: 'seed-lg-longbeach', nombre: 'Long Beach', loc: gl('Long Beach, Koh Phi Phi'), fecha: '2026-12-05', hora: '15:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.kohPhiPhiDon },
+    { id: 'seed-lg-viewpoints', nombre: 'Miradores Phi Phi Viewpoint 1 y 2', loc: gl('Phi Phi Viewpoint, Koh Phi Phi'), fecha: '2026-12-05', hora: '16:30', visita: '60', prioridad: 'Alta', notas: 'Atardecer desde los miradores.', foto: FOTO.kohPhiPhiDon },
     // 6 dic — Phi Phi, tour en barco
     { id: 'seed-lg-mayabay', nombre: 'Maya Bay', loc: gl('Maya Bay, Koh Phi Phi Leh', 7.6791, 98.7622), fecha: '2026-12-06', hora: '09:00', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.mayaBay },
-    { id: 'seed-lg-lohsamah', nombre: 'Loh Samah Bay', loc: gl('Loh Samah Bay, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '10:00', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-pileh', nombre: 'Pi Leh Lagoon', loc: gl('Pi Leh Lagoon, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '11:00', visita: '', prioridad: 'Alta', notas: '' },
-    { id: 'seed-lg-vikingcave', nombre: 'Viking Cave', loc: gl('Viking Cave, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '12:00', visita: '', prioridad: 'Baja', notas: '' },
-    { id: 'seed-lg-monkeybeach', nombre: 'Monkey Beach', loc: gl('Monkey Beach, Koh Phi Phi'), fecha: '2026-12-06', hora: '13:00', visita: '', prioridad: 'Media', notas: '' },
-    { id: 'seed-lg-bambooisland', nombre: 'Bamboo Island', loc: gl('Bamboo Island, Koh Phi Phi'), fecha: '2026-12-06', hora: '14:00', visita: '', prioridad: 'Media', notas: '' },
+    { id: 'seed-lg-lohsamah', nombre: 'Loh Samah Bay', loc: gl('Loh Samah Bay, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '10:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.mayaBay },
+    { id: 'seed-lg-pileh', nombre: 'Pi Leh Lagoon', loc: gl('Pi Leh Lagoon, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '11:00', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.mayaBay },
+    { id: 'seed-lg-vikingcave', nombre: 'Viking Cave', loc: gl('Viking Cave, Koh Phi Phi Leh'), fecha: '2026-12-06', hora: '12:00', visita: '', prioridad: 'Baja', notas: '', foto: FOTO.mayaBay },
+    { id: 'seed-lg-monkeybeach', nombre: 'Monkey Beach', loc: gl('Monkey Beach, Koh Phi Phi'), fecha: '2026-12-06', hora: '13:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.mayaBay },
+    { id: 'seed-lg-bambooisland', nombre: 'Bamboo Island', loc: gl('Bamboo Island, Koh Phi Phi'), fecha: '2026-12-06', hora: '14:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.mayaBay },
     // 8 dic — Phuket, ruta por la isla (horas explícitas del usuario)
     { id: 'seed-lg-bigbuddha', nombre: 'Big Buddha', loc: gl('Big Buddha, Phuket', 7.8278, 98.3121), fecha: '2026-12-08', hora: '08:30', visita: '', prioridad: 'Alta', notas: '', foto: FOTO.bigBuddhaPhuket },
     { id: 'seed-lg-watchalong', nombre: 'Wat Chalong', loc: gl('Wat Chalong, Phuket', 7.8467, 98.3374), fecha: '2026-12-08', hora: '10:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.watChalong },
-    { id: 'seed-lg-karonview', nombre: 'Karon Viewpoint', loc: gl('Karon Viewpoint, Phuket'), fecha: '2026-12-08', hora: '11:30', visita: '', prioridad: 'Media', notas: '' },
+    { id: 'seed-lg-karonview', nombre: 'Karon Viewpoint', loc: gl('Karon Viewpoint, Phuket'), fecha: '2026-12-08', hora: '11:30', visita: '', prioridad: 'Media', notas: '', foto: FOTO.kataBeach },
     { id: 'seed-lg-kata', nombre: 'Kata / Kata Noi', loc: gl('Kata, Phuket'), fecha: '2026-12-08', hora: '12:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.kataBeach },
     { id: 'seed-lg-naiharn', nombre: 'Nai Harn', loc: gl('Nai Harn, Phuket'), fecha: '2026-12-08', hora: '15:00', visita: '', prioridad: 'Media', notas: '', foto: FOTO.naiHarn },
-    { id: 'seed-lg-yanui', nombre: 'Ya Nui', loc: gl('Ya Nui, Phuket'), fecha: '2026-12-08', hora: '16:00', visita: '', prioridad: 'Baja', notas: '' },
-    { id: 'seed-lg-windmill', nombre: 'Windmill Viewpoint', loc: gl('Windmill Viewpoint, Phuket'), fecha: '2026-12-08', hora: '16:30', visita: '', prioridad: 'Baja', notas: '' },
+    { id: 'seed-lg-yanui', nombre: 'Ya Nui', loc: gl('Ya Nui, Phuket'), fecha: '2026-12-08', hora: '16:00', visita: '', prioridad: 'Baja', notas: '', foto: FOTO.kataBeach },
+    { id: 'seed-lg-windmill', nombre: 'Windmill Viewpoint', loc: gl('Windmill Viewpoint, Phuket'), fecha: '2026-12-08', hora: '16:30', visita: '', prioridad: 'Baja', notas: '', foto: FOTO.promthepCape },
     { id: 'seed-lg-promthep', nombre: 'Promthep Cape', loc: gl('Promthep Cape, Phuket', 7.7629, 98.2967), fecha: '2026-12-08', hora: '17:30', visita: '', prioridad: 'Alta', notas: 'Uno de los mejores puntos de la isla para el atardecer.', foto: FOTO.promthepCape },
     { id: 'seed-lg-patong', nombre: 'Patong / mercado / beach club', loc: gl('Patong, Phuket', 7.8965, 98.2965), fecha: '2026-12-08', hora: '20:30', visita: '', prioridad: 'Media', notas: '', foto: FOTO.patong }
   ];
@@ -481,11 +488,11 @@
         { nombre: 'Cerca de Wat Arun', foto: FOTO.watArun },
         { nombre: 'Wang Lang Market' }
       ] },
-    { id: 'seed-cm-sukhumvit', nombre: 'Cena en Sukhumvit / Soi 11', tipo: 'Cena', loc: gl('Sukhumvit Soi 11, Bangkok'), fecha: '2026-11-26', horario: '20:00', notas: '' },
+    { id: 'seed-cm-sukhumvit', nombre: 'Cena en Sukhumvit / Soi 11', tipo: 'Cena', loc: gl('Sukhumvit Soi 11, Bangkok'), fecha: '2026-11-26', horario: '20:00', notas: '', foto: FOTO.sukhumvit },
     { id: 'seed-cm-khaosoi', nombre: 'Khao Soi (fideos con curry del norte)', tipo: 'Almuerzo', loc: gl('Chiang Mai'), fecha: '2026-11-29', horario: '14:15', notas: 'Plato típico del norte de Tailandia.', foto: FOTO.khaoSoi },
     { id: 'seed-cm-aonangmarket', nombre: 'Cena y paseo por el Ao Nang Landmark Night Market', tipo: 'Mercado nocturno', loc: gl('Ao Nang Landmark, Krabi'), fecha: '2026-12-03', horario: '19:30', notas: '', foto: FOTO.aoNang },
-    { id: 'seed-cm-phuket1', nombre: 'Comida (ruta por Phuket)', tipo: 'Almuerzo', loc: gl('Phuket'), fecha: '2026-12-08', horario: '13:30', notas: '' },
-    { id: 'seed-cm-phuket2', nombre: 'Cena (ruta por Phuket)', tipo: 'Cena', loc: gl('Phuket'), fecha: '2026-12-08', horario: '19:00', notas: '' }
+    { id: 'seed-cm-phuket1', nombre: 'Comida (ruta por Phuket)', tipo: 'Almuerzo', loc: gl('Phuket'), fecha: '2026-12-08', horario: '13:30', notas: '', foto: FOTO.patong },
+    { id: 'seed-cm-phuket2', nombre: 'Cena (ruta por Phuket)', tipo: 'Cena', loc: gl('Phuket'), fecha: '2026-12-08', horario: '19:00', notas: '', foto: FOTO.patong }
   ];
 
   function seedState() {
