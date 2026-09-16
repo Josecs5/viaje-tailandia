@@ -5,9 +5,8 @@ escalas, vehículo de alquiler (coche o moto), alojamientos, excursiones,
 sitios para comer y lugares que ver — **todo editable desde el móvil**, sin
 datos precargados. Genera un **itinerario diario** automático que ordena
 cada elemento por hora y marca la **viabilidad de cada día** (luz disponible
-y tiempo de trayecto entre paradas) con la hora recomendada de salida.
-Muestra el **recorrido de cada día en un mapa** (Leaflet + OpenStreetMap/CARTO)
-y genera sola el enlace de la **ruta completa en Google Maps** a partir de
+y tiempo de trayecto entre paradas) con la hora recomendada de salida, y
+genera sola el enlace de la **ruta completa en Google Maps** a partir de
 las paradas con ubicación que vayas añadiendo. Incluye un **registro de
 gastos** en THB y € con el tipo de cambio del día (BCE vía frankfurter.dev,
 cacheado, con ajuste manual) y un resumen por categoría. La pestaña
@@ -19,9 +18,11 @@ B para días de lluvia fuerte, trucos de dinero en THB y tus propias notas.
 El Itinerario avisa de **lluvia fuerte** por día (Open-Meteo) y de la
 **viabilidad de cada día** con salida/puesta de sol (cálculo local con
 SunCalc), con la acción concreta — poncho, posibles calles anegadas o
-ferris cancelados. La pestaña **Muay Thai** reúne los estadios cerca de
-cada alojamiento con los días de la semana en los que suelen tener cartel,
-para saber qué noche de la estancia encaja. Datos
+ferris cancelados. La pestaña **Dónde comer** reúne las estrellas Michelin
+y los sitios mejor valorados cerca de cada alojamiento, con enlace directo
+a Google Maps y Apple Maps. La pestaña **Muay Thai** reúne los estadios
+cerca de cada alojamiento con los días de la semana en los que suelen
+tener cartel, para saber qué noche de la estancia encaja. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del
 pasaporte, vacunas, facturar los vuelos con su fecha límite calculada en
 cuanto los añadas...) y una **lista de equipaje** curada para el clima
@@ -44,8 +45,8 @@ Para instalarla como app en el móvil: ábrela en el navegador → menú de
 compartir → **Añadir a pantalla de inicio**. Se abre en modo standalone.
 
 La app arranca **vacía**: añade tus vuelos, alojamientos, excursiones y las
-fechas del viaje desde la pestaña Datos, y el resto (itinerario, mapas,
-clima) se genera solo.
+fechas del viaje desde la pestaña Datos, y el resto (itinerario, dónde
+comer, Muay Thai) se genera solo.
 
 ## Estructura
 
@@ -53,22 +54,18 @@ clima) se genera solo.
 |---|---|
 | `index.html` | Estructura y meta tags PWA/iOS |
 | `style.css` | Tema claro propio ("Sabai"), tokens OKLCH, responsive (autónomo) |
-| `app.js` | Lógica: CRUD, motor de itinerario, mapas, sección "Clima", transporte y guías |
-| `sw.js` | Service worker: precache del shell y caché de tiles |
-| `vendor/` | Leaflet 1.9.4, SunCalc 1.9.0 y fuentes web servidos desde el repo |
+| `app.js` | Lógica: CRUD, motor de itinerario, dónde comer, Muay Thai, transporte y guías |
+| `sw.js` | Service worker: precache del shell |
+| `vendor/` | SunCalc 1.9.0 y fuentes web servidos desde el repo |
 | `manifest.json` | Manifiesto PWA |
 | `icons/` | Iconos 192 / 512 / maskable + apple-touch-icon + SVG |
 | `tokens.css` | Sistema de diseño portable (no lo usa la app; solo referencia) |
 
 Solo HTML, CSS y JavaScript. Sin frameworks. Service worker para uso sin
-conexión; Leaflet, SunCalc y las fuentes van incluidos en el repo.
+conexión; SunCalc y las fuentes van incluidos en el repo.
 
-El shell (HTML/CSS/JS, Leaflet, SunCalc, fuentes) se guarda en la primera
-visita con conexión, así que la app arranca sin cobertura. Los tiles del
-mapa se guardan solo de los días que abras en **Mapas** con conexión: antes
-de viajar, **desde el propio móvil** (los tiles de una pantalla retina no
-son los mismos que los de un portátil), abre la app con wifi y pasa por el
-mapa de cada día.
+El shell (HTML/CSS/JS, SunCalc, fuentes) se guarda en la primera visita con
+conexión, así que la app arranca sin cobertura.
 
 La app se actualiza sola: al detectar una versión nueva se recarga cuando no
 hay ningún formulario abierto. Si la tienes abierta en varias pestañas, se

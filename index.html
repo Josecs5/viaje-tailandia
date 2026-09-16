@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Viaje a Tailandia — Planificador</title>
-  <meta name="description" content="Planifica tu viaje a Tailandia: vuelos, alojamientos, excursiones, itinerario diario, mapas y transporte local. Funciona como app en tu móvil.">
+  <meta name="description" content="Planifica tu viaje a Tailandia: vuelos, alojamientos, excursiones, itinerario diario, dónde comer y transporte local. Funciona como app en tu móvil.">
   <meta name="robots" content="noindex, nofollow">
 
   <!-- PWA -->
@@ -27,10 +27,7 @@
   <!-- Fuentes (local) -->
   <link rel="stylesheet" href="vendor/fonts/fonts.css">
 
-  <!-- Leaflet (local) -->
-  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -60,16 +57,13 @@
       <div id="itin-body"></div>
     </section>
 
-    <!-- ============ MAPAS ============ -->
-    <section class="screen" id="screen-mapas" data-screen="mapas" hidden>
+    <!-- ============ DÓNDE COMER ============ -->
+    <section class="screen" id="screen-comer" data-screen="comer" hidden>
       <div class="screen-head">
-        <h2>Mapas</h2>
-        <p class="muted">Elige un día para ver su recorrido en orden.</p>
+        <h2>Dónde comer</h2>
+        <p class="muted">Estrellas Michelin y recomendados cerca de cada alojamiento.</p>
       </div>
-      <div id="map-days" class="chips"></div>
-      <div id="map" class="map"></div>
-      <div id="map-actions" class="row-actions"></div>
-      <ol id="map-legend" class="legend"></ol>
+      <div id="comer-body"></div>
     </section>
 
     <!-- ============ TRANSPORTE (guías: transporte local, comida callejera, templos, temporada) ============ -->
@@ -100,9 +94,9 @@
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15h4"/></svg>
       <span>Itinerario</span>
     </button>
-    <button class="tab" data-tab="mapas" type="button" aria-current="false">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-      <span>Mapas</span>
+    <button class="tab" data-tab="comer" type="button" aria-current="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2v7a2 2 0 0 0 2 2v11"/><path d="M7 2v6M9 2v6M11 2v9"/><path d="M17 2c-1.6 0-3 2.2-3 5s1.4 5 3 5v10"/></svg>
+      <span>Comer</span>
     </button>
     <button class="tab" data-tab="transporte" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16V8a2 2 0 0 1 2-2h10l4 4v6a1 1 0 0 1-1 1h-1"/><circle cx="8" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M4 16h3M11 6v6h9"/></svg>
@@ -151,8 +145,7 @@
     <p style="padding:24px;color:#2a2f3a;font-family:sans-serif">Esta aplicación necesita JavaScript para funcionar.</p>
   </noscript>
 
-  <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="vendor/suncalc/suncalc.js" defer></script>
-  <script src="app.js?v=4" defer></script>
+  <script src="app.js?v=5" defer></script>
 </body>
 </html>

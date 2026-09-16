@@ -1866,7 +1866,7 @@
   let selectedGuiaTopic = 'all';
   // La primera vez que se pinta cada sección, si hoy cae dentro del viaje,
   // se abre directamente ese día en vez de «Todos». Después el usuario manda.
-  let itinDayInit = false, mapDayInit = false;
+  let itinDayInit = false;
 
   // YMD de hoy si el viaje está en curso hoy; null en caso contrario.
   function diaHoyYMD() {
@@ -2311,199 +2311,100 @@
   }
 
   /* ==========================================================
-     Pantalla: MAPAS
+     Pantalla: DÓNDE COMER — estrellas Michelin y recomendados
+     cerca de cada alojamiento
      ========================================================== */
-  let map = null, dayLayer = null, mapData = null, selectedDay = 'all';
-  let mapDirty = true, tileFallback = false;
+  // Investigado y verificado en septiembre de 2026 (Guía Michelin Thailand
+  // 2026). Krabi/Ao Nang y Koh Phi Phi no están cubiertos por la Guía
+  // Michelin — ahí solo hay recomendados, no estrellas.
+  const COMER_SEED = [
+    { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
+      intro: 'Bangkok tiene 43 restaurantes con estrella Michelin en la guía 2026 — esta es una selección accesible para turistas, no la lista completa.',
+      estrellas: [
+        { nombre: 'Sorn', estrellas: 3, tipo: 'Cocina del sur de Tailandia', q: 'Sorn restaurant Bangkok' },
+        { nombre: 'Sühring', estrellas: 3, tipo: 'Alemana moderna', q: 'Suhring restaurant Bangkok' },
+        { nombre: 'Le Normandie by Anne-Sophie Pic', estrellas: 2, tipo: 'Francesa, en el Mandarin Oriental', q: 'Le Normandie Mandarin Oriental Bangkok' },
+        { nombre: 'Gaa', estrellas: 2, tipo: 'India-tailandesa contemporánea', q: 'Gaa restaurant Bangkok' },
+        { nombre: 'Nahm', estrellas: 1, tipo: 'Tailandesa clásica', q: 'Nahm restaurant Bangkok' },
+        { nombre: 'Le Du', estrellas: 1, tipo: 'Tailandesa moderna', q: 'Le Du restaurant Bangkok' },
+        { nombre: 'Jay Fai', estrellas: 1, tipo: 'Street food — tortilla de cangrejo', nota: 'Colas larguísimas: reserva con mucha antelación o ve a primera hora.', q: 'Jay Fai restaurant Bangkok' }
+      ], recomendados: [] },
+    { zona: 'Chiang Mai', fechas: '29 nov – 2 dic (3 noches)',
+      intro: 'Chiang Mai está en la Guía Michelin pero todavía sin ningún restaurante con estrella (edición 2026) — solo Bib Gourmand (buena comida a buen precio) y selección Michelin.',
+      estrellas: [], recomendados: [
+        { nombre: 'Khao Soi Mae Sai', tipo: 'Bib Gourmand · khao soi del norte', q: 'Khao Soi Mae Sai Chiang Mai' },
+        { nombre: 'Huan Soontaree', tipo: 'Bib Gourmand · cocina Lanna del norte', q: 'Huan Soontaree Chiang Mai' }
+      ] },
+    { zona: 'Krabi / Ao Nang', fechas: '3 – 5 dic (2 noches)',
+      intro: 'Krabi no está cubierto todavía por la Guía Michelin — recomendaciones locales bien valoradas, no son estrellas Michelin.',
+      estrellas: [], recomendados: [
+        { nombre: 'The Last Fisherman', tipo: 'Marisco con vistas, bueno para el atardecer', q: 'The Last Fisherman Ao Nang' },
+        { nombre: 'KoDam Kitchen', tipo: 'Cocina tailandesa tradicional', q: 'KoDam Kitchen Ao Nang' }
+      ] },
+    { zona: 'Koh Phi Phi', fechas: '5 – 7 dic (2 noches)',
+      intro: 'Phi Phi tampoco está en la Guía Michelin — recomendaciones locales bien valoradas.',
+      estrellas: [], recomendados: [
+        { nombre: 'Tonsai Seafood Restaurant', tipo: 'Marisco frente a la playa, buena puesta de sol', q: 'Tonsai Seafood Restaurant Koh Phi Phi' },
+        { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india', q: 'Papaya Restaurant Koh Phi Phi Tonsai' }
+      ] },
+    { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
+      intro: 'Phuket tiene un restaurante con estrella Michelin, en el norte de la isla — lejos de Rawai donde os alojáis (~1 h en coche); reserva con tiempo.',
+      estrellas: [
+        { nombre: 'PRU', estrellas: 1, tipo: 'Km 0 — ingredientes de la propia granja (Trisara, Cherngtalay)', nota: 'También tiene la Estrella Verde Michelin. A ~1 h en coche desde Rawai.', q: 'PRU restaurant Trisara Phuket' }
+      ], recomendados: [
+        { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, selección Michelin, en Rawai', q: 'Salaloy Seafood Restaurant Rawai Phuket' },
+        { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', q: 'Kan Eang @ Pier Phuket' }
+      ] }
+  ];
 
-  // Límites aproximados de Tailandia (con un pequeño margen).
-  const THAILAND_BOUNDS = [[5.3, 96.8], [20.7, 105.9]];
-  const THAILAND_CENTER = [13.0, 101.0];
+  const gmapsSearchHref = q => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+  const appleMapsSearchHref = q => `https://maps.apple.com/?q=${encodeURIComponent(q)}`;
 
-  // Tile transparente 1×1: Leaflet lo pone como src del tile que falla (sin
-  // señal), así el mapa sale en gris sin iconos de imagen rota.
-  const TILE_ERROR_URL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
-
-  function ensureMap() {
-    if (map || typeof L === 'undefined') return;
-    const elMap = document.getElementById('map');
-    // No inicializar Leaflet en un contenedor oculto (tamaño 0): el mapa
-    // quedaría roto. Se crea la primera vez que la pestaña es visible.
-    if (!elMap || !elMap.clientHeight) return;
-
-    map = L.map('map', {
-      zoomControl: true,
-      minZoom: 5,
-      maxZoom: 17,
-      maxBounds: THAILAND_BOUNDS,
-      maxBoundsViscosity: 1,      // no deja arrastrar fuera de Tailandia
-      worldCopyJump: false
-    }).fitBounds(THAILAND_BOUNDS);
-
-    const carto = L.tileLayer('https://{s}.basemap.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      maxZoom: 19,
-      crossOrigin: 'anonymous',   // respuesta con status real -> el SW cachea tiles sin opacas
-      errorTileUrl: TILE_ERROR_URL,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-    });
-    let errs = 0;
-    carto.on('tileerror', () => {
-      // Sin conexión no tiene sentido cambiar a OSM (tampoco carga), y quitar la
-      // capa CARTO borraría de la pantalla los tiles suyos ya cacheados.
-      if (!navigator.onLine || tileFallback || ++errs < 5) return;
-      tileFallback = true;
-      map.removeLayer(carto);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        crossOrigin: 'anonymous',
-        errorTileUrl: TILE_ERROR_URL,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(map);
-    });
-    carto.addTo(map);
-    dayLayer = L.layerGroup().addTo(map);
+  function comerVenue(v) {
+    const w = el('div', 'comer-venue');
+    const estrellas = v.estrellas ? '⭐'.repeat(v.estrellas) + ' ' : '';
+    w.innerHTML =
+      `<div class="comer-venue__nombre">${estrellas}${esc(v.nombre)}</div>` +
+      (v.tipo ? `<div class="comer-venue__meta">${esc(v.tipo)}</div>` : '') +
+      (v.nota ? `<div class="comer-venue__meta">${esc(v.nota)}</div>` : '') +
+      `<div class="comer-venue__go">` +
+      `<a class="reco-link" href="${esc(gmapsSearchHref(v.q))}" target="_blank" rel="noopener">Google Maps ›</a>` +
+      `<a class="reco-link" href="${esc(appleMapsSearchHref(v.q))}" target="_blank" rel="noopener">Apple Maps ›</a>` +
+      `</div>`;
+    return w;
   }
 
-  function renderMapas() {
-    const chips = $('#map-days');
-    const mapEl = $('#map');
-    chips.innerHTML = '';
-    $('#map-actions').innerHTML = '';
-    $('#map-legend').innerHTML = '';
-
-    if (!state.meta.fechaInicio || !state.meta.fechaFin) {
-      mapEl.style.display = 'none';
-      chips.appendChild(notice('Añade las fechas del viaje para ver los mapas por día.'));
-      mapData = null;
-      return;
+  function comerCard(zona) {
+    const c = el('section', 'card mt-zona');
+    const head = el('h3', 'mt-zona__head');
+    head.textContent = `${zona.zona} · ${zona.fechas}`;
+    c.appendChild(head);
+    if (zona.intro) {
+      const p = el('p', 'comer-intro');
+      p.textContent = zona.intro;
+      c.appendChild(p);
     }
-    mapEl.style.display = '';
-    mapData = buildItinerary();
-
-    if (!mapDayInit) {
-      mapDayInit = true;
-      const hoy = diaHoyYMD();
-      if (hoy && mapData.days.some(d => d.date === hoy)) selectedDay = hoy;
+    if (zona.estrellas.length) {
+      const lab = el('p', 'slot__opciones-label');
+      lab.textContent = 'Estrellas Michelin';
+      c.appendChild(lab);
+      zona.estrellas.forEach(v => c.appendChild(comerVenue(v)));
     }
-
-    chips.appendChild(chipBtn('all', 'Todo el viaje', false));
-    mapData.days.forEach(d => {
-      const has = d.items.some(i => i.loc && i.loc.lat != null);
-      chips.appendChild(chipBtn(d.date, 'Día ' + d.idx, !has));
-    });
-
-    if (selectedDay !== 'all' && !mapData.days.some(d => d.date === selectedDay)) selectedDay = 'all';
-
-    mapDirty = true;
-    refreshMap();
+    if (zona.recomendados.length) {
+      const lab = el('p', 'slot__opciones-label');
+      lab.textContent = 'También recomendados';
+      c.appendChild(lab);
+      zona.recomendados.forEach(v => c.appendChild(comerVenue(v)));
+    }
+    return c;
   }
 
-  // Crea/redimensiona/redibuja el mapa. Seguro llamar en cualquier momento:
-  // si la pestaña está oculta no hace nada y se completa al mostrarla.
-  function refreshMap() {
-    const elMap = document.getElementById('map');
-    if (!elMap || !elMap.clientHeight || !mapData) return;
-    if (typeof L === 'undefined') {
-      elMap.innerHTML = '<p class="map-err">No se pudo cargar el mapa (Leaflet). Revisa la conexión y recarga la página.</p>';
-      return;
-    }
-    ensureMap();
-    if (!map) return;
-    map.invalidateSize();
-    if (mapDirty) { drawSelection(); mapDirty = false; }
-  }
-
-  function chipBtn(key, label, disabled) {
-    const b = el('button', 'chip');
-    b.type = 'button';
-    b.textContent = label;
-    b.setAttribute('aria-pressed', String(selectedDay === key));
-    if (disabled) { b.disabled = true; b.title = 'Sin ubicaciones con coordenadas'; }
-    b.addEventListener('click', () => {
-      selectedDay = key;
-      $$('#map-days .chip').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
-      mapDirty = true;
-      refreshMap();
-    });
-    return b;
-  }
-
-  function accentColor() {
-    return getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim() || '#e671d9';
-  }
-
-  function drawSelection() {
-    if (!map || !mapData) return;
-    dayLayer.clearLayers();
-    const actions = $('#map-actions');
-    const legend = $('#map-legend');
-    actions.innerHTML = '';
-    legend.innerHTML = '';
-
-    let pts = [];
-    if (selectedDay === 'all') {
-      mapData.days.forEach(d => d.items.forEach(i => {
-        if (i.loc && i.loc.lat != null) pts.push(Object.assign({}, i, { badge: d.idx }));
-      }));
-    } else {
-      const d = mapData.days.find(x => x.date === selectedDay);
-      if (d) d.items.forEach((i, k) => {
-        if (i.loc && i.loc.lat != null) pts.push(Object.assign({}, i, { badge: pts.length + 1 }));
-      });
-    }
-
-    if (!pts.length) {
-      legend.innerHTML = '<li class="legend__empty">No hay ubicaciones con coordenadas en esta selección. Añade coordenadas al editar cada elemento.</li>';
-      map.setView(THAILAND_CENTER, 6);
-      return;
-    }
-
-    const latlngs = [];
-    pts.forEach(p => {
-      const mk = L.marker([p.loc.lat, p.loc.lng], {
-        icon: L.divIcon({
-          className: '',
-          html: `<div class="num-marker">${p.badge}</div>`,
-          iconSize: [26, 26],
-          iconAnchor: [13, 13]
-        })
-      });
-      mk.bindPopup(
-        `<b>${esc(p.titulo)}</b>` +
-        (p.hora ? `<br>${p.hora}` : '') +
-        (p.loc.texto ? `<br><span class="pop-sub">${esc(p.loc.texto)}</span>` : '')
-      );
-      dayLayer.addLayer(mk);
-      latlngs.push([p.loc.lat, p.loc.lng]);
-    });
-
-    if (selectedDay !== 'all' && latlngs.length > 1) {
-      dayLayer.addLayer(L.polyline(latlngs, { color: accentColor(), weight: 3, opacity: 0.85, dashArray: '2 7' }));
-    }
-    map.fitBounds(latlngs, { padding: [42, 42], maxZoom: selectedDay === 'all' ? 9 : 12 });
-
-    const locs = pts.map(p => p.loc);
-    const g = mapsLink('g', locs);
-    g.classList.remove('btn--sm');
-    g.textContent = selectedDay === 'all' ? 'Google Maps (viaje)' : 'Google Maps';
-    const a = mapsLink('a', locs);
-    a.classList.remove('btn--sm');
-    a.textContent = 'Apple Maps';
-    const w = mapsLink('w', locs);
-    w.classList.remove('btn--sm');
-    w.textContent = 'Waze';
-    actions.append(g, a, w);
-
-    pts.forEach(p => {
-      const li = el('li', 'legend__item');
-      li.innerHTML =
-        `<span class="legend__n">${p.badge}</span>` +
-        `<span>${esc(p.titulo)}</span>` +
-        `<span class="legend__t">${p.hora || ''}</span>`;
-      li.addEventListener('click', () => map.setView([p.loc.lat, p.loc.lng], 12));
-      legend.appendChild(li);
-    });
+  function renderComer() {
+    const body = $('#comer-body');
+    if (!body) return;
+    body.innerHTML = '';
+    body.appendChild(notice('Guía Michelin Thailand 2026 y recomendaciones locales, revisadas en septiembre de 2026 — confirma disponibilidad y reserva con tiempo, sobre todo en los restaurantes con estrella.'));
+    COMER_SEED.forEach(zona => body.appendChild(comerCard(zona)));
   }
 
   /* ==========================================================
@@ -2756,7 +2657,7 @@
   /* ==========================================================
      Navegación por pestañas
      ========================================================== */
-  const SCREENS = ['datos', 'itinerario', 'mapas', 'transporte', 'muaythai'];
+  const SCREENS = ['datos', 'itinerario', 'comer', 'transporte', 'muaythai'];
 
   function showScreen(name) {
     if (!SCREENS.includes(name)) name = 'datos';
@@ -2766,13 +2667,6 @@
       const tab = $(`.tab[data-tab="${s}"]`);
       if (tab) tab.setAttribute('aria-current', s === name ? 'page' : 'false');
     });
-    if (name === 'mapas') {
-      // La sección ya es visible: inicializa/redibuja tras el reflujo.
-      // Doble pasada (60 ms y 300 ms) para que Leaflet mida bien el contenedor.
-      renderMapas();
-      setTimeout(refreshMap, 60);
-      setTimeout(() => { if (map) map.invalidateSize(); }, 300);
-    }
     window.scrollTo(0, 0);
     if (name === 'itinerario') refreshMeteo();
     if (location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);
@@ -2932,7 +2826,7 @@
     paintAppbar();
     renderDatos();
     renderItinerario();
-    renderMapas();
+    renderComer();
     renderTransporte();
     renderMuayThai();
   }

@@ -1040,73 +1040,21 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
 .chip:disabled { opacity: 0.4; cursor: default; }
 .chip:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
 
-.map {
-  height: 56dvh;
-  min-height: 300px;
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-m);
-  overflow: hidden;
-  margin-bottom: var(--space-12);
-}
-.leaflet-container { background: var(--c-bg-1); font-family: var(--font-body); }
-.map-err { padding: var(--space-24); color: var(--c-text-2); font-size: var(--step-0); text-align: center; }
-.leaflet-popup-content-wrapper, .leaflet-popup-tip {
-  background: var(--c-surface-2);
-  color: var(--c-text);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
-.leaflet-popup-content { font-size: var(--step-0); }
-.leaflet-popup-content .pop-sub { color: var(--c-text-2); }
-.leaflet-bar a, .leaflet-bar a:hover {
-  background: var(--c-surface-2);
-  color: var(--c-text);
-  border-bottom-color: var(--c-border);
-}
-.leaflet-control-attribution {
-  background: color-mix(in oklab, var(--c-bg) 70%, transparent) !important;
-  color: var(--c-text-2) !important;
-}
-.leaflet-control-attribution a { color: var(--c-text-1) !important; }
-.num-marker {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  background: var(--c-accent);
-  color: var(--c-accent-ink);
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 26px;
-  text-align: center;
-  border: 2px solid var(--c-bg);
-  box-shadow: 0 1px 8px rgba(0,0,0,0.55);
-}
-
-.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
-.legend__item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-10);
-  padding: var(--space-8) var(--space-10);
-  background: var(--c-surface);
+/* ============================================================
+   DÓNDE COMER — estrellas Michelin y recomendados
+   ============================================================ */
+.comer-intro { margin: 0 0 var(--space-10); color: var(--c-text-2); font-size: var(--step-0); line-height: 1.4; }
+.comer-venue {
+  padding: var(--space-10) var(--space-12);
+  margin-bottom: var(--space-8);
+  background: var(--c-bg-1);
   border: 1px solid var(--c-border-soft);
   border-radius: var(--radius-s);
-  font-size: var(--step-0);
-  cursor: pointer;
 }
-.legend__item > span:nth-child(2) { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.legend__n {
-  width: 22px; height: 22px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--c-accent-soft);
-  color: var(--c-accent);
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  line-height: 22px;
-  text-align: center;
-}
-.legend__t { color: var(--c-text-2); font-family: var(--font-mono); font-size: var(--step--1); flex-shrink: 0; }
-.legend__empty { color: var(--c-text-2); font-size: var(--step-0); padding: var(--space-8); }
+.comer-venue:last-child { margin-bottom: 0; }
+.comer-venue__nombre { font-family: var(--font-display); font-weight: 600; font-size: var(--step-0); }
+.comer-venue__meta { margin-top: 3px; color: var(--c-text-2); font-size: var(--step--1); line-height: 1.4; }
+.comer-venue__go { display: flex; gap: var(--space-16); margin-top: var(--space-6); }
 
 /* ============================================================
    RECOMENDACIONES  ("Ideas")

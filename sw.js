@@ -1,74 +1,28 @@
 /* Service worker — Viaje a Tailandia
- * Precache del shell y caché de tiles del mapa al usarlos. Sin dependencias.
+ * Precache del shell. Sin dependencias.
  * sw.js usa sintaxis moderna (const / arrow / async); el IIFE de registro
  * en app.js sigue el estilo var/function del archivo que lo aloja.
  */
 'use strict';
 
-const SHELL_CACHE = 'shell-v5';
-const TILE_CACHE  = 'tiles-v2';
-const TILE_MAX = 300;
+const SHELL_CACHE = 'shell-v6';
 // Solo se tocan las cachés de este proyecto: en GitHub Pages el origen es
 // compartido con otros proyectos del usuario y caches.keys() no está acotado
 // por scope.
-const OWNED_CACHE = /^(shell|tiles)-v\d+$/;
-
-// Mapa base real de la app: CARTO. OpenStreetMap es solo el fallback tras
-// varios tileerror (ver app.js). Se reconocen los dos.
-function isTile(url) {
-  return /(^|\.)basemap\.cartocdn\.com$/.test(url.hostname)
-      || /(^|\.)tile\.openstreetmap\.org$/.test(url.hostname);
-}
-
-async function trimTileCache() {
-  const cache = await caches.open(TILE_CACHE);
-  const keys = await cache.keys();
-  if (keys.length <= TILE_MAX) return;
-  const excess = keys.slice(0, keys.length - TILE_MAX);
-  await Promise.all(excess.map(req => cache.delete(req)));
-}
-
-async function tileFetch(request) {
-  const cache = await caches.open(TILE_CACHE);
-  const hit = await cache.match(request);
-  if (hit) return hit;
-  try {
-    const res = await fetch(request);
-    // Los tiles se piden con CORS (crossOrigin en app.js), así que la respuesta
-    // trae status real: un 4xx/5xx no se cachea.
-    if (res && res.ok) {
-      try {
-        await cache.put(request, res.clone());
-      } catch (e) { /* quota u otro: se responde igualmente */ }
-      trimTileCache().catch(() => {});   // también tras un fallo de put (libera hueco)
-    }
-    return res;
-  } catch (e) {
-    // Sin caché y fetch fallido: propagar el error para que Leaflet dispare
-    // 'tileerror' (paso de CARTO a OSM, y su errorTileUrl transparente).
-    return Response.error();
-  }
-}
+const OWNED_CACHE = /^shell-v\d+$/;
 
 const SHELL_ASSETS = [
   './',                       // redundante a propósito (red de seguridad);
   './index.html',             // la navegación resuelve contra './index.html'.
-  './style.css?v=5',
-  './app.js?v=4',
+  './style.css?v=6',
+  './app.js?v=5',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png',
   './icons/icon.svg',
-  './vendor/leaflet/leaflet.js',
-  './vendor/leaflet/leaflet.css',
   './vendor/suncalc/suncalc.js',
-  './vendor/leaflet/images/marker-icon.png',
-  './vendor/leaflet/images/marker-icon-2x.png',
-  './vendor/leaflet/images/marker-shadow.png',
-  './vendor/leaflet/images/layers.png',
-  './vendor/leaflet/images/layers-2x.png',
   './vendor/fonts/fonts.css',
   './vendor/fonts/space-grotesk-500.woff2',
   './vendor/fonts/space-grotesk-600.woff2',
@@ -97,7 +51,7 @@ self.addEventListener('message', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
-    const keep = [SHELL_CACHE, TILE_CACHE];
+    const keep = [SHELL_CACHE];
     const names = await caches.keys();
     await Promise.all(
       names
@@ -122,12 +76,6 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Tiles del mapa (CARTO, u OSM de fallback): cache-first en tiles-v1.
-  if (isTile(url)) {
-    event.respondWith(tileFetch(request));
-    return;
-  }
-
   // Shell mismo origen: cache-first con fallback a red.
   if (url.origin === self.location.origin) {
     event.respondWith(
@@ -137,5 +85,5 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cross-origin no-tile (Nominatim, Open-Meteo, frankfurter.dev): sin interceptar.
+  // Cross-origin (Nominatim, Open-Meteo, frankfurter.dev, fotos de Wikimedia): sin interceptar.
 });

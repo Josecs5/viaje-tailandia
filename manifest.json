@@ -1,7 +1,7 @@
 {
   "name": "Viaje a Tailandia — Planificador",
   "short_name": "Tailandia",
-  "description": "Planifica tu viaje a Tailandia: vuelos, alojamientos, excursiones, itinerario diario, mapas y transporte local.",
+  "description": "Planifica tu viaje a Tailandia: vuelos, alojamientos, excursiones, itinerario diario, dónde comer y transporte local.",
   "lang": "es",
   "dir": "ltr",
   "start_url": "./index.html",
