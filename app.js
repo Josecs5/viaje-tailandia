@@ -1310,13 +1310,16 @@
     return g;
   }
 
-  // Todo es editable: sin datos precargados que proteger de solo lectura
-  // (a diferencia del hermano de Islandia, que sí traía un viaje real ya
-  // reservado). Se deja la lista explícita por claridad de qué pinta groupEl.
-  const EDITABLE_COLS = ['vuelos', 'coches', 'alojamientos', 'excursiones', 'comidas', 'lugares', 'recomendaciones', 'gastos'];
+  // El viaje real (vuelos, alojamientos, excursiones, lugares, comidas y las
+  // fechas) es de solo lectura: ya está reservado/planificado y no debe
+  // poder borrarse o editarse por error desde el móvil. Solo quedan
+  // editables las cosas pensadas para usar durante el viaje o para anotar
+  // tus propios descubrimientos: coche/moto (no reservado), recomendaciones
+  // propias y el registro de gastos.
+  const EDITABLE_COLS = ['coches', 'recomendaciones', 'gastos'];
 
   function metaCard() {
-    const c = el('div', 'card meta-card');
+    const c = el('div', 'card meta-card meta-card--ro');
     const m = state.meta;
     const rango = (m.fechaInicio && m.fechaFin)
       ? `${fmtFecha(m.fechaInicio, true)} – ${fmtFecha(m.fechaFin, true)}`
@@ -1324,11 +1327,6 @@
     c.innerHTML =
       `<div class="ro-line"><span class="ro-k">Viaje</span><span class="ro-v">${esc(m.titulo || 'Viaje a Tailandia')}</span></div>` +
       `<div class="ro-line"><span class="ro-k">Fechas</span><span class="ro-v">${esc(rango)}</span></div>`;
-    const edit = el('button', 'btn btn--ghost btn--sm meta-card__edit');
-    edit.type = 'button';
-    edit.textContent = '✎ Editar';
-    edit.addEventListener('click', () => openSheet('meta'));
-    c.appendChild(edit);
     return c;
   }
 
@@ -1352,22 +1350,26 @@
 
     if (col === 'gastos') bodyWrap.appendChild(gastoResumen());
 
+    const editable = EDITABLE_COLS.includes(col);
+
     const list = el('div', 'list');
     if (!items.length) {
       const e = el('div', 'empty');
       e.textContent = 'Aún no has añadido nada aquí.';
       list.appendChild(e);
     } else {
-      items.slice().sort(itemSorter(col)).forEach(it => list.appendChild(itemCard(kind, it, summarize(it))));
+      items.slice().sort(itemSorter(col)).forEach(it => list.appendChild(itemCard(kind, it, summarize(it), editable)));
     }
 
     bodyWrap.appendChild(list);
 
-    const add = el('button', 'btn btn--ghost btn--block');
-    add.type = 'button';
-    add.textContent = '+ Añadir ' + SCHEMAS[kind].sing;
-    add.addEventListener('click', () => openSheet(kind));
-    bodyWrap.appendChild(add);
+    if (editable) {
+      const add = el('button', 'btn btn--ghost btn--block');
+      add.type = 'button';
+      add.textContent = '+ Añadir ' + SCHEMAS[kind].sing;
+      add.addEventListener('click', () => openSheet(kind));
+      bodyWrap.appendChild(add);
+    }
 
     head.addEventListener('click', () => {
       const willOpen = bodyWrap.hidden;
@@ -1380,27 +1382,29 @@
     return g;
   }
 
-  function itemCard(kind, it, summaryHtml) {
+  function itemCard(kind, it, summaryHtml, editable) {
     const c = el('div', 'card item');
     const main = el('div', 'item__main');
     main.innerHTML = summaryHtml;
     c.appendChild(main);
 
-    const acts = el('div', 'item__acts');
-    const edit = el('button', 'icon-btn');
-    edit.type = 'button';
-    edit.setAttribute('aria-label', 'Editar');
-    edit.textContent = '✎';
-    edit.addEventListener('click', () => openSheet(kind, it.id));
+    if (editable) {
+      const acts = el('div', 'item__acts');
+      const edit = el('button', 'icon-btn');
+      edit.type = 'button';
+      edit.setAttribute('aria-label', 'Editar');
+      edit.textContent = '✎';
+      edit.addEventListener('click', () => openSheet(kind, it.id));
 
-    const del = el('button', 'icon-btn icon-btn--danger');
-    del.type = 'button';
-    del.setAttribute('aria-label', 'Eliminar');
-    del.textContent = '🗑';
-    del.addEventListener('click', () => removeItem(kind, it.id));
+      const del = el('button', 'icon-btn icon-btn--danger');
+      del.type = 'button';
+      del.setAttribute('aria-label', 'Eliminar');
+      del.textContent = '🗑';
+      del.addEventListener('click', () => removeItem(kind, it.id));
 
-    acts.append(edit, del);
-    c.appendChild(acts);
+      acts.append(edit, del);
+      c.appendChild(acts);
+    }
     return c;
   }
 
@@ -2617,7 +2621,7 @@
       list.appendChild(e);
     } else {
       state.recomendaciones.forEach(it => {
-        const c = itemCard('recomendacion', it, recoSummary(it));
+        const c = itemCard('recomendacion', it, recoSummary(it), true);
         c.classList.add('reco-usercard');
         list.appendChild(c);
       });
