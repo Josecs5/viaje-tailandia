@@ -1620,18 +1620,27 @@
   function excSummary(e) {
     return `<div class="item__title">${esc(e.nombre || 'Excursión')}</div>
       <div class="item__meta">${e.fecha ? fmtFecha(e.fecha) : '—'} ${e.hora || ''} ${e.duracion ? '· ' + fmtDur(+e.duracion) : ''}</div>
-      <div class="item__meta">${e.encuentro && e.encuentro.texto ? 'Encuentro: ' + locLine(e.encuentro) : ''}</div>`;
+      <div class="item__meta">${e.encuentro && e.encuentro.texto ? 'Encuentro: ' + locLine(e.encuentro) : ''}</div>
+      ${e.notas ? `<div class="item__meta">${escLines(e.notas)}</div>` : ''}
+      ${fotoBlock(e.foto, e.nombre, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption')}
+      ${opcionesHtml(e.opciones)}`;
   }
   function comidaSummary(c) {
     return `<div class="item__title">${esc(c.nombre || '')}</div>
       <div class="item__meta">${esc(c.tipo || '')} ${c.horario ? '· ' + esc(c.horario) : ''}</div>
-      <div class="item__meta">${locLine(c.loc)} ${c.fecha ? '· ' + fmtFecha(c.fecha) : ''}</div>`;
+      <div class="item__meta">${locLine(c.loc)} ${c.fecha ? '· ' + fmtFecha(c.fecha) : ''}</div>
+      ${c.notas ? `<div class="item__meta">${escLines(c.notas)}</div>` : ''}
+      ${fotoBlock(c.foto, c.nombre, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption')}
+      ${opcionesHtml(c.opciones)}`;
   }
   function lugarSummary(l) {
     const p = (l.prioridad || 'Media');
     return `<div class="item__title">${esc(l.nombre || '')} <span class="prio prio--${p.toLowerCase()}">${esc(p)}</span></div>
       <div class="item__meta">${locLine(l.loc)}</div>
-      <div class="item__meta">${l.visita ? fmtDur(+l.visita) + ' de visita' : ''} ${l.fecha ? '· ' + fmtFecha(l.fecha) : ''}${l.hora ? ' · ' + esc(l.hora) : ''}</div>`;
+      <div class="item__meta">${l.visita ? fmtDur(+l.visita) + ' de visita' : ''} ${l.fecha ? '· ' + fmtFecha(l.fecha) : ''}${l.hora ? ' · ' + esc(l.hora) : ''}</div>
+      ${l.notas ? `<div class="item__meta">${escLines(l.notas)}</div>` : ''}
+      ${fotoBlock(l.foto, l.nombre, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption')}
+      ${opcionesHtml(l.opciones)}`;
   }
   function gastoResumen() {
     const box = el('div', 'gasto-resumen');
@@ -2204,10 +2213,16 @@
     return wrap;
   }
 
-  // <img> con onerror para ocultarse sola si la URL de Commons deja de
-  // servir el archivo (public page, sin control sobre terceros).
-  const fotoImg = (foto, alt, cls) =>
-    foto ? `<img class="${cls}" src="${esc(foto)}" alt="${esc(alt || '')}" loading="lazy" onerror="this.remove()">` : '';
+  // <figure> con foto + mensaje debajo para saber qué es. onerror quita la
+  // figura entera si la URL de Commons deja de servir el archivo (public
+  // page, sin control sobre terceros).
+  function fotoBlock(foto, nombre, wrapCls, imgCls, capCls) {
+    if (!foto) return '';
+    return `<figure class="${wrapCls}">` +
+      `<img class="${imgCls}" src="${esc(foto)}" alt="${esc(nombre || '')}" loading="lazy" onerror="this.parentElement.remove()">` +
+      (nombre ? `<figcaption class="${capCls}">${esc(nombre)}</figcaption>` : '') +
+      `</figure>`;
+  }
 
   function opcionesHtml(opciones) {
     if (!opciones || !opciones.length) return '';
@@ -2216,7 +2231,7 @@
         `<div class="slot__opcion">` +
         `<div class="slot__opcion-nombre">${esc(o.nombre || '')}</div>` +
         (o.notas ? `<div class="slot__opcion-notas">${esc(o.notas)}</div>` : '') +
-        fotoImg(o.foto, o.nombre, 'slot__opcion-foto') +
+        fotoBlock(o.foto, o.nombre, 'slot__opcion-foto-wrap', 'slot__opcion-foto', 'slot__opcion-foto-caption') +
         `</div>`
       ).join('') +
       `</div>`;
@@ -2232,7 +2247,7 @@
       `<div class="slot__title">${esc(it.titulo)}</div>` +
       (it.sub ? `<div class="slot__sub">${esc(it.sub)}</div>` : '') +
       (it.notas ? `<details class="slot__notes"><summary>Info importante</summary><p>${esc(it.notas)}</p></details>` : '') +
-      fotoImg(it.foto, it.titulo, 'slot__foto') +
+      fotoBlock(it.foto, it.titulo, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption') +
       opcionesHtml(it.opciones);
     if (it.loc && it.loc.lat != null) {
       const nav = el('div', 'slot__nav');
@@ -3224,7 +3239,7 @@
       (l.precio ? `<div class="mt-venue__meta">💰 ${esc(comerPrecioTxt(l))}</div>` : '') +
       (dist ? `<div class="mt-venue__meta">📍 ${esc(dist)}</div>` : '') +
       (l.nota ? `<div class="mt-venue__meta">${esc(l.nota)}</div>` : '') +
-      fotoImg(l.foto, l.nombre, 'slot__foto') +
+      fotoBlock(l.foto, l.nombre, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption') +
       (l.web ? `<a class="reco-link" href="${esc(l.web)}" target="_blank" rel="noopener">Más información ›</a>` : '');
     return v;
   }

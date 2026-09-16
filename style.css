@@ -954,46 +954,67 @@ input[type="date"], input[type="time"], input[type="datetime-local"] {
 }
 .slot__go:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; border-radius: 4px; }
 
+.slot__foto-wrap, .slot__opcion-foto-wrap { margin: var(--space-10) 0 0; }
 .slot__foto {
   display: block;
-  width: 96px;
-  height: 96px;
+  width: 100%;
+  height: 190px;
   object-fit: cover;
   border-radius: var(--radius-m);
-  margin-top: var(--space-8);
   border: 1px solid var(--c-border);
 }
+.slot__foto-caption {
+  margin: var(--space-6) 0 0;
+  color: var(--c-text-2);
+  font-size: var(--step--1);
+  font-style: italic;
+  text-align: center;
+}
 .slot__opciones {
-  margin-top: var(--space-10);
-  padding-top: var(--space-10);
+  margin-top: var(--space-16);
+  padding-top: var(--space-16);
   border-top: 1px dashed var(--c-border);
 }
 .slot__opciones-label {
-  margin: 0 0 var(--space-8);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 var(--space-12);
+  padding: 6px 14px;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--step--1);
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: var(--c-text-2);
+  font-weight: 700;
+  font-size: var(--step-0);
+  letter-spacing: .01em;
+  color: var(--c-accent-ink);
+  background: var(--c-accent);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-glow);
 }
+.slot__opciones-label::before { content: "💡"; font-size: 1.05em; }
 .slot__opcion {
-  padding: var(--space-10) var(--space-12);
-  margin-bottom: var(--space-8);
+  padding: var(--space-12);
+  margin-bottom: var(--space-12);
   background: var(--c-bg-1);
   border: 1px solid var(--c-border-soft);
+  border-left: 4px solid var(--c-accent);
   border-radius: var(--radius-s);
 }
 .slot__opcion:last-child { margin-bottom: 0; }
-.slot__opcion-nombre { font-weight: 600; font-size: var(--step-0); }
-.slot__opcion-notas { margin-top: 2px; color: var(--c-text-2); font-size: var(--step--1); }
+.slot__opcion-nombre { font-family: var(--font-display); font-weight: 700; font-size: var(--step-1); }
+.slot__opcion-notas { margin-top: 3px; color: var(--c-text-2); font-size: var(--step-0); }
 .slot__opcion-foto {
   display: block;
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 150px;
   object-fit: cover;
   border-radius: var(--radius-s);
-  margin-top: var(--space-8);
+}
+.slot__opcion-foto-caption {
+  margin: 4px 0 0;
+  color: var(--c-text-2);
+  font-size: var(--step--1);
+  font-style: italic;
+  text-align: center;
 }
 
 .leg {
