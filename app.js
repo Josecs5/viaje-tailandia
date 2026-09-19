@@ -32,6 +32,8 @@
     house:  svgIco('<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>', 17, 2.6),
     pin:    svgIco('<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>', 14, 2.4),
     coin:   svgIco('<circle cx="12" cy="12" r="9"/><path d="M14.6 9.3c-.6-.8-1.6-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.7 5.2 1.4 5.2 4.2 0 1.2-1.1 2-2.6 2-1.1 0-2.1-.5-2.7-1.4M12 6v2M12 16v2"/>', 14, 2.4),
+    moon:   svgIco('<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>', 19, 2.2),
+    sun:    svgIco('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>', 19, 2.2),
     locate: svgIco('<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>', 15, 2.4)
   };
 
@@ -2441,6 +2443,8 @@
     // al llamar a invalidateSize()/fitBounds() varias veces al abrir la pestaña.
     zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false
   };
+  // El popup se ajusta para no quedar tapado por los botones de zoom
+  const POPUP_MAPA = { maxWidth: 210, autoPanPaddingTopLeft: [52, 12] };
   const ATTR_MAPA = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
   // Tiles claros de CARTO (el CSS los tiñe de lavanda). CARTO es un servicio
@@ -2504,8 +2508,7 @@
     if (home) {
       // Círculos de 500 m y 1 km: cuánto se puede hacer a pie desde el alojamiento
       [1000, 500].forEach(r => L.circle([home.lat, home.lng], {
-        radius: r, color: '#161a3c', weight: 1.5, dashArray: '4 6',
-        fillColor: '#ff3d95', fillOpacity: r === 500 ? 0.14 : 0.06, interactive: false
+        radius: r, weight: 1.5, dashArray: '4 6', className: r === 500 ? 'map-ring map-ring--in' : 'map-ring map-ring--out', interactive: false
       }).addTo(map));
       L.marker([home.lat, home.lng], { icon: chapa('mpin--home', ICON.house, i++, 32), keyboard: false, zIndexOffset: 500 })
         .addTo(map).bindPopup(`<b>${esc(aloj.nombre || 'Alojamiento')}</b><small>Tu alojamiento</small>`);
@@ -2518,7 +2521,7 @@
     sitios.forEach(({ v, n }) => {
       const cls = kind === 'mt' ? 'mpin--mt' : (v.estrellas ? 'mpin--star' : '');
       const m = L.marker([v.loc.lat, v.loc.lng], { icon: chapa(cls, n, i++, 32), keyboard: false }).addTo(map);
-      m.bindPopup(`<b>${esc(v.nombre)}</b>${v.tipo || v.dias ? `<small>${esc(v.tipo || v.dias)}</small>` : ''}`);
+      m.bindPopup(`<b>${esc(v.nombre)}</b>${v.tipo || v.dias ? `<small>${esc(v.tipo || v.dias)}</small>` : ''}`, POPUP_MAPA);
       m.on('click', () => selectVenue(key, n, true));
       entry.markers[n] = m;
       pts.push([v.loc.lat, v.loc.lng]);
@@ -2548,7 +2551,7 @@
 
     if (entry.home) {
       entry.line = L.polyline([[entry.home.lat, entry.home.lng], m.getLatLng()], {
-        color: '#c20f63', weight: 3, dashArray: '6 8', lineCap: 'round', className: 'route-line', interactive: false
+        weight: 3, dashArray: '6 8', lineCap: 'round', className: 'route-line', interactive: false
       }).addTo(entry.map);
     }
     entry.map.panTo(m.getLatLng(), { animate: false });
@@ -2608,7 +2611,7 @@
     addBaseTiles(map);
     const ll = stops.map(a => [a.loc.lat, a.loc.lng]);
     // Carretera: asfalto de tinta con su línea central, como en el itinerario
-    L.polyline(ll, { color: '#161a3c', weight: 7, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
+    L.polyline(ll, { weight: 7, lineCap: 'round', lineJoin: 'round', className: 'map-road', interactive: false }).addTo(map);
     L.polyline(ll, { color: '#ccf62f', weight: 2, dashArray: '2 9', lineCap: 'round', interactive: false }).addTo(map);
     // Etiquetas hacia fuera (las de más al oeste a la izquierda) y solo una
     // fija por grupo de paradas cercanas: las demás salen al tocar la chapa.
@@ -3059,6 +3062,37 @@
     updateCountdown();
   }
   setInterval(updateCountdown, 60000);
+
+  /* ==========================================================
+     Tema claro / oscuro
+     El script de <head> ya fijó data-theme antes de pintar. Aquí solo se
+     dibuja el botón, se guarda la elección y, mientras no haya elección
+     propia, se sigue el tema del sistema.
+     ========================================================== */
+  const TEMA_COLOR = { light: '#161a3c', dark: '#070920' };
+  const temaActual = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  const temaGuardado = () => { try { return localStorage.getItem('tema'); } catch (e) { return null; } };
+
+  function paintTheme() {
+    const dark = temaActual() === 'dark';
+    const btn = $('#theme-btn');
+    btn.innerHTML = dark ? ICON.sun : ICON.moon;
+    btn.setAttribute('aria-pressed', String(dark));
+    btn.setAttribute('aria-label', dark ? 'Activar modo claro' : 'Activar modo oscuro');
+    $('meta[name="theme-color"]').content = TEMA_COLOR[temaActual()];
+  }
+
+  function setTheme(t, guardar) {
+    document.documentElement.dataset.theme = t;
+    if (guardar) { try { localStorage.setItem('tema', t === 'dark' ? 'oscuro' : 'claro'); } catch (e) { /* sin almacenamiento */ } }
+    paintTheme();
+  }
+
+  on('#theme-btn', 'click', () => setTheme(temaActual() === 'dark' ? 'light' : 'dark', true));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ev => {
+    if (!temaGuardado()) setTheme(ev.matches ? 'dark' : 'light', false);
+  });
+  paintTheme();
 
   function renderAll() {
     paintAppbar();

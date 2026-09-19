@@ -10,7 +10,18 @@
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#161a3c">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Tema: se fija antes de pintar para que no parpadee (guardado o el del sistema) -->
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('tema'); } catch (e) {}
+      if (t !== 'claro' && t !== 'oscuro') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+      document.documentElement.dataset.theme = t === 'oscuro' ? 'dark' : 'light';
+      document.querySelector('meta[name="theme-color"]').content = t === 'oscuro' ? '#070920' : '#161a3c';
+    })();
+  </script>
 
   <!-- iOS / Safari -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -41,6 +52,7 @@
       <p class="appbar__sub" id="appbar-sub">Sin fechas · añádelas en Datos</p>
     </div>
     <div class="appbar__count" id="appbar-count" hidden></div>
+    <button class="theme-btn" id="theme-btn" type="button" aria-pressed="false" aria-label="Activar modo oscuro"></button>
   </header>
 
   <main>

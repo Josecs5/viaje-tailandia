@@ -55,7 +55,7 @@ comer, Muay Thai) se genera solo.
 | Archivo | Contenido |
 |---|---|
 | `index.html` | Estructura y meta tags PWA/iOS |
-| `style.css` | Tema «Taxi de Bangkok» (rosa, lima y tinta azul noche sobre papel lavanda), responsive y autónomo |
+| `style.css` | Tema «Taxi de Bangkok» (rosa, lima y tinta azul noche), con modo claro y oscuro; responsive y autónomo |
 | `app.js` | Lógica: CRUD, motor de itinerario, dónde comer, Muay Thai, transporte y guías |
 | `sw.js` | Service worker: precache del shell |
 | `vendor/` | Leaflet 1.9.4, SunCalc 1.9.0 y fuentes web (Bricolage Grotesque y Figtree) servidos desde el repo |
