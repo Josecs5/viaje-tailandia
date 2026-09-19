@@ -2938,6 +2938,24 @@
   }
 
   $$('.tab').forEach(t => t.addEventListener('click', () => showScreen(t.dataset.tab)));
+
+  /* ==========================================================
+     Tema claro / oscuro (botón de la barra superior)
+     ========================================================== */
+  function paintTheme() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const btn = $('#theme-btn');
+    if (btn) btn.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    const meta = $('#meta-theme');
+    if (meta) meta.setAttribute('content', dark ? '#151b28' : '#f1f6f5');
+  }
+  on('#theme-btn', 'click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('tema', next); } catch (e) { /* sin almacenamiento: vale solo para esta sesión */ }
+    paintTheme();
+  });
+  paintTheme();
   window.addEventListener('hashchange', () => showScreen(location.hash.slice(1)));
 
   /* ==========================================================

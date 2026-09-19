@@ -91,6 +91,56 @@
 [data-z="phiphi"]    { --z: oklch(0.600 0.120 232); --z-soft: oklch(0.955 0.030 232); --z-ink: oklch(0.410 0.110 240); --z-on: oklch(0.985 0.005 190); }
 [data-z="phuket"]    { --z: oklch(0.520 0.170 295); --z-soft: oklch(0.955 0.030 295); --z-ink: oklch(0.400 0.150 295); --z-on: oklch(0.985 0.005 190); }
 
+/* Modo oscuro: se activa con el botón de la barra superior */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --c-bg:          oklch(0.190 0.022 255);
+  --c-bg-1:        oklch(0.225 0.022 255);
+  --c-surface:     oklch(0.255 0.022 255);
+  --c-surface-2:   oklch(0.290 0.022 255);
+  --c-surface-3:   oklch(0.330 0.024 255);
+  --c-border:      oklch(0.420 0.026 255);
+  --c-border-soft: oklch(0.330 0.022 255);
+
+  --c-text:   oklch(0.950 0.010 200);
+  --c-text-1: oklch(0.830 0.014 220);
+  --c-text-2: oklch(0.720 0.018 235);
+
+  --c-accent:       oklch(0.930 0.020 200);
+  --c-accent-press: oklch(0.850 0.030 205);
+  --c-accent-ink:   oklch(0.200 0.040 255);
+  --c-accent-soft:  oklch(0.300 0.030 240);
+
+  --c-ok:      oklch(0.760 0.130 155);
+  --c-info:    oklch(0.770 0.100 235);
+  --c-warning: oklch(0.800 0.130 75);
+  --c-warning-soft: oklch(0.330 0.055 80);
+  --c-danger:  oklch(0.740 0.170 25);
+  --c-danger-soft: oklch(0.300 0.060 25);
+  --c-focus:   oklch(0.780 0.130 250);
+
+  --z:      oklch(0.750 0.060 240);
+  --z-soft: oklch(0.300 0.030 240);
+  --z-ink:  oklch(0.860 0.040 240);
+  --z-on:   oklch(0.200 0.040 255);
+
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.35);
+  --shadow-lg: 0 -12px 40px oklch(0 0 0 / 0.55);
+}
+:root[data-theme="dark"] [data-z="bangkok"]   { --z: oklch(0.700 0.200 355); --z-soft: oklch(0.300 0.065 355); --z-ink: oklch(0.860 0.090 355); --z-on: oklch(0.200 0.040 355); }
+:root[data-theme="dark"] [data-z="chiangmai"] { --z: oklch(0.800 0.150 82);  --z-soft: oklch(0.320 0.055 85);  --z-ink: oklch(0.880 0.100 85);  --z-on: oklch(0.220 0.045 70); }
+:root[data-theme="dark"] [data-z="krabi"]     { --z: oklch(0.730 0.120 168); --z-soft: oklch(0.300 0.050 168); --z-ink: oklch(0.860 0.090 168); --z-on: oklch(0.200 0.040 168); }
+:root[data-theme="dark"] [data-z="phiphi"]    { --z: oklch(0.750 0.120 232); --z-soft: oklch(0.300 0.050 232); --z-ink: oklch(0.870 0.080 232); --z-on: oklch(0.200 0.040 240); }
+:root[data-theme="dark"] [data-z="phuket"]    { --z: oklch(0.720 0.160 295); --z-soft: oklch(0.310 0.065 295); --z-ink: oklch(0.870 0.090 295); --z-on: oklch(0.200 0.040 295); }
+:root[data-theme="dark"] .reco-cat { --rc-accent: oklch(0.720 0.120 var(--rc)); --rc-soft: oklch(0.320 0.050 var(--rc)); }
+:root[data-theme="dark"] select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23b4c0d0' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] ::-webkit-calendar-picker-indicator { filter: invert(0.85); }
+/* Los tiles del mapa son claros: se invierten para que encajen con el tema */
+:root[data-theme="dark"] .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+
 /* ============================================================
    RESET / BASE
    ============================================================ */
@@ -186,6 +236,25 @@ a { color: var(--z-ink); text-underline-offset: 3px; }
   color: var(--c-accent-ink);
   background: var(--c-text);
 }
+
+.theme-btn {
+  flex-shrink: 0;
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  padding: 0;
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-text);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.theme-btn:active { transform: translateY(1px); }
+.theme-btn:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.theme-btn__sun { display: none; }
+:root[data-theme="dark"] .theme-btn__moon { display: none; }
+:root[data-theme="dark"] .theme-btn__sun { display: block; }
 
 .appbar__ruta {
   position: absolute;
