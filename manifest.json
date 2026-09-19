@@ -9,8 +9,8 @@
   "id": "/viaje-tailandia/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#060611",
-  "theme_color": "#060611",
+  "background_color": "#f1f6f5",
+  "theme_color": "#f1f6f5",
   "categories": ["travel", "productivity", "lifestyle"],
   "icons": [
     {

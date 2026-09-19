@@ -9,13 +9,13 @@
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#060611">
-  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#f1f6f5">
+  <meta name="color-scheme" content="light">
 
   <!-- iOS / Safari -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Tailandia">
   <meta name="format-detection" content="telephone=no">
 
@@ -30,7 +30,7 @@
   <!-- Leaflet (local) — mapas pequeños de la pestaña "Comer" -->
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -40,12 +40,13 @@
       <p class="appbar__sub" id="appbar-sub">Sin fechas · añádelas en Datos</p>
     </div>
     <div class="appbar__count" id="appbar-count" hidden></div>
+    <div class="appbar__ruta" id="appbar-ruta" aria-hidden="true" hidden></div>
   </header>
 
   <main>
     <!-- ============ DATOS ============ -->
     <section class="screen" id="screen-datos" data-screen="datos">
-      <div class="screen-head">
+      <div class="screen-head screen-head--sr">
         <h2>Datos del viaje</h2>
       </div>
       <div id="datos-body"></div>
@@ -64,7 +65,7 @@
     <section class="screen" id="screen-comer" data-screen="comer" hidden>
       <div class="screen-head">
         <h2>Dónde comer</h2>
-        <p class="muted">Estrellas Michelin y recomendados cerca de cada alojamiento, con distancia, precio medio y mapa.</p>
+        <p class="muted">Cerca de cada alojamiento, con distancia, precio y mapa.</p>
       </div>
       <div id="comer-body"></div>
     </section>
@@ -72,8 +73,8 @@
     <!-- ============ TRANSPORTE (guías: transporte local, comida callejera, templos, temporada) ============ -->
     <section class="screen" id="screen-transporte" data-screen="transporte" hidden>
       <div class="screen-head">
-        <h2>Transporte y guías</h2>
-        <p class="muted">Tuk-tuk, Grab, trenes y ferris — y cómo moverte sin líos. Comida callejera, templos y temporada.</p>
+        <h2>Guías</h2>
+        <p class="muted">Cómo moverte, qué comer en la calle, etiqueta en los templos y la temporada.</p>
       </div>
       <div id="transporte-body"></div>
     </section>
@@ -91,11 +92,11 @@
   <nav class="tabbar" aria-label="Secciones">
     <button class="tab" data-tab="datos" type="button" aria-current="page">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v3h6V3M8 11h8M8 15h6"/></svg>
-      <span>Datos</span>
+      <span>Viaje</span>
     </button>
     <button class="tab" data-tab="itinerario" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15h4"/></svg>
-      <span>Itinerario</span>
+      <span>Días</span>
     </button>
     <button class="tab" data-tab="comer" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2v7a2 2 0 0 0 2 2v11"/><path d="M7 2v6M9 2v6M11 2v9"/><path d="M17 2c-1.6 0-3 2.2-3 5s1.4 5 3 5v10"/></svg>
@@ -103,7 +104,7 @@
     </button>
     <button class="tab" data-tab="transporte" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16V8a2 2 0 0 1 2-2h10l4 4v6a1 1 0 0 1-1 1h-1"/><circle cx="8" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M4 16h3M11 6v6h9"/></svg>
-      <span>Transporte</span>
+      <span>Guías</span>
     </button>
     <button class="tab" data-tab="muaythai" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V7a3 3 0 0 1 6 0v1a3 3 0 0 1 3 3v2"/><path d="M16 13v3a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-3a3 3 0 0 1 3-3h1"/><path d="M10 8V6a2 2 0 0 1 4 0v2"/></svg>
@@ -150,6 +151,6 @@
 
   <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="vendor/suncalc/suncalc.js" defer></script>
-  <script src="app.js?v=9" defer></script>
+  <script src="app.js?v=10" defer></script>
 </body>
 </html>

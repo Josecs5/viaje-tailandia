@@ -55,10 +55,10 @@ comer, Muay Thai) se genera solo.
 | Archivo | Contenido |
 |---|---|
 | `index.html` | Estructura y meta tags PWA/iOS |
-| `style.css` | Tema claro propio ("Sabai"), tokens OKLCH, responsive (autónomo) |
+| `style.css` | Tema claro "Ruta de color": un tono por ciudad del viaje, tokens OKLCH, responsive (autónomo) |
 | `app.js` | Lógica: CRUD, motor de itinerario, dónde comer, Muay Thai, transporte y guías |
 | `sw.js` | Service worker: precache del shell |
-| `vendor/` | Leaflet 1.9.4, SunCalc 1.9.0 y fuentes web servidos desde el repo |
+| `vendor/` | Leaflet 1.9.4, SunCalc 1.9.0 y fuentes web (Kanit, Sarabun, IBM Plex Mono) servidos desde el repo |
 | `manifest.json` | Manifiesto PWA |
 | `icons/` | Iconos 192 / 512 / maskable + apple-touch-icon + SVG |
 | `tokens.css` | Sistema de diseño portable (no lo usa la app; solo referencia) |
@@ -76,6 +76,17 @@ hay ningún formulario abierto. Si la tienes abierta en varias pestañas, se
 recarga la activa; las demás se actualizan al navegar. Si algo se queda raro,
 cierra la app del todo y vuelve a abrirla, o borra los datos del sitio en el
 navegador (se borran caché y datos).
+
+## Diseño
+
+La interfaz sigue la ruta del viaje: cada parada (Bangkok, Chiang Mai, Krabi,
+Koh Phi Phi, Phuket) tiene su propio tono, y los días del itinerario, las
+guías de Dónde comer y los estadios de Muay Thai heredan el de su ciudad. La
+portada de **Viaje** muestra la ruta como una cinta con un tramo por parada
+(proporcional a sus noches) y una versión fina de esa cinta queda fija bajo
+la barra superior, con una marca en el día actual cuando el viaje está en
+curso. Los tonos se definen en `style.css` con `[data-z="…"]`; la zona de
+cada día sale del alojamiento donde se duerme.
 
 ## Aviso
 

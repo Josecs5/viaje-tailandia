@@ -5,7 +5,7 @@
  */
 'use strict';
 
-const SHELL_CACHE = 'shell-v11';
+const SHELL_CACHE = 'shell-v12';
 // Solo se tocan las cachés de este proyecto: en GitHub Pages el origen es
 // compartido con otros proyectos del usuario y caches.keys() no está acotado
 // por scope.
@@ -14,8 +14,8 @@ const OWNED_CACHE = /^shell-v\d+$/;
 const SHELL_ASSETS = [
   './',                       // redundante a propósito (red de seguridad);
   './index.html',             // la navegación resuelve contra './index.html'.
-  './style.css?v=9',
-  './app.js?v=9',
+  './style.css?v=10',
+  './app.js?v=10',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -31,13 +31,14 @@ const SHELL_ASSETS = [
   './vendor/leaflet/images/layers-2x.png',
   './vendor/suncalc/suncalc.js',
   './vendor/fonts/fonts.css',
-  './vendor/fonts/space-grotesk-500.woff2',
-  './vendor/fonts/space-grotesk-600.woff2',
-  './vendor/fonts/space-grotesk-700.woff2',
-  './vendor/fonts/inter-400.woff2',
-  './vendor/fonts/inter-500.woff2',
-  './vendor/fonts/inter-600.woff2',
-  './vendor/fonts/inter-700.woff2',
+  './vendor/fonts/kanit-latin-500.woff2',
+  './vendor/fonts/kanit-latin-600.woff2',
+  './vendor/fonts/kanit-latin-700.woff2',
+  './vendor/fonts/kanit-thai-600.woff2',
+  './vendor/fonts/kanit-thai-700.woff2',
+  './vendor/fonts/sarabun-latin-400.woff2',
+  './vendor/fonts/sarabun-latin-600.woff2',
+  './vendor/fonts/sarabun-thai-400.woff2',
   './vendor/fonts/ibm-plex-mono-400.woff2',
   './vendor/fonts/ibm-plex-mono-500.woff2'
 ];
