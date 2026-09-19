@@ -55,12 +55,13 @@ comer, Muay Thai) se genera solo.
 | Archivo | Contenido |
 |---|---|
 | `index.html` | Estructura y meta tags PWA/iOS |
-| `style.css` | Tema oscuro "Noche de Loi Krathong": tokens OKLCH, dock de pestañas flotante, responsive (autónomo) |
+| `style.css` | Tema claro propio ("Sabai"), tokens OKLCH, responsive (autónomo) |
 | `app.js` | Lógica: CRUD, motor de itinerario, dónde comer, Muay Thai, transporte y guías |
 | `sw.js` | Service worker: precache del shell |
 | `vendor/` | Leaflet 1.9.4, SunCalc 1.9.0 y fuentes web servidos desde el repo |
 | `manifest.json` | Manifiesto PWA |
 | `icons/` | Iconos 192 / 512 / maskable + apple-touch-icon + SVG |
+| `tokens.css` | Sistema de diseño portable (no lo usa la app; solo referencia) |
 
 Solo HTML, CSS y JavaScript. Sin frameworks. Service worker para uso sin
 conexión; Leaflet, SunCalc y las fuentes van incluidos en el repo.
