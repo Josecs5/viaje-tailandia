@@ -1,9 +1,6 @@
 /* Viaje a Tailandia — Planificador
  * HTML + CSS + JS puro. Sin build. Datos en localStorage.
- * Arquitectura calcada del proyecto hermano "viaje a Islandia": mismo motor
- * de itinerario, mismo sistema de formularios por schema, mismo service
- * worker. A diferencia de Islandia (datos reales precargados y de solo
- * lectura), esta app arranca vacía: TODO es editable desde el móvil.
+ * Motor de itinerario, formularios por schema y service worker propios.
  */
 'use strict';
 (function () {
@@ -21,6 +18,16 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
+
+  // Iconos de interfaz (SVG de trazo; heredan el color del texto)
+  const svgIco = (d, size) => `<svg viewBox="0 0 24 24" width="${size || 18}" height="${size || 18}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ICON = {
+    edit:  svgIco('<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>'),
+    trash: svgIco('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'),
+    chev:  svgIco('<path d="M6 9l6 6 6-6"/>', 20),
+    plus:  svgIco('<path d="M12 5v14M5 12h14"/>', 16),
+    plane: svgIco('<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.2.4c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>', 15)
+  };
 
   const MES_C = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   const MES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -925,7 +932,7 @@
     const rm = el('button', 'icon-btn icon-btn--danger');
     rm.type = 'button';
     rm.setAttribute('aria-label', 'Eliminar tramo');
-    rm.textContent = '🗑';
+    rm.innerHTML = ICON.trash;
     rm.addEventListener('click', () => {
       const wrap = c.parentElement;
       if (wrap.querySelectorAll('.tramo').length <= 1) { toast('Un vuelo necesita al menos un tramo.'); return; }
@@ -1229,182 +1236,122 @@
     return fmtFecha(ymd(d)) + ', ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
   }
 
-  // Checklist de equipaje. No usa SCHEMAS/openSheet porque no es una ficha
-  // con formulario, sino ítems de tap-to-marcar; solo renderDatos() hace
-  // falta tras cada cambio, el equipaje no afecta a Itinerario/Mapas/Muay Thai.
-  function equipajeBlock() {
+  // Cabecera común de los bloques plegables de Datos: icono tintado, título,
+  // contador y chevrón; recuerda abierto/cerrado en localStorage.
+  function groupShell(openKey, ico, label, countTxt, hue) {
     const g = el('div', 'group');
-    const openKey = 'open_equipaje';
+    g.style.setProperty('--h', hue);
     const isOpen = localStorage.getItem(openKey) !== '0';
-    const total = state.equipaje.length;
-    const packed = state.equipaje.filter(x => x.packed).length;
 
     const head = el('button', 'group__head');
     head.type = 'button';
     head.setAttribute('aria-expanded', String(isOpen));
     head.innerHTML =
-      `<span class="group__label">🎒 Equipaje</span>` +
-      `<span class="group__right"><span class="count">${packed}/${total}</span><span class="chev">⌄</span></span>`;
+      `<span class="group__label"><span class="group__ico" aria-hidden="true">${ico}</span>${esc(label)}</span>` +
+      `<span class="group__right"><span class="count">${countTxt}</span><span class="chev" aria-hidden="true">${ICON.chev}</span></span>`;
 
-    const bodyWrap = el('div', 'group__body');
-    bodyWrap.hidden = !isOpen;
+    const body = el('div', 'group__body');
+    body.hidden = !isOpen;
 
-    if (!total) {
+    head.addEventListener('click', () => {
+      const willOpen = body.hidden;
+      body.hidden = !willOpen;
+      head.setAttribute('aria-expanded', String(willOpen));
+      localStorage.setItem(openKey, willOpen ? '1' : '0');
+    });
+
+    g.append(head, body);
+    return { g, body };
+  }
+
+  // Lista de comprobación (equipaje / tareas antes de viajar). No usa
+  // SCHEMAS/openSheet: son ítems de tap-to-marcar y basta con renderDatos()
+  // tras cada cambio, no afectan a las demás pestañas.
+  function checklistBlock(cfg) {
+    const items = state[cfg.col];
+    const done = items.filter(x => x[cfg.doneKey]).length;
+    const { g, body } = groupShell(cfg.openKey, cfg.ico, cfg.label, `${done}/${items.length}`, cfg.hue);
+
+    if (!items.length) {
       const e = el('div', 'empty');
       e.textContent = 'Sin elementos.';
-      bodyWrap.appendChild(e);
+      body.appendChild(e);
     } else {
       const cats = [];
       const byCat = {};
-      state.equipaje.forEach(it => {
+      items.forEach(it => {
         if (!byCat[it.cat]) { byCat[it.cat] = []; cats.push(it.cat); }
         byCat[it.cat].push(it);
       });
       cats.forEach(cat => {
         const catEl = el('p', 'equipaje-cat');
         catEl.textContent = cat;
-        bodyWrap.appendChild(catEl);
+        body.appendChild(catEl);
         const list = el('div', 'equipaje-list');
         byCat[cat].forEach(it => {
-          const row = el('label', 'equipaje-row' + (it.packed ? ' equipaje-row--done' : ''));
+          const row = el('label', 'equipaje-row' + (it[cfg.doneKey] ? ' equipaje-row--done' : ''));
           row.innerHTML =
-            `<input type="checkbox"${it.packed ? ' checked' : ''}>` +
-            `<span>${esc(it.texto)}</span>`;
+            `<input type="checkbox"${it[cfg.doneKey] ? ' checked' : ''}>` +
+            `<span>${esc(it.texto)}${cfg.extra ? cfg.extra(it) : ''}</span>`;
           row.querySelector('input').addEventListener('change', () => {
-            it.packed = !it.packed;
+            it[cfg.doneKey] = !it[cfg.doneKey];
             save();
             renderDatos();
           });
           const del = el('button', 'icon-btn icon-btn--danger equipaje-row__del');
           del.type = 'button';
           del.setAttribute('aria-label', 'Eliminar');
-          del.textContent = '🗑';
+          del.innerHTML = ICON.trash;
           del.addEventListener('click', async ev => {
             ev.preventDefault();
             const ok = await confirmAsk('¿Eliminar «' + it.texto + '» de la lista?');
             if (!ok) return;
-            const i = state.equipaje.findIndex(x => x.id === it.id);
-            if (i > -1) { state.equipaje.splice(i, 1); save(); renderDatos(); }
+            const i = items.findIndex(x => x.id === it.id);
+            if (i > -1) { items.splice(i, 1); save(); renderDatos(); }
           });
           row.appendChild(del);
           list.appendChild(row);
         });
-        bodyWrap.appendChild(list);
+        body.appendChild(list);
       });
     }
 
     const addRow = el('form', 'equipaje-add');
-    addRow.innerHTML = `<input type="text" placeholder="Añadir a la lista…" maxlength="60"><button type="submit" class="btn btn--ghost">+ Añadir</button>`;
+    addRow.innerHTML = `<input type="text" placeholder="Añadir a la lista…" maxlength="60"><button type="submit" class="btn btn--ghost">${ICON.plus} Añadir</button>`;
     addRow.addEventListener('submit', e => {
       e.preventDefault();
       const input = addRow.querySelector('input');
       const texto = input.value.trim();
       if (!texto) return;
-      state.equipaje.push({ id: uid(), texto, cat: 'Otros', packed: false });
+      items.push(cfg.newItem(texto));
       save();
       renderDatos();
     });
-    bodyWrap.appendChild(addRow);
+    body.appendChild(addRow);
 
-    head.addEventListener('click', () => {
-      const willOpen = bodyWrap.hidden;
-      bodyWrap.hidden = !willOpen;
-      head.setAttribute('aria-expanded', String(willOpen));
-      localStorage.setItem(openKey, willOpen ? '1' : '0');
-    });
-
-    g.append(head, bodyWrap);
     return g;
   }
 
-  // Checklist de tareas antes de salir (no objetos que llevar, eso es
-  // equipajeBlock). Mismo patrón exacto: sin SCHEMAS/openSheet, tap-to-marcar,
-  // solo renderDatos() tras cada cambio. La única diferencia es la fecha
-  // límite calculada para las tareas con anchor (ver anteFechaTxt).
+  function equipajeBlock() {
+    return checklistBlock({
+      col: 'equipaje', openKey: 'open_equipaje', ico: '🎒', label: 'Equipaje', hue: 30,
+      doneKey: 'packed',
+      newItem: texto => ({ id: uid(), texto, cat: 'Otros', packed: false })
+    });
+  }
+
+  // La única diferencia con equipaje es la fecha límite calculada para las
+  // tareas con anchor (ver anteFechaTxt).
   function antesDeViajarBlock() {
-    const g = el('div', 'group');
-    const openKey = 'open_antes';
-    const isOpen = localStorage.getItem(openKey) !== '0';
-    const total = state.antesDeViajar.length;
-    const hechas = state.antesDeViajar.filter(x => x.hecho).length;
-
-    const head = el('button', 'group__head');
-    head.type = 'button';
-    head.setAttribute('aria-expanded', String(isOpen));
-    head.innerHTML =
-      `<span class="group__label">✅ Antes de viajar</span>` +
-      `<span class="group__right"><span class="count">${hechas}/${total}</span><span class="chev">⌄</span></span>`;
-
-    const bodyWrap = el('div', 'group__body');
-    bodyWrap.hidden = !isOpen;
-
-    if (!total) {
-      const e = el('div', 'empty');
-      e.textContent = 'Sin elementos.';
-      bodyWrap.appendChild(e);
-    } else {
-      const cats = [];
-      const byCat = {};
-      state.antesDeViajar.forEach(it => {
-        if (!byCat[it.cat]) { byCat[it.cat] = []; cats.push(it.cat); }
-        byCat[it.cat].push(it);
-      });
-      cats.forEach(cat => {
-        const catEl = el('p', 'equipaje-cat');
-        catEl.textContent = cat;
-        bodyWrap.appendChild(catEl);
-        const list = el('div', 'equipaje-list');
-        byCat[cat].forEach(it => {
-          const fechaTxt = it.anchor ? anteFechaTxt(it.anchor) : '';
-          const row = el('label', 'equipaje-row' + (it.hecho ? ' equipaje-row--done' : ''));
-          row.innerHTML =
-            `<input type="checkbox"${it.hecho ? ' checked' : ''}>` +
-            `<span>${esc(it.texto)}${fechaTxt ? '<br><span class="ante-fecha">Disponible desde: ' + esc(fechaTxt) + '</span>' : ''}</span>`;
-          row.querySelector('input').addEventListener('change', () => {
-            it.hecho = !it.hecho;
-            save();
-            renderDatos();
-          });
-          const del = el('button', 'icon-btn icon-btn--danger equipaje-row__del');
-          del.type = 'button';
-          del.setAttribute('aria-label', 'Eliminar');
-          del.textContent = '🗑';
-          del.addEventListener('click', async ev => {
-            ev.preventDefault();
-            const ok = await confirmAsk('¿Eliminar «' + it.texto + '» de la lista?');
-            if (!ok) return;
-            const i = state.antesDeViajar.findIndex(x => x.id === it.id);
-            if (i > -1) { state.antesDeViajar.splice(i, 1); save(); renderDatos(); }
-          });
-          row.appendChild(del);
-          list.appendChild(row);
-        });
-        bodyWrap.appendChild(list);
-      });
-    }
-
-    const addRow = el('form', 'equipaje-add');
-    addRow.innerHTML = `<input type="text" placeholder="Añadir a la lista…" maxlength="60"><button type="submit" class="btn btn--ghost">+ Añadir</button>`;
-    addRow.addEventListener('submit', e => {
-      e.preventDefault();
-      const input = addRow.querySelector('input');
-      const texto = input.value.trim();
-      if (!texto) return;
-      state.antesDeViajar.push({ id: uid(), texto, cat: 'General', anchor: null, hecho: false });
-      save();
-      renderDatos();
+    return checklistBlock({
+      col: 'antesDeViajar', openKey: 'open_antes', ico: '✅', label: 'Antes de viajar', hue: 170,
+      doneKey: 'hecho',
+      extra: it => {
+        const f = it.anchor ? anteFechaTxt(it.anchor) : '';
+        return f ? '<br><span class="ante-fecha">Disponible desde: ' + esc(f) + '</span>' : '';
+      },
+      newItem: texto => ({ id: uid(), texto, cat: 'General', anchor: null, hecho: false })
     });
-    bodyWrap.appendChild(addRow);
-
-    head.addEventListener('click', () => {
-      const willOpen = bodyWrap.hidden;
-      bodyWrap.hidden = !willOpen;
-      head.setAttribute('aria-expanded', String(willOpen));
-      localStorage.setItem(openKey, willOpen ? '1' : '0');
-    });
-
-    g.append(head, bodyWrap);
-    return g;
   }
 
   // El viaje real (vuelos, alojamientos, excursiones, lugares, comidas y las
@@ -1416,36 +1363,33 @@
   const EDITABLE_COLS = ['coches', 'recomendaciones', 'gastos'];
 
   function metaCard() {
-    const c = el('div', 'card meta-card meta-card--ro');
     const m = state.meta;
+    const c = el('section', 'trip-hero');
     const rango = (m.fechaInicio && m.fechaFin)
       ? `${fmtFecha(m.fechaInicio, true)} – ${fmtFecha(m.fechaFin, true)}`
       : 'Sin fechas';
+    const dias = (m.fechaInicio && m.fechaFin) ? eachDay(m.fechaInicio, m.fechaFin).length : 0;
+    const stat = (n, txt) => `<span class="stat"><b>${n}</b> ${txt}</span>`;
     c.innerHTML =
-      `<div class="ro-line"><span class="ro-k">Viaje</span><span class="ro-v">${esc(m.titulo || 'Viaje a Tailandia')}</span></div>` +
-      `<div class="ro-line"><span class="ro-k">Fechas</span><span class="ro-v">${esc(rango)}</span></div>`;
+      `<p class="eyebrow">Tu viaje</p>` +
+      `<h3 class="trip-hero__title">${esc(m.titulo || 'Viaje a Tailandia')}</h3>` +
+      `<p class="trip-hero__dates">${esc(rango)}</p>` +
+      `<div class="trip-hero__stats">` +
+      (dias ? stat(dias, dias === 1 ? 'día' : 'días') : '') +
+      stat(state.vuelos.length, state.vuelos.length === 1 ? 'vuelo' : 'vuelos') +
+      stat(state.alojamientos.length, state.alojamientos.length === 1 ? 'alojamiento' : 'alojamientos') +
+      `</div>`;
     return c;
   }
+
+  const GROUP_HUE = { vuelos: 215, coches: 55, alojamientos: 300, excursiones: 150, comidas: 80, lugares: 340, gastos: 120 };
 
   function groupEl(col, label, summarize) {
     const items = state[col];
     const kind = KIND_OF[col];
-    const g = el('div', 'group');
+    const { g, body } = groupShell('open_' + col, SCHEMAS[kind].icon, label, items.length, GROUP_HUE[col]);
 
-    const openKey = 'open_' + col;
-    const isOpen = localStorage.getItem(openKey) !== '0';
-
-    const head = el('button', 'group__head');
-    head.type = 'button';
-    head.setAttribute('aria-expanded', String(isOpen));
-    head.innerHTML =
-      `<span class="group__label">${SCHEMAS[kind].icon} ${esc(label)}</span>` +
-      `<span class="group__right"><span class="count">${items.length}</span><span class="chev">⌄</span></span>`;
-
-    const bodyWrap = el('div', 'group__body');
-    bodyWrap.hidden = !isOpen;
-
-    if (col === 'gastos') bodyWrap.appendChild(gastoResumen());
+    if (col === 'gastos') body.appendChild(gastoResumen());
 
     const editable = EDITABLE_COLS.includes(col);
 
@@ -1457,25 +1401,16 @@
     } else {
       items.slice().sort(itemSorter(col)).forEach(it => list.appendChild(itemCard(kind, it, summarize(it), editable)));
     }
-
-    bodyWrap.appendChild(list);
+    body.appendChild(list);
 
     if (editable) {
       const add = el('button', 'btn btn--ghost btn--block');
       add.type = 'button';
-      add.textContent = '+ Añadir ' + SCHEMAS[kind].sing;
+      add.innerHTML = ICON.plus + ' Añadir ' + esc(SCHEMAS[kind].sing);
       add.addEventListener('click', () => openSheet(kind));
-      bodyWrap.appendChild(add);
+      body.appendChild(add);
     }
 
-    head.addEventListener('click', () => {
-      const willOpen = bodyWrap.hidden;
-      bodyWrap.hidden = !willOpen;
-      head.setAttribute('aria-expanded', String(willOpen));
-      localStorage.setItem(openKey, willOpen ? '1' : '0');
-    });
-
-    g.append(head, bodyWrap);
     return g;
   }
 
@@ -1490,13 +1425,13 @@
       const edit = el('button', 'icon-btn');
       edit.type = 'button';
       edit.setAttribute('aria-label', 'Editar');
-      edit.textContent = '✎';
+      edit.innerHTML = ICON.edit;
       edit.addEventListener('click', () => openSheet(kind, it.id));
 
       const del = el('button', 'icon-btn icon-btn--danger');
       del.type = 'button';
       del.setAttribute('aria-label', 'Eliminar');
-      del.textContent = '🗑';
+      del.innerHTML = ICON.trash;
       del.addEventListener('click', () => removeItem(kind, it.id));
 
       acts.append(edit, del);
@@ -2129,8 +2064,9 @@
 
     const head = el('div', 'day__head');
     head.innerHTML =
-      `<h3 class="day__date">${cap(fmtDiaSemana(day.date))}, ${fmtFecha(day.date)}</h3>` +
-      `<span class="day__idx">${esHoy ? '<b class="day__now">EN CURSO</b> · ' : ''}Día ${day.idx}</span>`;
+      `<span class="day__badge"><small>Día</small>${day.idx}</span>` +
+      `<div class="day__titles"><h3 class="day__date">${fmtFecha(day.date)}</h3><p class="day__wd">${esc(fmtDiaSemana(day.date))}</p></div>` +
+      (esHoy ? '<b class="day__now">EN CURSO</b>' : '');
     wrap.appendChild(head);
 
     if (plan.veredicto) {
@@ -2275,7 +2211,7 @@
   function unassignedBlock(items) {
     const w = el('section', 'day');
     w.innerHTML =
-      `<div class="day__head"><h3 class="day__date">Por planificar</h3><span class="day__idx">${items.length}</span></div>`;
+      `<div class="day__head"><span class="day__badge"><small>Sin día</small>${items.length}</span><div class="day__titles"><h3 class="day__date">Por planificar</h3></div></div>`;
     w.appendChild(notice('Sin día asignado. Edita cada elemento y ponle una fecha dentro del viaje para colocarlo en el itinerario.'));
     const tl = el('div', 'timeline');
     items.forEach(it => tl.appendChild(slotRow(Object.assign({}, it, { hora: '' }))));
@@ -2401,40 +2337,46 @@
   }
 
   function comerVenue(v, aloj) {
-    const w = el('div', 'comer-venue');
-    const estrellas = v.estrellas ? '⭐'.repeat(v.estrellas) + ' ' : '';
+    const w = el('div', 'venue' + (v.estrellas ? ' venue--star' : ''));
+    const estrellas = v.estrellas ? `<span class="venue__stars" role="img" aria-label="${v.estrellas} estrella${v.estrellas > 1 ? 's' : ''} Michelin">${'★'.repeat(v.estrellas)}</span> ` : '';
     const dist = comerDistTxt(aloj, v);
     w.innerHTML =
-      `<div class="comer-venue__nombre">${estrellas}${esc(v.nombre)}</div>` +
-      (v.tipo ? `<div class="comer-venue__meta">${esc(v.tipo)}</div>` : '') +
-      (v.precio ? `<div class="comer-venue__meta">💰 ${esc(comerPrecioTxt(v))}</div>` : '') +
-      (dist ? `<div class="comer-venue__meta">📍 ${esc(dist)}</div>` : '') +
-      (v.nota ? `<div class="comer-venue__meta">${esc(v.nota)}</div>` : '') +
-      `<div class="comer-venue__go">` +
+      `<div class="venue__nombre">${estrellas}${esc(v.nombre)}</div>` +
+      (v.tipo ? `<div class="venue__meta venue__meta--muted">${esc(v.tipo)}</div>` : '') +
+      (v.precio ? `<div class="venue__meta">💰 ${esc(comerPrecioTxt(v))}</div>` : '') +
+      (dist ? `<div class="venue__meta">📍 ${esc(dist)}</div>` : '') +
+      (v.nota ? `<div class="venue__meta venue__meta--muted">${esc(v.nota)}</div>` : '') +
+      `<div class="venue__go">` +
       `<a class="reco-link" href="${esc(gmapsSearchHref(v.q))}" target="_blank" rel="noopener">Google Maps ›</a>` +
       `<a class="reco-link" href="${esc(appleMapsSearchHref(v.q))}" target="_blank" rel="noopener">Apple Maps ›</a>` +
       `</div>`;
     return w;
   }
 
-  function comerCard(zona, idx, aloj) {
-    const c = el('section', 'card mt-zona');
-    const head = el('h3', 'mt-zona__head');
-    head.textContent = `${zona.zona} · ${zona.fechas}`;
+  // Tarjeta de ciudad compartida por Comer y Muay Thai: nombre + fechas de estancia.
+  function zonaCard(zona) {
+    const c = el('section', 'zona');
+    const head = el('div', 'zona__head');
+    head.innerHTML = `<h3 class="zona__nombre">${esc(zona.zona)}</h3><span class="zona__fechas">${esc(zona.fechas)}</span>`;
     c.appendChild(head);
+    return c;
+  }
+
+  function comerCard(zona, idx, aloj) {
+    const c = zonaCard(zona);
     if (zona.intro) {
       const p = el('p', 'comer-intro');
       p.textContent = zona.intro;
       c.appendChild(p);
     }
     if (zona.estrellas.length) {
-      const lab = el('p', 'slot__opciones-label');
+      const lab = el('p', 'sub-label sub-label--star');
       lab.textContent = 'Estrellas Michelin';
       c.appendChild(lab);
       zona.estrellas.forEach(v => c.appendChild(comerVenue(v, aloj)));
     }
     if (zona.recomendados.length) {
-      const lab = el('p', 'slot__opciones-label');
+      const lab = el('p', 'sub-label');
       lab.textContent = 'También recomendados';
       c.appendChild(lab);
       zona.recomendados.forEach(v => c.appendChild(comerVenue(v, aloj)));
@@ -2758,7 +2700,7 @@
 
     const add = el('button', 'btn btn--accent btn--block');
     add.type = 'button';
-    add.textContent = '+ Añadir recomendación';
+    add.innerHTML = ICON.plus + ' Añadir recomendación';
     add.style.marginTop = 'var(--space-12)';
     add.addEventListener('click', () => openSheet('recomendacion'));
     mine.appendChild(add);
@@ -2920,7 +2862,7 @@
     if (st === 'fin') { box.hidden = true; box.classList.remove('is-live'); return; }
 
     if (st === 'curso') {
-      box.textContent = '🟢 EN CURSO · Día ' + diaActual();
+      box.textContent = 'En curso · Día ' + diaActual();
       box.title = 'El viaje está en marcha';
       box.classList.add('is-live');
       box.hidden = false;
@@ -2930,7 +2872,7 @@
     box.classList.remove('is-live');
     const s = countdownStr(firstDeparture());
     if (!s) { box.hidden = true; return; }
-    box.textContent = '✈️ ' + s;
+    box.innerHTML = ICON.plane + '<span>' + esc(s) + '</span>';
     const dp = dtParts(firstDeparture());
     box.title = dp.date ? `Salida del vuelo: ${fmtFecha(dp.date, true)}, ${dp.time}` : 'Cuenta atrás para el viaje';
     box.hidden = false;
@@ -3234,25 +3176,22 @@
   ];
 
   function muayThaiVenue(l, aloj) {
-    const v = el('div', 'mt-venue');
+    const v = el('div', 'venue');
     const dist = comerDistTxt(aloj, l);
     v.innerHTML =
-      `<div class="mt-venue__nombre">${esc(l.nombre)}</div>` +
-      `<div class="mt-venue__dias">📅 ${esc(l.dias)}</div>` +
-      (l.horario ? `<div class="mt-venue__meta">${esc(l.horario)}</div>` : '') +
-      (l.precio ? `<div class="mt-venue__meta">💰 ${esc(comerPrecioTxt(l))}</div>` : '') +
-      (dist ? `<div class="mt-venue__meta">📍 ${esc(dist)}</div>` : '') +
-      (l.nota ? `<div class="mt-venue__meta">${esc(l.nota)}</div>` : '') +
+      `<div class="venue__nombre">${esc(l.nombre)}</div>` +
+      `<div class="venue__dias">📅 ${esc(l.dias)}</div>` +
+      (l.horario ? `<div class="venue__meta">${esc(l.horario)}</div>` : '') +
+      (l.precio ? `<div class="venue__meta">💰 ${esc(comerPrecioTxt(l))}</div>` : '') +
+      (dist ? `<div class="venue__meta">📍 ${esc(dist)}</div>` : '') +
+      (l.nota ? `<div class="venue__meta venue__meta--muted">${esc(l.nota)}</div>` : '') +
       fotoBlock(l.foto, l.nombre, l.desc, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption') +
       (l.web ? `<a class="reco-link" href="${esc(l.web)}" target="_blank" rel="noopener">Más información ›</a>` : '');
     return v;
   }
 
   function muayThaiCard(zona, aloj) {
-    const c = el('section', 'card mt-zona');
-    const head = el('h3', 'mt-zona__head');
-    head.textContent = `${zona.zona} · ${zona.fechas}`;
-    c.appendChild(head);
+    const c = zonaCard(zona);
     zona.lugares.forEach(l => c.appendChild(muayThaiVenue(l, aloj)));
     return c;
   }
