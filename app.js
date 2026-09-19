@@ -1,9 +1,6 @@
 /* Viaje a Tailandia — Planificador
  * HTML + CSS + JS puro. Sin build. Datos en localStorage.
- * Arquitectura calcada del proyecto hermano "viaje a Islandia": mismo motor
- * de itinerario, mismo sistema de formularios por schema, mismo service
- * worker. A diferencia de Islandia (datos reales precargados y de solo
- * lectura), esta app arranca vacía: TODO es editable desde el móvil.
+ * Motor de itinerario, formularios por schema y service worker propios.
  */
 'use strict';
 (function () {
@@ -21,6 +18,22 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
+
+  // Iconos de interfaz (SVG de trazo; heredan el color del texto)
+  const svgIco = (d, size, sw) => `<svg viewBox="0 0 24 24" width="${size || 18}" height="${size || 18}" fill="none" stroke="currentColor" stroke-width="${sw || 2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const PLANE = '<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.2.4c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>';
+  const ICON = {
+    edit:   svgIco('<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>'),
+    trash:  svgIco('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'),
+    chev:   svgIco('<path d="M6 9l6 6 6-6"/>', 22, 2.6),
+    plus:   svgIco('<path d="M12 5v14M5 12h14"/>', 18, 2.6),
+    plane:  svgIco(PLANE, 16, 2.4),
+    planeL: svgIco(PLANE, 34, 2.2),
+    house:  svgIco('<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>', 17, 2.6),
+    pin:    svgIco('<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>', 14, 2.4),
+    coin:   svgIco('<circle cx="12" cy="12" r="9"/><path d="M14.6 9.3c-.6-.8-1.6-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.7 5.2 1.4 5.2 4.2 0 1.2-1.1 2-2.6 2-1.1 0-2.1-.5-2.7-1.4M12 6v2M12 16v2"/>', 14, 2.4),
+    locate: svgIco('<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>', 15, 2.4)
+  };
 
   const MES_C = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   const MES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -925,7 +938,7 @@
     const rm = el('button', 'icon-btn icon-btn--danger');
     rm.type = 'button';
     rm.setAttribute('aria-label', 'Eliminar tramo');
-    rm.textContent = '🗑';
+    rm.innerHTML = ICON.trash;
     rm.addEventListener('click', () => {
       const wrap = c.parentElement;
       if (wrap.querySelectorAll('.tramo').length <= 1) { toast('Un vuelo necesita al menos un tramo.'); return; }
@@ -1229,182 +1242,122 @@
     return fmtFecha(ymd(d)) + ', ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
   }
 
-  // Checklist de equipaje. No usa SCHEMAS/openSheet porque no es una ficha
-  // con formulario, sino ítems de tap-to-marcar; solo renderDatos() hace
-  // falta tras cada cambio, el equipaje no afecta a Itinerario/Mapas/Muay Thai.
-  function equipajeBlock() {
+  // Cabecera común de los bloques plegables de Datos: icono de color, título,
+  // contador y chevrón; recuerda abierto/cerrado en localStorage.
+  function groupShell(openKey, ico, label, countTxt, color) {
     const g = el('div', 'group');
-    const openKey = 'open_equipaje';
+    g.style.setProperty('--gc', color);
     const isOpen = localStorage.getItem(openKey) !== '0';
-    const total = state.equipaje.length;
-    const packed = state.equipaje.filter(x => x.packed).length;
 
     const head = el('button', 'group__head');
     head.type = 'button';
     head.setAttribute('aria-expanded', String(isOpen));
     head.innerHTML =
-      `<span class="group__label">🎒 Equipaje</span>` +
-      `<span class="group__right"><span class="count">${packed}/${total}</span><span class="chev">⌄</span></span>`;
+      `<span class="group__label"><span class="group__ico" aria-hidden="true">${ico}</span>${esc(label)}</span>` +
+      `<span class="group__right"><span class="count">${countTxt}</span><span class="chev" aria-hidden="true">${ICON.chev}</span></span>`;
 
-    const bodyWrap = el('div', 'group__body');
-    bodyWrap.hidden = !isOpen;
+    const body = el('div', 'group__body');
+    body.hidden = !isOpen;
 
-    if (!total) {
+    head.addEventListener('click', () => {
+      const willOpen = body.hidden;
+      body.hidden = !willOpen;
+      head.setAttribute('aria-expanded', String(willOpen));
+      localStorage.setItem(openKey, willOpen ? '1' : '0');
+    });
+
+    g.append(head, body);
+    return { g, body };
+  }
+
+  // Lista de comprobación (equipaje / tareas antes de viajar). No usa
+  // SCHEMAS/openSheet: son ítems de tap-to-marcar y basta con renderDatos()
+  // tras cada cambio, no afectan a las demás pestañas.
+  function checklistBlock(cfg) {
+    const items = state[cfg.col];
+    const done = items.filter(x => x[cfg.doneKey]).length;
+    const { g, body } = groupShell(cfg.openKey, cfg.ico, cfg.label, `${done}/${items.length}`, cfg.color);
+
+    if (!items.length) {
       const e = el('div', 'empty');
       e.textContent = 'Sin elementos.';
-      bodyWrap.appendChild(e);
+      body.appendChild(e);
     } else {
       const cats = [];
       const byCat = {};
-      state.equipaje.forEach(it => {
+      items.forEach(it => {
         if (!byCat[it.cat]) { byCat[it.cat] = []; cats.push(it.cat); }
         byCat[it.cat].push(it);
       });
       cats.forEach(cat => {
         const catEl = el('p', 'equipaje-cat');
         catEl.textContent = cat;
-        bodyWrap.appendChild(catEl);
+        body.appendChild(catEl);
         const list = el('div', 'equipaje-list');
         byCat[cat].forEach(it => {
-          const row = el('label', 'equipaje-row' + (it.packed ? ' equipaje-row--done' : ''));
+          const row = el('label', 'equipaje-row' + (it[cfg.doneKey] ? ' equipaje-row--done' : ''));
           row.innerHTML =
-            `<input type="checkbox"${it.packed ? ' checked' : ''}>` +
-            `<span>${esc(it.texto)}</span>`;
+            `<input type="checkbox"${it[cfg.doneKey] ? ' checked' : ''}>` +
+            `<span>${esc(it.texto)}${cfg.extra ? cfg.extra(it) : ''}</span>`;
           row.querySelector('input').addEventListener('change', () => {
-            it.packed = !it.packed;
+            it[cfg.doneKey] = !it[cfg.doneKey];
             save();
             renderDatos();
           });
           const del = el('button', 'icon-btn icon-btn--danger equipaje-row__del');
           del.type = 'button';
           del.setAttribute('aria-label', 'Eliminar');
-          del.textContent = '🗑';
+          del.innerHTML = ICON.trash;
           del.addEventListener('click', async ev => {
             ev.preventDefault();
             const ok = await confirmAsk('¿Eliminar «' + it.texto + '» de la lista?');
             if (!ok) return;
-            const i = state.equipaje.findIndex(x => x.id === it.id);
-            if (i > -1) { state.equipaje.splice(i, 1); save(); renderDatos(); }
+            const i = items.findIndex(x => x.id === it.id);
+            if (i > -1) { items.splice(i, 1); save(); renderDatos(); }
           });
           row.appendChild(del);
           list.appendChild(row);
         });
-        bodyWrap.appendChild(list);
+        body.appendChild(list);
       });
     }
 
     const addRow = el('form', 'equipaje-add');
-    addRow.innerHTML = `<input type="text" placeholder="Añadir a la lista…" maxlength="60"><button type="submit" class="btn btn--ghost">+ Añadir</button>`;
+    addRow.innerHTML = `<input type="text" placeholder="Añadir a la lista…" maxlength="60"><button type="submit" class="btn btn--ghost">${ICON.plus} Añadir</button>`;
     addRow.addEventListener('submit', e => {
       e.preventDefault();
       const input = addRow.querySelector('input');
       const texto = input.value.trim();
       if (!texto) return;
-      state.equipaje.push({ id: uid(), texto, cat: 'Otros', packed: false });
+      items.push(cfg.newItem(texto));
       save();
       renderDatos();
     });
-    bodyWrap.appendChild(addRow);
+    body.appendChild(addRow);
 
-    head.addEventListener('click', () => {
-      const willOpen = bodyWrap.hidden;
-      bodyWrap.hidden = !willOpen;
-      head.setAttribute('aria-expanded', String(willOpen));
-      localStorage.setItem(openKey, willOpen ? '1' : '0');
-    });
-
-    g.append(head, bodyWrap);
     return g;
   }
 
-  // Checklist de tareas antes de salir (no objetos que llevar, eso es
-  // equipajeBlock). Mismo patrón exacto: sin SCHEMAS/openSheet, tap-to-marcar,
-  // solo renderDatos() tras cada cambio. La única diferencia es la fecha
-  // límite calculada para las tareas con anchor (ver anteFechaTxt).
+  function equipajeBlock() {
+    return checklistBlock({
+      col: 'equipaje', openKey: 'open_equipaje', ico: '🎒', label: 'Equipaje', color: 'var(--pink)',
+      doneKey: 'packed',
+      newItem: texto => ({ id: uid(), texto, cat: 'Otros', packed: false })
+    });
+  }
+
+  // La única diferencia con equipaje es la fecha límite calculada para las
+  // tareas con anchor (ver anteFechaTxt).
   function antesDeViajarBlock() {
-    const g = el('div', 'group');
-    const openKey = 'open_antes';
-    const isOpen = localStorage.getItem(openKey) !== '0';
-    const total = state.antesDeViajar.length;
-    const hechas = state.antesDeViajar.filter(x => x.hecho).length;
-
-    const head = el('button', 'group__head');
-    head.type = 'button';
-    head.setAttribute('aria-expanded', String(isOpen));
-    head.innerHTML =
-      `<span class="group__label">✅ Antes de viajar</span>` +
-      `<span class="group__right"><span class="count">${hechas}/${total}</span><span class="chev">⌄</span></span>`;
-
-    const bodyWrap = el('div', 'group__body');
-    bodyWrap.hidden = !isOpen;
-
-    if (!total) {
-      const e = el('div', 'empty');
-      e.textContent = 'Sin elementos.';
-      bodyWrap.appendChild(e);
-    } else {
-      const cats = [];
-      const byCat = {};
-      state.antesDeViajar.forEach(it => {
-        if (!byCat[it.cat]) { byCat[it.cat] = []; cats.push(it.cat); }
-        byCat[it.cat].push(it);
-      });
-      cats.forEach(cat => {
-        const catEl = el('p', 'equipaje-cat');
-        catEl.textContent = cat;
-        bodyWrap.appendChild(catEl);
-        const list = el('div', 'equipaje-list');
-        byCat[cat].forEach(it => {
-          const fechaTxt = it.anchor ? anteFechaTxt(it.anchor) : '';
-          const row = el('label', 'equipaje-row' + (it.hecho ? ' equipaje-row--done' : ''));
-          row.innerHTML =
-            `<input type="checkbox"${it.hecho ? ' checked' : ''}>` +
-            `<span>${esc(it.texto)}${fechaTxt ? '<br><span class="ante-fecha">Disponible desde: ' + esc(fechaTxt) + '</span>' : ''}</span>`;
-          row.querySelector('input').addEventListener('change', () => {
-            it.hecho = !it.hecho;
-            save();
-            renderDatos();
-          });
-          const del = el('button', 'icon-btn icon-btn--danger equipaje-row__del');
-          del.type = 'button';
-          del.setAttribute('aria-label', 'Eliminar');
-          del.textContent = '🗑';
-          del.addEventListener('click', async ev => {
-            ev.preventDefault();
-            const ok = await confirmAsk('¿Eliminar «' + it.texto + '» de la lista?');
-            if (!ok) return;
-            const i = state.antesDeViajar.findIndex(x => x.id === it.id);
-            if (i > -1) { state.antesDeViajar.splice(i, 1); save(); renderDatos(); }
-          });
-          row.appendChild(del);
-          list.appendChild(row);
-        });
-        bodyWrap.appendChild(list);
-      });
-    }
-
-    const addRow = el('form', 'equipaje-add');
-    addRow.innerHTML = `<input type="text" placeholder="Añadir a la lista…" maxlength="60"><button type="submit" class="btn btn--ghost">+ Añadir</button>`;
-    addRow.addEventListener('submit', e => {
-      e.preventDefault();
-      const input = addRow.querySelector('input');
-      const texto = input.value.trim();
-      if (!texto) return;
-      state.antesDeViajar.push({ id: uid(), texto, cat: 'General', anchor: null, hecho: false });
-      save();
-      renderDatos();
+    return checklistBlock({
+      col: 'antesDeViajar', openKey: 'open_antes', ico: '✅', label: 'Antes de viajar', color: 'var(--lime)',
+      doneKey: 'hecho',
+      extra: it => {
+        const f = it.anchor ? anteFechaTxt(it.anchor) : '';
+        return f ? '<br><span class="ante-fecha">Disponible desde: ' + esc(f) + '</span>' : '';
+      },
+      newItem: texto => ({ id: uid(), texto, cat: 'General', anchor: null, hecho: false })
     });
-    bodyWrap.appendChild(addRow);
-
-    head.addEventListener('click', () => {
-      const willOpen = bodyWrap.hidden;
-      bodyWrap.hidden = !willOpen;
-      head.setAttribute('aria-expanded', String(willOpen));
-      localStorage.setItem(openKey, willOpen ? '1' : '0');
-    });
-
-    g.append(head, bodyWrap);
-    return g;
   }
 
   // El viaje real (vuelos, alojamientos, excursiones, lugares, comidas y las
@@ -1416,71 +1369,61 @@
   const EDITABLE_COLS = ['coches', 'recomendaciones', 'gastos'];
 
   function metaCard() {
-    const c = el('div', 'card meta-card meta-card--ro');
     const m = state.meta;
+    const c = el('section', 'trip-hero');
     const rango = (m.fechaInicio && m.fechaFin)
-      ? `${fmtFecha(m.fechaInicio, true)} – ${fmtFecha(m.fechaFin, true)}`
+      ? `${fmtFecha(m.fechaInicio, true)} \u2013 ${fmtFecha(m.fechaFin, true)}`
       : 'Sin fechas';
+    const dias = (m.fechaInicio && m.fechaFin) ? eachDay(m.fechaInicio, m.fechaFin).length : 0;
+    const stat = (n, txt) => `<span class="stat"><b>${n}</b> ${txt}</span>`;
     c.innerHTML =
-      `<div class="ro-line"><span class="ro-k">Viaje</span><span class="ro-v">${esc(m.titulo || 'Viaje a Tailandia')}</span></div>` +
-      `<div class="ro-line"><span class="ro-k">Fechas</span><span class="ro-v">${esc(rango)}</span></div>`;
+      `<h3 class="trip-hero__title">${esc(m.titulo || 'Viaje a Tailandia')}</h3>` +
+      `<p class="trip-hero__dates">${esc(rango)}</p>` +
+      `<div class="trip-hero__stats">` +
+      (dias ? stat(dias, dias === 1 ? 'd\u00eda' : 'd\u00edas') : '') +
+      stat(state.vuelos.length, state.vuelos.length === 1 ? 'vuelo' : 'vuelos') +
+      stat(state.alojamientos.length, state.alojamientos.length === 1 ? 'alojamiento' : 'alojamientos') +
+      `</div>`;
     return c;
   }
+
+  const GROUP_COLOR = {
+    vuelos: 'var(--blue)', coches: 'var(--orange)', alojamientos: 'var(--pink)', excursiones: 'var(--lime)',
+    comidas: 'var(--orange)', lugares: 'var(--lime)', gastos: 'var(--blue)'
+  };
 
   function groupEl(col, label, summarize) {
     const items = state[col];
     const kind = KIND_OF[col];
-    const g = el('div', 'group');
+    const { g, body } = groupShell('open_' + col, SCHEMAS[kind].icon, label, items.length, GROUP_COLOR[col]);
 
-    const openKey = 'open_' + col;
-    const isOpen = localStorage.getItem(openKey) !== '0';
-
-    const head = el('button', 'group__head');
-    head.type = 'button';
-    head.setAttribute('aria-expanded', String(isOpen));
-    head.innerHTML =
-      `<span class="group__label">${SCHEMAS[kind].icon} ${esc(label)}</span>` +
-      `<span class="group__right"><span class="count">${items.length}</span><span class="chev">⌄</span></span>`;
-
-    const bodyWrap = el('div', 'group__body');
-    bodyWrap.hidden = !isOpen;
-
-    if (col === 'gastos') bodyWrap.appendChild(gastoResumen());
+    if (col === 'gastos') body.appendChild(gastoResumen());
 
     const editable = EDITABLE_COLS.includes(col);
 
     const list = el('div', 'list');
     if (!items.length) {
       const e = el('div', 'empty');
-      e.textContent = 'Aún no has añadido nada aquí.';
+      e.textContent = 'A\u00fan no has a\u00f1adido nada aqu\u00ed.';
       list.appendChild(e);
     } else {
       items.slice().sort(itemSorter(col)).forEach(it => list.appendChild(itemCard(kind, it, summarize(it), editable)));
     }
-
-    bodyWrap.appendChild(list);
+    body.appendChild(list);
 
     if (editable) {
       const add = el('button', 'btn btn--ghost btn--block');
       add.type = 'button';
-      add.textContent = '+ Añadir ' + SCHEMAS[kind].sing;
+      add.innerHTML = ICON.plus + ' A\u00f1adir ' + esc(SCHEMAS[kind].sing);
       add.addEventListener('click', () => openSheet(kind));
-      bodyWrap.appendChild(add);
+      body.appendChild(add);
     }
 
-    head.addEventListener('click', () => {
-      const willOpen = bodyWrap.hidden;
-      bodyWrap.hidden = !willOpen;
-      head.setAttribute('aria-expanded', String(willOpen));
-      localStorage.setItem(openKey, willOpen ? '1' : '0');
-    });
-
-    g.append(head, bodyWrap);
     return g;
   }
 
   function itemCard(kind, it, summaryHtml, editable) {
-    const c = el('div', 'card item');
+    const c = el('div', 'card item' + (kind === 'vuelo' ? ' card--pass' : ''));
     const main = el('div', 'item__main');
     main.innerHTML = summaryHtml;
     c.appendChild(main);
@@ -1490,13 +1433,13 @@
       const edit = el('button', 'icon-btn');
       edit.type = 'button';
       edit.setAttribute('aria-label', 'Editar');
-      edit.textContent = '✎';
+      edit.innerHTML = ICON.edit;
       edit.addEventListener('click', () => openSheet(kind, it.id));
 
       const del = el('button', 'icon-btn icon-btn--danger');
       del.type = 'button';
       del.setAttribute('aria-label', 'Eliminar');
-      del.textContent = '🗑';
+      del.innerHTML = ICON.trash;
       del.addEventListener('click', () => removeItem(kind, it.id));
 
       acts.append(edit, del);
@@ -1549,7 +1492,8 @@
     const s = dtParts(a.salida), e = dtParts(z.llegada);
 
     let html =
-      `<div class="item__title">${esc(v.tipo || 'Vuelo')} · <span class="mono">${esc(a.origen || '')}</span> → <span class="mono">${esc(z.destino || '')}</span></div>` +
+      `<div class="pass"><div class="pass__top"><span class="pass__route"><span class="mono">${esc(a.origen || '')}</span>${ICON.planeL}<span class="mono">${esc(z.destino || '')}</span></span><span class="pass__tipo">${esc(v.tipo || 'Vuelo')}</span></div>` +
+      `<div class="pass__tear"></div><div class="pass__body">` +
       `<div class="fly-summary">${s.date ? fmtFecha(s.date, true) : '—'} · sale <b>${s.time || '—'}</b> · llega <b>${e.time || '—'}</b>${e.date && e.date !== s.date ? ' (' + fmtFecha(e.date) + ')' : ''}${tr.length > 1 ? ' · ' + tr.length + ' tramos' : ''}</div>`;
 
     html += '<div class="fly-legs">';
@@ -1570,12 +1514,12 @@
     if (v.antelacion) {
       const mins = parseDurLoose(v.antelacion);
       const antesDe = (mins != null && s.time) ? `<br>Llega al aeropuerto sobre las <b>${minusMin(s.time, mins)}</b>.` : '';
-      html += `<div class="fly-alert">⏱️ Estar en el aeropuerto con <b>${esc(v.antelacion)}</b> de antelación.${antesDe}</div>`;
+      html += `<div class="fly-alert">Estar en el aeropuerto con <b>${esc(v.antelacion)}</b> de antelación.${antesDe}</div>`;
     }
     if (v.notas) html += `<div class="item__meta">${escLines(v.notas)}</div>`;
     if (v.reserva) html += `<div class="item__meta">Reserva: ${esc(v.reserva)}</div>`;
-    if (v.equipaje) html += `<details class="fly-bags" open><summary>🧳 Equipaje y restricciones</summary><p>${esc(v.equipaje)}</p></details>`;
-    return html;
+    if (v.equipaje) html += `<details class="fly-bags" open><summary>Equipaje y restricciones</summary><p>${esc(v.equipaje)}</p></details>`;
+    return html + '</div></div>';
   }
 
   function alojSummary(a) {
@@ -1920,6 +1864,7 @@
   function renderItinerario() {
     const body = $('#itin-body');
     const sub = $('#itin-sub');
+    destroyRutaMap();
     body.innerHTML = '';
     _odCache = {};   // cache de outdoorFor válido solo dentro de este render
 
@@ -1942,6 +1887,10 @@
 
     const hb = hoyBlock(it);
     if (hb) body.appendChild(hb);
+    if (selectedItinDay === 'all') {
+      const rb = rutaBlock();
+      if (rb) body.appendChild(rb);
+    }
     body.appendChild(outdoorRankBlock(it));
 
     const chips = el('div', 'chips chips--itin');
@@ -1953,6 +1902,7 @@
     dias.forEach(day => body.appendChild(dayBlock(day)));
 
     if (selectedItinDay === 'all' && it.unassigned.length) body.appendChild(unassignedBlock(it.unassigned));
+    ensureRutaMap();
   }
 
   // Tarjeta condensada del día en curso, arriba de todo en Itinerario.
@@ -1970,7 +1920,7 @@
 
     const box = el('section', 'hoy-card');
     const head = el('p', 'hoy-card__head');
-    head.innerHTML = `📍 <b>Hoy</b> · ${esc(cap(fmtDiaSemana(hoy)))}, ${esc(fmtFecha(hoy))} (Día ${day.idx})`;
+    head.innerHTML = `Hoy, ${esc(fmtDiaSemana(hoy))} ${esc(fmtFecha(hoy))} (día ${day.idx})`;
     box.appendChild(head);
 
     if (plan.veredicto) {
@@ -2129,8 +2079,8 @@
 
     const head = el('div', 'day__head');
     head.innerHTML =
-      `<h3 class="day__date">${cap(fmtDiaSemana(day.date))}, ${fmtFecha(day.date)}</h3>` +
-      `<span class="day__idx">${esHoy ? '<b class="day__now">EN CURSO</b> · ' : ''}Día ${day.idx}</span>`;
+      `<span class="day__badge"><small>Día</small>${day.idx}</span>` +
+      `<div class="day__titles"><h3 class="day__date">${fmtFecha(day.date)}</h3><p class="day__wd">${esc(fmtDiaSemana(day.date))}</p>${esHoy ? '<b class="day__now">En curso</b>' : ''}</div>`;
     wrap.appendChild(head);
 
     if (plan.veredicto) {
@@ -2275,7 +2225,7 @@
   function unassignedBlock(items) {
     const w = el('section', 'day');
     w.innerHTML =
-      `<div class="day__head"><h3 class="day__date">Por planificar</h3><span class="day__idx">${items.length}</span></div>`;
+      `<div class="day__head"><span class="day__badge"><small>Sin día</small>${items.length}</span><div class="day__titles"><h3 class="day__date">Por planificar</h3></div></div>`;
     w.appendChild(notice('Sin día asignado. Edita cada elemento y ponle una fecha dentro del viaje para colocarlo en el itinerario.'));
     const tl = el('div', 'timeline');
     items.forEach(it => tl.appendChild(slotRow(Object.assign({}, it, { hora: '' }))));
@@ -2386,7 +2336,7 @@
   function comerDistTxt(aloj, v) {
     if (!aloj || !aloj.loc || aloj.loc.lat == null || !v.loc) return '';
     const km = haversine(aloj.loc, v.loc);
-    return km < 0.5 ? 'A pie desde el alojamiento' : `~${km.toFixed(1)} km del alojamiento en línea recta`;
+    return km < 0.5 ? 'A pie desde el alojamiento' : `~${km.toFixed(1)} km del alojamiento`;
   }
 
   // Añade el equivalente en € (tipo del BCE del día, el mismo que usa
@@ -2400,95 +2350,107 @@
     return `${v.precio} (${eurTxt})`;
   }
 
-  function comerVenue(v, aloj) {
-    const w = el('div', 'comer-venue');
-    const estrellas = v.estrellas ? '⭐'.repeat(v.estrellas) + ' ' : '';
+  const fact = (cls, ico, txt) => `<span class="fact fact--${cls}">${ico}${esc(txt)}</span>`;
+
+  // Ficha de un sitio (restaurante o estadio). El número es el mismo que
+  // lleva su chapa en el mapa; tocar cualquiera de los dos los enlaza.
+  function venueCard(kind, v, aloj, n, key) {
+    const w = el('div', 'venue' + (kind === 'mt' ? ' venue--mt' : v.estrellas ? ' venue--star' : ''));
+    w.dataset.map = key;
+    w.dataset.n = n;
     const dist = comerDistTxt(aloj, v);
+    const facts = [];
+    if (v.precio) facts.push(fact('price', ICON.coin, comerPrecioTxt(v)));
+    if (dist) facts.push(fact('dist', ICON.pin, dist));
+    const estrellas = v.estrellas
+      ? `<span class="venue__stars" role="img" aria-label="${v.estrellas} estrella${v.estrellas > 1 ? 's' : ''} Michelin">${'★'.repeat(v.estrellas)}</span>`
+      : '';
+    const q = v.q || v.nombre;
     w.innerHTML =
-      `<div class="comer-venue__nombre">${estrellas}${esc(v.nombre)}</div>` +
-      (v.tipo ? `<div class="comer-venue__meta">${esc(v.tipo)}</div>` : '') +
-      (v.precio ? `<div class="comer-venue__meta">💰 ${esc(comerPrecioTxt(v))}</div>` : '') +
-      (dist ? `<div class="comer-venue__meta">📍 ${esc(dist)}</div>` : '') +
-      (v.nota ? `<div class="comer-venue__meta">${esc(v.nota)}</div>` : '') +
-      `<div class="comer-venue__go">` +
-      `<a class="reco-link" href="${esc(gmapsSearchHref(v.q))}" target="_blank" rel="noopener">Google Maps ›</a>` +
-      `<a class="reco-link" href="${esc(appleMapsSearchHref(v.q))}" target="_blank" rel="noopener">Apple Maps ›</a>` +
-      `</div>`;
+      `<button class="venue__n" type="button" aria-label="Ver ${esc(v.nombre)} en el mapa">${n}</button>` +
+      `<div class="venue__body">` +
+      `<div class="venue__nombre">${estrellas}${esc(v.nombre)}</div>` +
+      (v.tipo ? `<div class="venue__meta">${esc(v.tipo)}</div>` : '') +
+      (v.dias ? `<div class="venue__dias">${esc(v.dias)}</div>` : '') +
+      (v.horario ? `<div class="venue__meta">${esc(v.horario)}</div>` : '') +
+      (facts.length ? `<div class="venue__facts">${facts.join('')}</div>` : '') +
+      (v.nota ? `<div class="venue__meta">${esc(v.nota)}</div>` : '') +
+      fotoBlock(v.foto, v.nombre, v.desc, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption') +
+      `<div class="venue__go">` +
+      (v.loc ? `<button class="reco-link reco-link--map" type="button" data-pin>${ICON.locate} Ver en el mapa</button>` : '') +
+      `<a class="reco-link" href="${esc(gmapsSearchHref(q))}" target="_blank" rel="noopener">Google Maps</a>` +
+      `<a class="reco-link" href="${esc(appleMapsSearchHref(q))}" target="_blank" rel="noopener">Apple Maps</a>` +
+      (v.web ? `<a class="reco-link" href="${esc(v.web)}" target="_blank" rel="noopener">Más información</a>` : '') +
+      `</div></div>`;
+    w.querySelectorAll('.venue__n, [data-pin]').forEach(b => b.addEventListener('click', () => selectVenue(key, n)));
     return w;
   }
 
+  // Tarjeta de ciudad compartida por Comer y Muay Thai: nombre, fechas y mapa.
+  function zonaCard(zona, key) {
+    const c = el('section', 'zona');
+    c.innerHTML =
+      `<div class="zona__head"><h3 class="zona__nombre">${esc(zona.zona)}</h3><span class="zona__fechas">${esc(zona.fechas)}</span></div>` +
+      `<div class="zmap" id="zmap-${key}"></div>`;
+    return c;
+  }
+
   function comerCard(zona, idx, aloj) {
-    const c = el('section', 'card mt-zona');
-    const head = el('h3', 'mt-zona__head');
-    head.textContent = `${zona.zona} · ${zona.fechas}`;
-    c.appendChild(head);
+    const key = 'comer-' + idx;
+    const c = zonaCard(zona, key);
     if (zona.intro) {
-      const p = el('p', 'comer-intro');
+      const p = el('p', 'zona__intro');
       p.textContent = zona.intro;
       c.appendChild(p);
     }
+    let n = 0;
     if (zona.estrellas.length) {
-      const lab = el('p', 'slot__opciones-label');
+      const lab = el('p', 'sub-label sub-label--star');
       lab.textContent = 'Estrellas Michelin';
       c.appendChild(lab);
-      zona.estrellas.forEach(v => c.appendChild(comerVenue(v, aloj)));
+      zona.estrellas.forEach(v => c.appendChild(venueCard('comer', v, aloj, ++n, key)));
     }
     if (zona.recomendados.length) {
-      const lab = el('p', 'slot__opciones-label');
+      const lab = el('p', 'sub-label');
       lab.textContent = 'También recomendados';
       c.appendChild(lab);
-      zona.recomendados.forEach(v => c.appendChild(comerVenue(v, aloj)));
+      zona.recomendados.forEach(v => c.appendChild(venueCard('comer', v, aloj, ++n, key)));
     }
-    const mapa = el('div', 'comer-mapa');
-    mapa.id = 'comer-mapa-' + idx;
-    c.appendChild(mapa);
     return c;
   }
 
   function renderComer() {
     const body = $('#comer-body');
     if (!body) return;
+    destroyZoneMaps('comer-');
     body.innerHTML = '';
     body.appendChild(notice('Guía Michelin Thailand 2026 y recomendaciones locales, revisadas en septiembre de 2026 — confirma disponibilidad y reserva con tiempo, sobre todo en los restaurantes con estrella. Distancias en línea recta desde el alojamiento, no ruta real.'));
     COMER_SEED.forEach((zona, idx) => {
       const aloj = state.alojamientos.find(a => a.zona === zona.zona);
       body.appendChild(comerCard(zona, idx, aloj));
     });
-    refreshComerMaps();
+    refreshMaps();
   }
 
-  // Un mapa pequeño por ciudad con el alojamiento (🏠) y los restaurantes
-  // numerados. Igual que antes con el mapa del Itinerario: no se puede crear
-  // un mapa de Leaflet en un contenedor oculto (tamaño 0), así que se reintenta
-  // cuando la pestaña "Comer" se hace visible.
-  const comerMaps = {};    // idx -> { map, bounds }
-  function ensureComerMap(idx, aloj, venues) {
-    if (comerMaps[idx] || typeof L === 'undefined') return;
-    const elMap = document.getElementById('comer-mapa-' + idx);
-    if (!elMap || !elMap.clientHeight) return;
+  /* ==========================================================
+     Mapas (Leaflet): Comer, Muay Thai y la ruta del Itinerario
+     ========================================================== */
+  const OPTS_MAPA = {
+    zoomControl: true, scrollWheelZoom: false, maxZoom: 18,
+    // Sin animaciones: las de zoom/pan dejaban el pane de tiles mal colocado
+    // al llamar a invalidateSize()/fitBounds() varias veces al abrir la pestaña.
+    zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false
+  };
+  const ATTR_MAPA = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
-    const pts = [];
-    if (aloj && aloj.loc && aloj.loc.lat != null) pts.push({ lat: aloj.loc.lat, lng: aloj.loc.lng, label: aloj.nombre || 'Alojamiento', home: true });
-    venues.forEach((v, i) => { if (v.loc) pts.push({ lat: v.loc.lat, lng: v.loc.lng, label: v.nombre, n: i + 1 }); });
-    if (!pts.length) { elMap.remove(); return; }
-
-    // Sin animaciones: son mapas pequeños y estáticos, y las animaciones de
-    // zoom/pan eran las que dejaban el "pane" de tiles mal colocado (a veces
-    // se veía desplazado y tapando el contenido de debajo) cuando se llamaba
-    // invalidateSize()/fitBounds() varias veces seguidas al abrir la pestaña.
-    const map = L.map(elMap.id, {
-      zoomControl: true, scrollWheelZoom: false, maxZoom: 18,
-      zoomAnimation: false, fadeAnimation: false, markerZoomAnimation: false
-    }).setView([pts[0].lat, pts[0].lng], 14);
-    const carto = L.tileLayer('https://{s}.basemap.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd', maxZoom: 19, crossOrigin: 'anonymous',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  // Tiles claros de CARTO (el CSS los tiñe de lavanda). CARTO es un servicio
+  // gratuito compartido y a veces da 503: tras varios fallos cambia a OSM.
+  function addBaseTiles(map) {
+    const carto = L.tileLayer('https://{s}.basemap.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd', maxZoom: 19, crossOrigin: 'anonymous', attribution: ATTR_MAPA
     });
     let errs = 0, fallenBack = false;
     carto.on('tileerror', () => {
-      // CARTO es un servicio gratuito compartido y a veces da 503: tras varios
-      // fallos, cambia a los tiles (claros) de OpenStreetMap en vez de dejar
-      // el mapa en blanco.
       if (fallenBack || ++errs < 4) return;
       fallenBack = true;
       map.removeLayer(carto);
@@ -2498,58 +2460,209 @@
       }).addTo(map);
     });
     carto.addTo(map);
-    pts.forEach(p => {
-      const icon = L.divIcon({
-        className: '',
-        html: `<div class="num-marker${p.home ? ' num-marker--home' : ''}">${p.home ? '🏠' : p.n}</div>`,
-        iconSize: [26, 26], iconAnchor: [13, 13]
-      });
-      L.marker([p.lat, p.lng], { icon }).addTo(map).bindPopup(`<b>${esc(p.label)}</b>`);
-    });
-    const bounds = L.latLngBounds(pts.map(p => [p.lat, p.lng]));
-    map.fitBounds(bounds, { padding: [28, 28], maxZoom: 15, animate: false });
-    comerMaps[idx] = { map, bounds };
   }
 
-  function refreshComerMaps() {
+  // Chapa numerada. El estilo va en un div interior para poder animarlo sin
+  // pelearse con el transform que Leaflet aplica al marcador.
+  function chapa(cls, inner, i, size) {
+    return L.divIcon({
+      className: '',
+      html: `<div class="mpin ${cls}" style="--i:${i}">${inner}</div>`,
+      iconSize: [size, size], iconAnchor: [size / 2, size / 2], popupAnchor: [0, -size / 2]
+    });
+  }
+
+  const zoneMaps = {};   // clave ('comer-0', 'mt-1'…) -> { map, bounds, markers, home, line, active }
+
+  function destroyZoneMaps(prefix) {
+    Object.keys(zoneMaps).forEach(k => {
+      if (k.indexOf(prefix) !== 0) return;
+      zoneMaps[k].map.remove();
+      delete zoneMaps[k];
+    });
+  }
+
+  // No se puede crear un mapa de Leaflet en un contenedor oculto (tamaño 0),
+  // así que se reintenta cuando la pestaña se hace visible.
+  function ensureZoneMap(key, aloj, items, kind) {
+    if (zoneMaps[key] || typeof L === 'undefined') return;
+    const box = document.getElementById('zmap-' + key);
+    if (!box || !box.clientHeight) return;
+
+    const home = aloj && aloj.loc && aloj.loc.lat != null ? aloj.loc : null;
+    const sitios = [];
+    items.forEach((v, i) => { if (v.loc) sitios.push({ v, n: i + 1 }); });
+    if (!home && !sitios.length) { box.remove(); return; }
+
+    const first = home || sitios[0].v.loc;
+    const map = L.map(box, OPTS_MAPA).setView([first.lat, first.lng], 14);
+    addBaseTiles(map);
+    const entry = { map, markers: {}, home, line: null, active: null, bounds: null };
+    const pts = [];
+    let i = 0;
+
+    if (home) {
+      // Círculos de 500 m y 1 km: cuánto se puede hacer a pie desde el alojamiento
+      [1000, 500].forEach(r => L.circle([home.lat, home.lng], {
+        radius: r, color: '#161a3c', weight: 1.5, dashArray: '4 6',
+        fillColor: '#ff3d95', fillOpacity: r === 500 ? 0.14 : 0.06, interactive: false
+      }).addTo(map));
+      L.marker([home.lat, home.lng], { icon: chapa('mpin--home', ICON.house, i++, 32), keyboard: false, zIndexOffset: 500 })
+        .addTo(map).bindPopup(`<b>${esc(aloj.nombre || 'Alojamiento')}</b><small>Tu alojamiento</small>`);
+      pts.push([home.lat, home.lng]);
+      const leyenda = L.control({ position: 'bottomleft' });
+      leyenda.onAdd = () => { const d = L.DomUtil.create('div', 'ring-key'); d.textContent = '500 m y 1 km'; return d; };
+      leyenda.addTo(map);
+    }
+
+    sitios.forEach(({ v, n }) => {
+      const cls = kind === 'mt' ? 'mpin--mt' : (v.estrellas ? 'mpin--star' : '');
+      const m = L.marker([v.loc.lat, v.loc.lng], { icon: chapa(cls, n, i++, 32), keyboard: false }).addTo(map);
+      m.bindPopup(`<b>${esc(v.nombre)}</b>${v.tipo || v.dias ? `<small>${esc(v.tipo || v.dias)}</small>` : ''}`);
+      m.on('click', () => selectVenue(key, n, true));
+      entry.markers[n] = m;
+      pts.push([v.loc.lat, v.loc.lng]);
+    });
+
+    entry.bounds = L.latLngBounds(pts);
+    map.fitBounds(entry.bounds, { padding: [40, 40], maxZoom: 16, animate: false });
+    zoneMaps[key] = entry;
+  }
+
+  // Marca un sitio en la lista y en el mapa (chapa ampliada, línea discontinua
+  // desde el alojamiento y popup). Si viene del mapa, desplaza la lista a su ficha.
+  function selectVenue(key, n, fromMap) {
+    const entry = zoneMaps[key];
+    const m = entry && entry.markers[n];
+    if (!m) return;
+
+    document.querySelectorAll(`.venue.is-active[data-map="${key}"]`).forEach(c => c.classList.remove('is-active'));
+    if (entry.active) { const old = entry.active.getElement(); if (old) old.firstChild.classList.remove('is-active'); }
+    if (entry.line) { entry.map.removeLayer(entry.line); entry.line = null; }
+
+    const card = document.querySelector(`.venue[data-map="${key}"][data-n="${n}"]`);
+    if (card) card.classList.add('is-active');
+    const icon = m.getElement();
+    if (icon) icon.firstChild.classList.add('is-active');
+    entry.active = m;
+
+    if (entry.home) {
+      entry.line = L.polyline([[entry.home.lat, entry.home.lng], m.getLatLng()], {
+        color: '#c20f63', weight: 3, dashArray: '6 8', lineCap: 'round', className: 'route-line', interactive: false
+      }).addTo(entry.map);
+    }
+    entry.map.panTo(m.getLatLng(), { animate: false });
+    m.openPopup();
+    if (fromMap && card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function refreshZoneMaps() {
     COMER_SEED.forEach((zona, idx) => {
       const aloj = state.alojamientos.find(a => a.zona === zona.zona);
-      const venues = zona.estrellas.concat(zona.recomendados);
-      ensureComerMap(idx, aloj, venues);
-      const entry = comerMaps[idx];
-      if (!entry) return;
-      // invalidateSize() por sí solo no siempre recoloca bien el pane de
-      // tiles tras reflujos del layout (fotos que terminan de cargar más
-      // abajo, etc.): reencuadrar de nuevo en cada refresco es idempotente
-      // y garantiza que el mapa siempre acabe alineado con su contenedor.
-      entry.map.invalidateSize(false);
-      entry.map.fitBounds(entry.bounds, { padding: [28, 28], maxZoom: 15, animate: false });
+      ensureZoneMap('comer-' + idx, aloj, zona.estrellas.concat(zona.recomendados), 'comer');
     });
+    MUAYTHAI_SEED.forEach((zona, idx) => {
+      const aloj = state.alojamientos.find(a => a.zona === zona.zona);
+      ensureZoneMap('mt-' + idx, aloj, zona.lugares, 'mt');
+    });
+    Object.keys(zoneMaps).forEach(k => {
+      const e = zoneMaps[k];
+      // invalidateSize() solo no siempre recoloca el pane de tiles tras
+      // reflujos del layout: reencuadrar es idempotente y lo deja alineado.
+      e.map.invalidateSize(false);
+      e.map.fitBounds(e.bounds, { padding: [40, 40], maxZoom: 16, animate: false });
+    });
+  }
+
+  // Ruta del viaje: un alojamiento tras otro, por fecha de entrada.
+  let rutaMap = null;
+  const rutaStops = () => state.alojamientos
+    .filter(a => a.loc && a.loc.lat != null)
+    .sort((a, b) => (a.checkin || '').localeCompare(b.checkin || ''));
+
+  function rutaBlock() {
+    const stops = rutaStops();
+    if (!stops.length) return null;
+    const km = stops.slice(1).reduce((s, a, i) => s + haversine(stops[i].loc, a.loc), 0);
+    const box = el('section', 'ruta');
+    box.innerHTML =
+      `<div class="ruta__head"><h3>Tu ruta</h3><div class="ruta__stats">` +
+      `<span class="stat"><b>${stops.length}</b> ${stops.length === 1 ? 'parada' : 'paradas'}</span>` +
+      (km >= 1 ? `<span class="stat"><b>${Math.round(km)}</b> km en línea recta</span>` : '') +
+      `</div></div><div class="zmap zmap--flat" id="ruta-mapa"></div>`;
+    return box;
+  }
+
+  function destroyRutaMap() {
+    if (rutaMap) { rutaMap.map.remove(); rutaMap = null; }
+  }
+
+  function ensureRutaMap() {
+    if (rutaMap || typeof L === 'undefined') return;
+    const box = document.getElementById('ruta-mapa');
+    if (!box || !box.clientHeight) return;
+    const stops = rutaStops();
+    if (!stops.length) return;
+
+    const map = L.map(box, OPTS_MAPA).setView([stops[0].loc.lat, stops[0].loc.lng], 6);
+    addBaseTiles(map);
+    const ll = stops.map(a => [a.loc.lat, a.loc.lng]);
+    // Carretera: asfalto de tinta con su línea central, como en el itinerario
+    L.polyline(ll, { color: '#161a3c', weight: 7, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
+    L.polyline(ll, { color: '#ccf62f', weight: 2, dashArray: '2 9', lineCap: 'round', interactive: false }).addTo(map);
+    // Etiquetas hacia fuera (las de más al oeste a la izquierda) y solo una
+    // fija por grupo de paradas cercanas: las demás salen al tocar la chapa.
+    const lngMedia = stops.reduce((s, a) => s + a.loc.lng, 0) / stops.length;
+    const rotuladas = [];
+    stops.forEach((a, i) => {
+      const noches = Math.max(0, eachDay(a.checkin, a.checkout).length - 1);
+      const izq = a.loc.lng < lngMedia;
+      const fija = !rotuladas.some(l => haversine(l, a.loc) < 90);
+      if (fija) rotuladas.push(a.loc);
+      L.marker([a.loc.lat, a.loc.lng], { icon: chapa('mpin--stop', i + 1, i, 36), keyboard: false })
+        .addTo(map)
+        .bindTooltip(esc(a.zona || a.nombre || ''), { permanent: fija, direction: izq ? 'left' : 'right', offset: [izq ? -14 : 14, 0], className: 'city-tip' })
+        .bindPopup(`<b>${esc(a.nombre || 'Alojamiento')}</b><small>${a.checkin ? esc(fmtFecha(a.checkin)) : ''}${noches ? ' · ' + noches + ' noche' + (noches !== 1 ? 's' : '') : ''}</small>`);
+    });
+    rutaMap = { map, bounds: L.latLngBounds(ll) };
+    map.fitBounds(rutaMap.bounds, { padding: [56, 56], maxZoom: 12, animate: false });
+  }
+
+  function refreshRutaMap() {
+    ensureRutaMap();
+    if (!rutaMap) return;
+    rutaMap.map.invalidateSize(false);
+    rutaMap.map.fitBounds(rutaMap.bounds, { padding: [56, 56], maxZoom: 12, animate: false });
+  }
+
+  function refreshMaps() {
+    refreshZoneMaps();
+    refreshRutaMap();
   }
 
   /* ==========================================================
      Pantalla: TRANSPORTE Y GUÍAS
      ========================================================== */
   const TRANSPORTE_LOCAL = [
-    { ico: '🛺', tint: '40', cat: 'Tuk-tuk, Grab y taxi',
+    { ico: '🛺', cat: 'Tuk-tuk, Grab y taxi',
       items: [
         'Grab (como Uber): precio fijo mostrado antes de aceptar — mejor que negociar. Disponible en Bangkok, Chiang Mai, Phuket; no llega a las islas pequeñas.',
         'Tuk-tuk: negocia el precio ANTES de subir, siempre algo por encima de lo que pediría un taxi con taxímetro. Bien para trayectos cortos y turísticos, no para tarifas largas.',
         'Taxi con taxímetro (Bangkok): pide "meter, please". Si el taxista se niega y solo ofrece tarifa plana muy alta, coge otro.',
         'Songthaew (camioneta compartida, típica en Chiang Mai y las islas): ruta fija tipo bus colectivo, se para donde se pide, tarifa barata fija por zona.'
       ] },
-    { ico: '🚆', tint: '210', cat: 'Trenes y vuelos domésticos',
+    { ico: '🚆', cat: 'Trenes y vuelos domésticos',
       items: [
         'Red estatal (SRT): conecta Bangkok con Chiang Mai (tren nocturno con literas, ~12 h), Kanchanaburi y el sur hacia Surat Thani (ferris a Koh Samui/Phangan/Tao). Reserva litera con antelación en temporada alta.',
         'Vuelos domésticos (AirAsia, Nok Air, Thai Lion Air, Thai Vietjet): conectan Bangkok con casi cualquier ciudad o isla en 1-2 h, a menudo más barato y rápido que tren o bus para tramos largos.'
       ] },
-    { ico: '⛴️', tint: '235', cat: 'Ferris a las islas',
+    { ico: '⛴️', cat: 'Ferris a las islas',
       items: [
         'Koh Samui / Koh Phangan / Koh Tao: ferris desde Surat Thani o Donsak.',
         'Koh Phi Phi / Koh Lanta: ferris desde Krabi o Phuket.',
         'Horarios reducidos y cancelaciones por mar de fondo en temporada de monzón — revisa el aviso de lluvia del día antes de reservar un trayecto en barco.'
       ] },
-    { ico: '🛵', tint: '25', cat: 'Alquiler de scooter',
+    { ico: '🛵', cat: 'Alquiler de scooter',
       items: [
         'Lleva el carné de conducir internacional: hay controles policiales habituales que lo piden.',
         'Casco obligatorio, también para el pasajero.',
@@ -2631,13 +2744,13 @@
   };
 
   const EMERGENCIAS_TH = [
-    { ico: '🚨', tint: '25', cat: 'Emergencias',
+    { ico: '🚨', cat: 'Emergencias',
       items: [
         { l: 'Policía', tel: '191', d: 'Emergencia policial general.' },
         { l: 'Policía turística (Tourist Police)', tel: '1155', d: 'Atienden en inglés — denuncias, timos, mediación con comercios. La primera opción si el problema involucra a un turista.' },
         { l: 'Emergencia médica / ambulancia', tel: '1669', d: 'Número nacional de emergencia sanitaria.' }
       ] },
-    { ico: '🛂', tint: '235', cat: 'Consulado',
+    { ico: '🛂', cat: 'Consulado',
       items: [
         { l: 'Embajada de España en Bangkok', d: 'Busca el teléfono de emergencia consular 24 h antes de viajar y guárdalo en el móvil — no lo escribimos aquí para no arriesgarnos a que quede desactualizado.' }
       ] }
@@ -2657,9 +2770,8 @@
   const HEAD_TO_GUIA_TOPIC = {};
   GUIA_TOPICS.forEach(t => t.heads.forEach(h => { HEAD_TO_GUIA_TOPIC[h] = t.key; }));
 
-  function guiaSection(ico, cat, items, tint) {
+  function guiaSection(ico, cat, items) {
     const sec = el('section', 'reco-cat');
-    if (tint) sec.style.setProperty('--rc', tint);
     sec.innerHTML =
       `<div class="reco-cat__head">` +
       `<span class="reco-cat__badge">${esc(ico)}</span>` +
@@ -2683,7 +2795,6 @@
 
     EMERGENCIAS_TH.forEach(g => {
       const sec = el('section', 'reco-cat emerg-cat');
-      if (g.tint) sec.style.setProperty('--rc', g.tint);
       sec.innerHTML =
         `<div class="reco-cat__head">` +
         `<span class="reco-cat__badge">${esc(g.ico || '•')}</span>` +
@@ -2727,13 +2838,13 @@
     GUIA_TOPICS.forEach(t => chips.appendChild(guiaChip(t.key, t.label)));
     body.appendChild(chips);
 
-    TRANSPORTE_LOCAL.forEach(g => body.appendChild(guiaSection(g.ico, g.cat, g.items, g.tint)));
-    body.appendChild(guiaSection('🍜', 'Comida callejera', COMIDA_CALLEJERA.items, '15'));
-    body.appendChild(guiaSection('🙏', 'Templos: etiqueta básica', TEMPLOS_ETIQUETA.items, '270'));
-    body.appendChild(guiaSection('🌧️', 'Temporada por región', TEMPORADA_TH.items, '200'));
-    body.appendChild(guiaSection('☔', 'Plan B para días de lluvia fuerte', PLAN_B_TH.items, '220'));
-    body.appendChild(guiaSection('🧾', 'Presupuesto de referencia', PRESUPUESTO_TH.items, '150'));
-    body.appendChild(guiaSection('💸', 'Dinero: trucos en THB', DINERO_TH.items, '90'));
+    TRANSPORTE_LOCAL.forEach(g => body.appendChild(guiaSection(g.ico, g.cat, g.items)));
+    body.appendChild(guiaSection('🍜', 'Comida callejera', COMIDA_CALLEJERA.items));
+    body.appendChild(guiaSection('🙏', 'Templos: etiqueta básica', TEMPLOS_ETIQUETA.items));
+    body.appendChild(guiaSection('🌧️', 'Temporada por región', TEMPORADA_TH.items));
+    body.appendChild(guiaSection('☔', 'Plan B para días de lluvia fuerte', PLAN_B_TH.items));
+    body.appendChild(guiaSection('🧾', 'Presupuesto de referencia', PRESUPUESTO_TH.items));
+    body.appendChild(guiaSection('💸', 'Dinero: trucos en THB', DINERO_TH.items));
 
     const mine = el('section', 'reco-cat reco-cat--mine');
     mine.innerHTML =
@@ -2758,7 +2869,7 @@
 
     const add = el('button', 'btn btn--accent btn--block');
     add.type = 'button';
-    add.textContent = '+ Añadir recomendación';
+    add.innerHTML = ICON.plus + ' Añadir recomendación';
     add.style.marginTop = 'var(--space-12)';
     add.addEventListener('click', () => openSheet('recomendacion'));
     mine.appendChild(add);
@@ -2787,12 +2898,12 @@
       const tab = $(`.tab[data-tab="${s}"]`);
       if (tab) tab.setAttribute('aria-current', s === name ? 'page' : 'false');
     });
-    if (name === 'comer') {
+    if (name === 'comer' || name === 'muaythai' || name === 'itinerario') {
       // La sección ya es visible: crea/redimensiona tras el reflujo.
       // Doble pasada (60 ms y 300 ms) para que Leaflet mida bien los contenedores.
-      refreshComerMaps();
-      setTimeout(refreshComerMaps, 60);
-      setTimeout(refreshComerMaps, 300);
+      refreshMaps();
+      setTimeout(refreshMaps, 60);
+      setTimeout(refreshMaps, 300);
     }
     window.scrollTo(0, 0);
     if (name === 'itinerario') refreshMeteo();
@@ -2920,7 +3031,7 @@
     if (st === 'fin') { box.hidden = true; box.classList.remove('is-live'); return; }
 
     if (st === 'curso') {
-      box.textContent = '🟢 EN CURSO · Día ' + diaActual();
+      box.textContent = 'En curso · día ' + diaActual();
       box.title = 'El viaje está en marcha';
       box.classList.add('is-live');
       box.hidden = false;
@@ -2930,7 +3041,7 @@
     box.classList.remove('is-live');
     const s = countdownStr(firstDeparture());
     if (!s) { box.hidden = true; return; }
-    box.textContent = '✈️ ' + s;
+    box.innerHTML = ICON.plane + '<span>' + esc(s) + '</span>';
     const dp = dtParts(firstDeparture());
     box.title = dp.date ? `Salida del vuelo: ${fmtFecha(dp.date, true)}, ${dp.time}` : 'Cuenta atrás para el viaje';
     box.hidden = false;
@@ -3233,39 +3344,24 @@
       ] }
   ];
 
-  function muayThaiVenue(l, aloj) {
-    const v = el('div', 'mt-venue');
-    const dist = comerDistTxt(aloj, l);
-    v.innerHTML =
-      `<div class="mt-venue__nombre">${esc(l.nombre)}</div>` +
-      `<div class="mt-venue__dias">📅 ${esc(l.dias)}</div>` +
-      (l.horario ? `<div class="mt-venue__meta">${esc(l.horario)}</div>` : '') +
-      (l.precio ? `<div class="mt-venue__meta">💰 ${esc(comerPrecioTxt(l))}</div>` : '') +
-      (dist ? `<div class="mt-venue__meta">📍 ${esc(dist)}</div>` : '') +
-      (l.nota ? `<div class="mt-venue__meta">${esc(l.nota)}</div>` : '') +
-      fotoBlock(l.foto, l.nombre, l.desc, 'slot__foto-wrap', 'slot__foto', 'slot__foto-caption') +
-      (l.web ? `<a class="reco-link" href="${esc(l.web)}" target="_blank" rel="noopener">Más información ›</a>` : '');
-    return v;
-  }
-
-  function muayThaiCard(zona, aloj) {
-    const c = el('section', 'card mt-zona');
-    const head = el('h3', 'mt-zona__head');
-    head.textContent = `${zona.zona} · ${zona.fechas}`;
-    c.appendChild(head);
-    zona.lugares.forEach(l => c.appendChild(muayThaiVenue(l, aloj)));
+  function muayThaiCard(zona, idx, aloj) {
+    const key = 'mt-' + idx;
+    const c = zonaCard(zona, key);
+    zona.lugares.forEach((l, i) => c.appendChild(venueCard('mt', l, aloj, i + 1, key)));
     return c;
   }
 
   function renderMuayThai() {
     const body = $('#muaythai-body');
     if (!body) return;
+    destroyZoneMaps('mt-');
     body.innerHTML = '';
     body.appendChild(notice('Cartel, entradas y horarios orientativos (revisados en septiembre de 2026) — los estadios cambian el programa y el precio a menudo, confirma fecha y entradas más cerca del viaje. Distancias en línea recta desde el alojamiento, no ruta real.'));
-    MUAYTHAI_SEED.forEach(zona => {
+    MUAYTHAI_SEED.forEach((zona, idx) => {
       const aloj = state.alojamientos.find(a => a.zona === zona.zona);
-      body.appendChild(muayThaiCard(zona, aloj));
+      body.appendChild(muayThaiCard(zona, idx, aloj));
     });
+    refreshMaps();
   }
 
   /* ==========================================================
