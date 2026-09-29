@@ -2295,6 +2295,8 @@
   // estrellas, ordenados de más barato a más caro.
   const michelin = path => 'https://guide.michelin.com/th/en/' + path;
   const bkk = slug => michelin('bangkok-region/bangkok/restaurant/' + slug);
+  const cnx = slug => michelin('chiang-mai-region/chiang-mai/restaurant/' + slug);
+  const pkt = slug => michelin('phuket-region/phuket/restaurant/' + slug);
   const COMER_SEED = [
     { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
       intro: 'Bangkok tiene 39 restaurantes con estrella Michelin en la guía 2026, y hay 2 más en Nonthaburi, justo al norte. Los precios son por persona y sin bebidas; «++» significa que se suma un 10 % de servicio y un 7 % de IVA. Debajo, Bib Gourmand (buena comida a buen precio, de la misma guía) y clásicos callejeros.',
@@ -2349,33 +2351,67 @@
         { nombre: 'Go-Ang Pratunam Chicken Rice', tipo: 'Bib Gourmand · khao man kai (arroz con pollo), en Pratunam', precio: '~40–50 THB', precioThb: [40, 50], q: 'Go-Ang Pratunam Chicken Rice Bangkok', loc: { lat: 13.7496, lng: 100.5420 } }
       ] },
     { zona: 'Chiang Mai', fechas: '29 nov – 2 dic (3 noches)',
-      intro: 'Chiang Mai está en la Guía Michelin pero todavía sin ningún restaurante con estrella (edición 2026) — solo Bib Gourmand (buena comida a buen precio) y selección Michelin.',
+      intro: 'Chiang Mai está en la Guía Michelin pero todavía sin ningún restaurante con estrella (edición 2026). Aquí van Bib Gourmand (buena comida a buen precio) y selección Michelin, casi todos a menos de 2,5 km del alojamiento: cocina del norte (Lanna), khao soi y mucho street food.',
       estrellas: [], recomendados: [
-        { nombre: 'Khao Soi Mae Sai', tipo: 'Bib Gourmand · khao soi del norte', precio: '~50–60 THB/plato', precioThb: [50, 60], q: 'Khao Soi Mae Sai Chiang Mai', loc: { lat: 18.8408, lng: 98.9872 } },
-        { nombre: 'Huan Soontaree', tipo: 'Bib Gourmand · cocina Lanna del norte', precio: '~400–600 THB/persona', precioThb: [400, 600], q: 'Huan Soontaree Chiang Mai', loc: { lat: 18.8308, lng: 98.9943 } }
+        { nombre: 'Baan Landai', tipo: 'Selección Michelin · tailandesa casera, a un paseo del alojamiento', precio: '~150–300 THB/plato', precioThb: [150, 300], q: 'Baan Landai Phra Pok Klao Road Chiang Mai', web: cnx('baan-landai'), loc: { lat: 18.7941, lng: 98.9874 } },
+        { nombre: 'Khao Soi Mae Sai', tipo: 'Bib Gourmand · khao soi del norte (fideos en curry de coco)', precio: '~50–60 THB/plato', precioThb: [50, 60], q: 'Khao Soi Mae Sai Chiang Mai', web: cnx('khao-soi-mae-sai'), loc: { lat: 18.8041, lng: 98.9851 } },
+        { nombre: 'Nam Ngiao Yong', tipo: 'Selección Michelin · khanom jeen nam ngiao (fideos con caldo de cerdo y tomate), en el mercado Siri Wattana', precio: '~50–80 THB/plato', precioThb: [50, 80], q: 'Nam Ngiao Yong Siri Wattana Market Chiang Mai', web: cnx('nam-ngiao-yong'), loc: { lat: 18.8044, lng: 98.9839 } },
+        { nombre: 'Huen Muan Jai', tipo: 'Bib Gourmand · cocina Lanna en una casa de madera con jardín', precio: '~100–250 THB/plato', precioThb: [100, 250], q: 'Huen Muan Jai Chiang Mai', web: cnx('huen-muan-jai'), loc: { lat: 18.8001, lng: 98.9756 } },
+        { nombre: 'Roti Pa Day', tipo: 'Bib Gourmand · roti crujiente con leche condensada, en un puesto frente a Wat Mahawan', precio: '~30–70 THB', precioThb: [30, 70], q: 'Roti Pa Day Chiang Mai', web: cnx('rotee-pa-day'), loc: { lat: 18.7881, lng: 98.9959 } },
+        { nombre: 'Guay Jub Chang Moi Tat Mai', tipo: 'Bib Gourmand · guay jub (fideos enrollados en caldo de pimienta) con salchicha sai ua', precio: '~50–80 THB/plato', precioThb: [50, 80], q: 'Guay Jub Chang Moi Tat Mai Chiang Mai', web: cnx('guay-jub-chang-moi-tat-mai'), loc: { lat: 18.7901, lng: 98.9987 } },
+        { nombre: 'Rasik Local Kitchen', tipo: 'Bib Gourmand · tailandesa de autor con producto de temporada', nota: 'Solo 14–16 plazas por turno: hay que reservar.', precio: '~120–350 THB/plato', precioThb: [120, 350], q: 'Rasik Local Kitchen Chiang Mai', web: cnx('rasik-local-kitchen'), loc: { lat: 18.7811, lng: 98.9958 } },
+        { nombre: 'Kiti Panit', tipo: 'Selección Michelin · cocina del norte en una antigua casa comercial de Tha Phae', precio: '~200–400 THB/plato', precioThb: [200, 400], q: 'Kiti Panit Chiang Mai', web: cnx('kiti-panit'), loc: { lat: 18.7879, lng: 99.0005 } },
+        { nombre: 'Magnolia Café', tipo: 'Bib Gourmand · tailandesa en un comedor vintage con cuatro mesas compartidas', precio: '~150–300 THB/plato', precioThb: [150, 300], q: 'Magnolia Cafe Rattanakosin Road Chiang Mai', web: cnx('magnolia-cafe'), loc: { lat: 18.8006, lng: 98.9971 } },
+        { nombre: 'Lung Khajohn Wat Ket', tipo: 'Bib Gourmand · postre: khao kriap pak mo (bolitas de arroz al vapor con leche de coco)', precio: '~20–60 THB', precioThb: [20, 60], q: 'Lung Khajohn Wat Ket Chiang Mai', web: cnx('lung-khajohn-wat-ket'), loc: { lat: 18.7923, lng: 99.0022 } },
+        { nombre: 'Euang Kam Sai', tipo: 'Bib Gourmand · recetas del norte de la misma familia desde hace un siglo', precio: '~80–200 THB/plato', precioThb: [80, 200], q: 'Euang Kam Sai Wua Lai Road Chiang Mai', web: cnx('euang-kam-sai'), loc: { lat: 18.7716, lng: 98.9802 } },
+        { nombre: 'Tue Ka Ko Na Prince', tipo: 'Bib Gourmand · taro frito crujiente con salsa de chile dulce y cacahuete', precio: '~40–60 THB', precioThb: [40, 60], q: 'Tue Ka Ko Na Prince Chiang Mai', web: cnx('tue-ka-ko-na-prince'), loc: { lat: 18.7962, lng: 99.0062 } },
+        { nombre: 'Sanpakoi Kanomjeen', tipo: 'Bib Gourmand · khanom jeen con currys, en el mercado Thongkam desde 1977', precio: '~40–70 THB/plato', precioThb: [40, 70], q: 'Sanpakoi Kanomjeen Thongkam Market Chiang Mai', web: cnx('sanpakoi-kanomjeen'), loc: { lat: 18.7859, lng: 99.0087 } },
+        { nombre: 'Saiyut and Doctor Sai Kitchen', tipo: 'Bib Gourmand · recetas familiares de toda Tailandia, incluida cocina real', precio: '~150–300 THB/plato', precioThb: [150, 300], q: 'Saiyut and Doctor Sai Kitchen Chiang Mai', web: cnx('saiyut-and-doctor-sai-kitchen'), loc: { lat: 18.8220, lng: 98.9873 } },
+        { nombre: 'Huan Soontaree', tipo: 'Bib Gourmand · cocina Lanna junto al río Ping, con música en directo de la dueña', precio: '~400–600 THB/persona', precioThb: [400, 600], q: 'Huan Soontaree Chiang Mai', web: cnx('huan-soontaree'), loc: { lat: 18.8310, lng: 98.9938 } }
       ] },
     { zona: 'Krabi / Ao Nang', fechas: '3 – 5 dic (2 noches)',
-      intro: 'Krabi no está cubierto todavía por la Guía Michelin — recomendaciones locales bien valoradas, no son estrellas Michelin.',
+      intro: 'Krabi no está cubierto todavía por la Guía Michelin: estas son recomendaciones locales bien valoradas (reseñas y guías de viaje), no de la Michelin. El viernes 4 de diciembre hay mercado nocturno en Krabi Town.',
       estrellas: [], recomendados: [
         { nombre: 'The Last Fisherman', tipo: 'Marisco con vistas, bueno para el atardecer', precio: 'Precio moderado (sin cifra oficial)', q: 'The Last Fisherman Ao Nang', loc: { lat: 8.0311, lng: 98.8219 } },
-        { nombre: 'KoDam Kitchen', tipo: 'Cocina tailandesa tradicional', precio: '~200–400 THB/persona', precioThb: [200, 400], q: 'KoDam Kitchen Ao Nang', loc: { lat: 8.0326, lng: 98.8237 } }
+        { nombre: 'KoDam Kitchen', tipo: 'Cocina tailandesa tradicional', precio: '~200–400 THB/persona', precioThb: [200, 400], q: 'KoDam Kitchen Ao Nang', loc: { lat: 8.0385, lng: 98.8199 } },
+        { nombre: 'Govinda’s', tipo: 'Vegetariana y vegana, india y tailandesa', precio: '~150–280 THB/plato', precioThb: [150, 280], q: 'Govindas Restaurant Ao Nang', loc: { lat: 8.0387, lng: 98.8195 } },
+        { nombre: 'Lae Lay Grill', tipo: 'Marisco y tailandesa con vistas desde el acantilado sobre Ao Nang', nota: 'Reserva si quieres mesa para el atardecer.', precio: '~500–1.000 THB/persona', precioThb: [500, 1000], q: 'Lae Lay Grill Ao Nang', loc: { lat: 8.0401, lng: 98.8229 } },
+        { nombre: 'Ao Nang Landmark Night Market', tipo: 'Mercado nocturno: pad thai, marisco a la brasa, roti y zumos', precio: '~40–150 THB/plato', precioThb: [40, 150], q: 'Ao Nang Landmark Night Market', loc: { lat: 8.0429, lng: 98.8123 } },
+        { nombre: 'Krua Thara', tipo: 'Marisco fresco al peso (cangrejo, gambas, pescado), lleno de gente local', precio: '~300–600 THB/persona', precioThb: [300, 600], q: 'Krua Thara Restaurant Ao Nang Krabi', loc: { lat: 8.0471, lng: 98.8002 } },
+        { nombre: 'Ao Nang Boat Noodle', tipo: 'Boat noodles (fideos en caldo intenso) y platos tailandeses baratos', precio: '~50–150 THB/plato', precioThb: [50, 150], q: 'Ao Nang Boat Noodle Krabi', loc: { lat: 8.0505, lng: 98.8144 } },
+        { nombre: 'Krabi Town Walking Street', tipo: 'Mercado nocturno de fin de semana (viernes a domingo desde las 17:00): street food y marisco a la brasa', nota: 'El viernes 4 de diciembre coincide con vuestra estancia. Está en Krabi Town, a unos 20 min en coche.', precio: '~20–100 THB/plato', precioThb: [20, 100], q: 'Krabi Town Walking Street', loc: { lat: 8.0640, lng: 98.9162 } },
+        { nombre: 'RuenMai', tipo: 'Cocina del sur de Tailandia en un jardín frondoso, en Krabi Town', nota: 'Abre de 10:30 a 15:00 y de 17:00 a 21:00.', precio: '~200–450 THB/persona', precioThb: [200, 450], q: 'RuenMai Restaurant Krabi', loc: { lat: 8.0880, lng: 98.8820 } }
       ] },
     { zona: 'Koh Phi Phi', fechas: '5 – 7 dic (2 noches)',
-      intro: 'Phi Phi tampoco está en la Guía Michelin — recomendaciones locales bien valoradas.',
+      intro: 'Phi Phi tampoco está en la Guía Michelin: recomendaciones locales bien valoradas, todas en el pueblo de Tonsai y a pie.',
       estrellas: [], recomendados: [
-        { nombre: 'Tonsai Seafood Restaurant', tipo: 'Marisco frente a la playa, buena puesta de sol', precio: '~700–900 THB/persona', precioThb: [700, 900], q: 'Tonsai Seafood Restaurant Koh Phi Phi', loc: { lat: 7.7401, lng: 98.7789 } },
-        { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india', precio: '~200–300 THB/plato', precioThb: [200, 300], q: 'Papaya Restaurant Koh Phi Phi Tonsai', loc: { lat: 7.7412, lng: 98.7779 } }
+        { nombre: 'Tonsai Seafood Restaurant', tipo: 'Marisco frente a la playa, buena puesta de sol', precio: '~700–900 THB/persona', precioThb: [700, 900], q: 'Tonsai Seafood Restaurant Koh Phi Phi', loc: { lat: 7.7381, lng: 98.7728 } },
+        { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india, raciones grandes; pocas mesas, ve pronto', precio: '~200–300 THB/plato', precioThb: [200, 300], q: 'Papaya Restaurant Koh Phi Phi Tonsai', loc: { lat: 7.7397, lng: 98.7736 } },
+        { nombre: 'Garlic 1992', tipo: 'Tailandesa tradicional y barata, siempre llena', precio: '~120–250 THB/plato', precioThb: [120, 250], q: 'Garlic 1992 Restaurant Koh Phi Phi', loc: { lat: 7.7411, lng: 98.7738 } },
+        { nombre: 'Mercado de Tonsai', tipo: 'Puestos de pad thai, arroz frito, roti y batidos: lo más barato de la isla', precio: '~60–150 THB/plato', precioThb: [60, 150], q: 'Phi Phi Market Tonsai', loc: { lat: 7.7391, lng: 98.7721 } },
+        { nombre: 'Anna’s Restaurant', tipo: 'Familiar, tailandesa y occidental con un toque saludable', precio: '~150–300 THB/plato', precioThb: [150, 300], q: 'Annas Restaurant Koh Phi Phi', loc: { lat: 7.7390, lng: 98.7717 } },
+        { nombre: 'Basil Bistro', tipo: 'Tailandesa: muy buenos curris y dumplings', precio: '~200–350 THB/plato', precioThb: [200, 350], q: 'Basil Bistro Bar Restaurant Koh Phi Phi', loc: { lat: 7.7399, lng: 98.7733 } },
+        { nombre: 'Cosmic', tipo: 'Tailandesa y occidental (pasta, pizza)', precio: '~200–350 THB/plato', precioThb: [200, 350], q: 'Cosmic Restaurant Koh Phi Phi', loc: { lat: 7.7397, lng: 98.7730 } },
+        { nombre: 'Breakfast & Friend', tipo: 'Desayunos: tortitas, fruta, huevos y café', precio: '~100–200 THB', precioThb: [100, 200], q: 'Breakfast and Friend Koh Phi Phi', loc: { lat: 7.7396, lng: 98.7730 } }
       ] },
     { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
-      intro: 'Phuket tiene un restaurante con estrella Michelin (PRU, en el norte de la isla) y hay otro en Phang Nga, pasado el puente de Sarasin (Aulis). Los dos quedan lejos de Rawai: cuenta 1 h o más en coche. Debajo, marisco y street food bien valorados cerca de Rawai.',
+      intro: 'Phuket tiene un restaurante con estrella Michelin (PRU, en el norte de la isla) y hay otro en Phang Nga, pasado el puente de Sarasin (Aulis). Los dos quedan lejos de Rawai: cuenta 1 h o más en coche. Debajo, marisco en Rawai y Chalong y, si pasáis por el casco antiguo de Phuket (a ~15 km), sus Bib Gourmand.',
       estrellas: [
         { nombre: 'PRU', estrellas: 1, tipo: 'Km 0 — ingredientes de su propia granja, en el resort Trisara', nota: 'También tiene la Estrella Verde Michelin. Precio vigente desde el 1 de octubre de 2026.', precio: 'Menú degustación ~7.500 THB++', precioThb: [7500, 7500], q: 'PRU restaurant Trisara Phuket', web: michelin('phuket-region/phuket/restaurant/pru'), loc: { lat: 8.0385, lng: 98.2765 } },
         { nombre: 'Aulis', estrellas: 1, tipo: 'Creativa (Simon Rogan), en Iniala Beach House', nota: 'En la playa de Natai (Phang Nga), fuera de la isla. Abre de martes a sábado.', precio: 'Menú degustación ~6.000 THB++', precioThb: [6000, 6000], q: 'Aulis Phuket Iniala Beach House', web: michelin('th-phang-nga-region/th-phang-nga/restaurant/aulis-1210910'), loc: { lat: 8.2879, lng: 98.2742 } }
       ],
       recomendados: [
-        { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, selección Michelin, en Rawai', precio: '~600–800 THB/persona', precioThb: [600, 800], q: 'Salaloy Seafood Restaurant Rawai Phuket', loc: { lat: 7.7719, lng: 98.3063 } },
+        { nombre: 'Mook Manee', tipo: 'Selección Michelin · marisco en el mercado de Rawai: eliges el marisco vivo y te lo cocinan', nota: 'Se paga el marisco al peso más ~100 THB/kg por cocinarlo.', precio: '~800–1.600 THB/persona', precioThb: [800, 1600], q: 'Mook Manee Seafood Rawai Phuket', web: pkt('mook-manee'), loc: { lat: 7.7757, lng: 98.3286 } },
+        { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, en Rawai', precio: '~600–800 THB/persona', precioThb: [600, 800], q: 'Salaloy Seafood Restaurant Rawai Phuket', loc: { lat: 7.7719, lng: 98.3063 } },
         { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', precio: '~900–1.000 THB/persona', precioThb: [900, 1000], q: 'Kan Eang @ Pier Phuket', loc: { lat: 7.7731, lng: 98.3071 } },
-        { nombre: 'A Pong Mae Sunee', tipo: 'Bib Gourmand · khanom a pong (crepes de coco), en el casco antiguo de Phuket', nota: 'A ~18 km de Rawai, en Phuket Town.', precio: 'Muy barato, unos pocos cientos de THB', precioThb: [50, 150], q: 'A Pong Mae Sunee Phuket Town', loc: { lat: 7.8848, lng: 98.3892 } }
+        { nombre: 'Mor Mu Dong', tipo: 'Bib Gourmand · marisco del sur en cabañas sobre el manglar, en Chalong', nota: 'Prueba el pla yut sai (caballa rellena de curry).', precio: '~300–500 THB/persona', precioThb: [300, 500], q: 'Mor Mu Dong Restaurant Chalong Phuket', web: pkt('mor-mu-dong'), loc: { lat: 7.8431, lng: 98.3720 } },
+        { nombre: 'Niyom Salt Grilled Duck', tipo: 'Bib Gourmand · pato asado al carbón con sal, de camino al casco antiguo', precio: '~200–400 THB (medio pato o entero)', precioThb: [200, 400], q: 'Niyom Salt Grilled Duck Phuket', web: pkt('niyom-salt-grilled-duck'), loc: { lat: 7.8662, lng: 98.3493 } },
+        { nombre: 'Roti Chaofa', tipo: 'Bib Gourmand · desayuno tailandés-musulmán: roti, curris y biryani de pollo', precio: '~30–120 THB', precioThb: [30, 120], q: 'Roti Chaofa Phuket Town', web: pkt('roti-chaofa'), loc: { lat: 7.8783, lng: 98.3806 } },
+        { nombre: 'Chuan Chim', tipo: 'Bib Gourmand · marisco al wok en una de las casas de comida más antiguas de Phuket', precio: '~150–400 THB/plato', precioThb: [150, 400], q: 'Chuan Chim Montri Road Phuket', web: pkt('chuan-chim'), loc: { lat: 7.8829, lng: 98.3927 } },
+        { nombre: 'Go Benz', tipo: 'Bib Gourmand · cerdo en caldo de pimienta con fideos de arroz enrollados', nota: 'Abre por la noche y siempre hay cola.', precio: '~60–120 THB/plato', precioThb: [60, 120], q: 'Go Benz Krabi Road Phuket', web: pkt('go-benz'), loc: { lat: 7.8849, lng: 98.3825 } },
+        { nombre: 'One Chun', tipo: 'Bib Gourmand · recetas familiares de Phuket en un edificio del siglo XIX', precio: '~150–350 THB/plato', precioThb: [150, 350], q: 'One Chun Thep Krasattri Road Phuket', web: pkt('one-chun'), loc: { lat: 7.8852, lng: 98.3907 } },
+        { nombre: 'The Charm Dining Gallery', tipo: 'Bib Gourmand · cocina de Phuket en una casona sino-portuguesa', precio: '~200–400 THB/plato', precioThb: [200, 400], q: 'The Charm Dining Gallery Phuket', web: pkt('the-charm'), loc: { lat: 7.8864, lng: 98.3862 } },
+        { nombre: 'A Pong Mae Sunee', tipo: 'Bib Gourmand · khanom a pong (crepes de coco), en el casco antiguo de Phuket', precio: '~50–150 THB', precioThb: [50, 150], q: 'A Pong Mae Sunee Phuket Town', web: pkt('a-pong-mae-sunee'), loc: { lat: 7.8859, lng: 98.3875 } }
       ] }
   ];
 
