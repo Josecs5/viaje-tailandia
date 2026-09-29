@@ -1099,6 +1099,29 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
   border-radius: var(--radius-pill);
 }
 .zona__intro { margin: var(--space-16) 0 var(--space-4); color: var(--ink-2); line-height: 1.6; }
+
+/* Ciudades plegables de Comer: la cabecera es el botón */
+.zona--fold:not([open]) { margin-bottom: var(--space-16); }
+.zona--fold > summary { position: relative; padding-right: 64px; list-style: none; cursor: pointer; }
+.zona--fold > summary::-webkit-details-marker { display: none; }
+.zona--fold:not([open]) > summary { margin-bottom: 0; }
+.zona--fold > summary:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+.zona__cuenta { flex-basis: 100%; font-size: var(--step--1); font-weight: 700; color: rgba(255, 255, 255, 0.72); }
+.zona__chev {
+  position: absolute;
+  top: var(--space-16);
+  right: var(--space-16);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--ink);
+  background: var(--lime);
+  border: 2px solid var(--edge);
+  border-radius: 50%;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.zona--fold[open] .zona__chev { transform: rotate(180deg); }
 .zona .zmap { margin-bottom: 0; }
 
 .sub-label { display: flex; align-items: center; gap: var(--space-10); margin: var(--space-24) 0 var(--space-12); font-family: var(--font-display); font-size: var(--step-2); font-weight: 800; font-stretch: 88%; }

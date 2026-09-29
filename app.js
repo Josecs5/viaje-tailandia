@@ -2289,12 +2289,58 @@
      cerca de cada alojamiento
      ========================================================== */
   // Investigado y verificado en septiembre de 2026 (Guía Michelin Thailand
-  // 2026). Krabi/Ao Nang y Koh Phi Phi no están cubiertos por la Guía
-  // Michelin — ahí solo hay recomendados, no estrellas.
+  // 2026: 43 restaurantes con estrella, coordenadas de la propia guía).
+  // Krabi/Ao Nang y Koh Phi Phi no están cubiertos por la Guía Michelin —
+  // ahí solo hay recomendados, no estrellas. Dentro de cada número de
+  // estrellas, ordenados de más barato a más caro.
+  const michelin = path => 'https://guide.michelin.com/th/en/' + path;
+  const bkk = slug => michelin('bangkok-region/bangkok/restaurant/' + slug);
   const COMER_SEED = [
     { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
-      intro: 'Bangkok tiene 43 restaurantes con estrella Michelin en la guía 2026, pero el menú de degustación más barato ronda los 2.900 THB (~75 €) por persona — todos superan los 40 €. En su lugar, esta es una selección de Bib Gourmand (buena comida a buen precio, reconocidos por la misma Guía Michelin) y clásicos callejeros, todos muy por debajo de esa cifra.',
-      estrellas: [],
+      intro: 'Bangkok tiene 39 restaurantes con estrella Michelin en la guía 2026, y hay 2 más en Nonthaburi, justo al norte. Los precios son por persona y sin bebidas; «++» significa que se suma un 10 % de servicio y un 7 % de IVA. Debajo, Bib Gourmand (buena comida a buen precio, de la misma guía) y clásicos callejeros.',
+      estrellas: [
+        { nombre: 'Sorn', estrellas: 3, tipo: 'Cocina del sur de Tailandia', precio: 'Menú degustación ~7.800 THB++', precioThb: [7800, 7800], q: 'Sorn restaurant Bangkok', web: bkk('sorn'), loc: { lat: 13.7231, lng: 100.5685 } },
+        { nombre: 'Sühring', estrellas: 3, tipo: 'Alemana moderna, en una villa de Sathorn', precio: 'Menú degustación ~7.800–9.800 THB++', precioThb: [7800, 9800], q: 'Suhring restaurant Bangkok', web: bkk('suhring'), loc: { lat: 13.7108, lng: 100.5457 } },
+        { nombre: 'Côte by Mauro Colagreco', estrellas: 2, tipo: 'Mediterránea de la Riviera, en el Capella junto al río', precio: 'Almuerzo ~3.300 THB++ · cena ~7.800 THB++', precioThb: [3300, 7800], q: 'Cote by Mauro Colagreco Capella Bangkok', web: bkk('cote-by-mauro-colagreco'), loc: { lat: 13.7131, lng: 100.5108 } },
+        { nombre: 'INDDEE', estrellas: 2, tipo: 'India contemporánea, menú de 10 pasos', precio: '~4.200–4.900 THB++', precioThb: [4200, 4900], q: 'INDDEE Bangkok', web: bkk('inddee'), loc: { lat: 13.7377, lng: 100.5423 } },
+        { nombre: 'Anne-Sophie Pic at Le Normandie', estrellas: 2, tipo: 'Francesa contemporánea, en el Mandarin Oriental', precio: '~4.500–9.000 THB++ (el almuerzo es lo más barato)', precioThb: [4500, 9000], q: 'Le Normandie Mandarin Oriental Bangkok', web: bkk('le-normandie'), loc: { lat: 13.7239, lng: 100.5139 } },
+        { nombre: 'R-Haan', estrellas: 2, tipo: 'Cocina real tailandesa', precio: 'Menú degustación ~5.200 THB++', precioThb: [5212, 5212], q: 'R-Haan restaurant Bangkok', web: bkk('r-haan'), loc: { lat: 13.7318, lng: 100.5796 } },
+        { nombre: 'Gaa', estrellas: 2, tipo: 'India contemporánea', precio: 'Menú degustación ~5.200–6.200 THB++', precioThb: [5200, 6200], q: 'Gaa restaurant Sukhumvit 53 Bangkok', web: bkk('gaa-1194845'), loc: { lat: 13.7273, lng: 100.5783 } },
+        { nombre: 'Baan Tepa', estrellas: 2, tipo: 'Tailandesa contemporánea, con verduras de su propio huerto', precio: 'Menú degustación ~6.200–7.500 THB++', precioThb: [6200, 7500], q: 'Baan Tepa Ramkhamhaeng Bangkok', web: bkk('baan-tepa'), loc: { lat: 13.7608, lng: 100.6264 } },
+        { nombre: 'Mezzaluna', estrellas: 2, tipo: 'Francesa contemporánea, planta 65 de la State Tower (lebua)', precio: 'Menú degustación ~8.000–9.600 THB++', precioThb: [8000, 9600], q: 'Mezzaluna lebua State Tower Bangkok', web: bkk('mezzaluna'), loc: { lat: 13.7221, lng: 100.5169 } },
+        { nombre: "Chef's Table", estrellas: 2, tipo: 'Francesa contemporánea, planta 61 de la State Tower (lebua)', precio: 'Menú degustación ~9.200 THB++', precioThb: [9200, 9200], q: "Chef's Table lebua Bangkok", web: bkk('chef-s-table1184372'), loc: { lat: 13.7215, lng: 100.5172 } },
+        { nombre: 'Jay Fai', estrellas: 1, tipo: 'Street food — tortilla de cangrejo', nota: 'Sin reservas y con colas larguísimas: ve a primera hora.', precio: '~800–2.000 THB/persona a la carta', precioThb: [800, 2000], q: 'Jay Fai restaurant Bangkok', web: bkk('jay-fai'), loc: { lat: 13.7526, lng: 100.5047 } },
+        { nombre: 'Saneh Jaan', estrellas: 1, tipo: 'Tailandesa clásica, en Wireless Road', precio: 'Menú de almuerzo desde ~1.200 THB++ (la cena, más cara)', precioThb: [1200, 1200], q: 'Saneh Jaan Bangkok', web: bkk('saneh-jaan'), loc: { lat: 13.7356, lng: 100.5458 } },
+        { nombre: 'Mia', estrellas: 1, tipo: 'Contemporánea entre Europa y Asia', precio: 'Almuerzo de fin de semana ~2.850 THB++ · cena ~3.550–4.550 THB++', precioThb: [2850, 4550], q: 'Mia restaurant Bangkok', web: bkk('mia'), loc: { lat: 13.7212, lng: 100.5713 } },
+        { nombre: 'Resonance', estrellas: 1, tipo: 'Cocina moderna, en Sukhumvit 65', precio: 'Desde ~2.900 THB++ (almuerzo del sábado)', precioThb: [2900, 2900], q: 'Resonance restaurant Sukhumvit 65 Bangkok', web: bkk('resonance'), loc: { lat: 13.7214, lng: 100.5916 } },
+        { nombre: 'Blue by Alain Ducasse', estrellas: 1, tipo: 'Francesa contemporánea, en ICONSIAM', precio: '~2.950 THB++', precioThb: [2950, 2950], q: 'Blue by Alain Ducasse ICONSIAM', web: bkk('blue-by-alain-ducasse'), loc: { lat: 13.7266, lng: 100.5106 } },
+        { nombre: 'Maison Dunand', estrellas: 1, tipo: 'Cocina alpina francesa, en Sathorn', precio: '~2.950–3.500 THB', precioThb: [2950, 3500], q: 'Maison Dunand Bangkok', web: bkk('maison-dunand'), loc: { lat: 13.7229, lng: 100.5275 } },
+        { nombre: 'Elements, Inspired by Ciel Bleu', estrellas: 1, tipo: 'Francesa-japonesa, planta 25 del hotel Okura', precio: '~3.000–4.100 THB', precioThb: [3000, 4100], q: 'Elements Okura Prestige Bangkok', web: bkk('elements'), loc: { lat: 13.7429, lng: 100.5476 } },
+        { nombre: 'Chim by Siam Wisdom', estrellas: 1, tipo: 'Tailandesa, en Dusit', precio: '~3.250–3.550 THB++', precioThb: [3250, 3550], q: 'Chim by Siam Wisdom Bangkok', web: bkk('chim-by-siam-wisdom'), loc: { lat: 13.7892, lng: 100.5186 } },
+        { nombre: 'Coda', estrellas: 1, tipo: 'Tailandesa contemporánea, en Wireless Road', precio: '~3.490 THB++', precioThb: [3490, 3490], q: 'Coda restaurant Wireless Road Bangkok', web: bkk('coda-1206365'), loc: { lat: 13.7360, lng: 100.5461 } },
+        { nombre: 'Haoma', estrellas: 1, tipo: 'India, cocina de huerto propio, en Sukhumvit 31', precio: '~3.500–4.990 THB++', precioThb: [3500, 4990], q: 'Haoma Bangkok', web: bkk('haoma'), loc: { lat: 13.7435, lng: 100.5677 } },
+        { nombre: 'etcha', estrellas: 1, tipo: 'Creativa, en el Chatrium Grand', precio: '~3.750 THB', precioThb: [3750, 3750], q: 'etcha Chatrium Grand Bangkok', web: bkk('etcha'), loc: { lat: 13.7499, lng: 100.5349 } },
+        { nombre: 'NAWA', estrellas: 1, tipo: 'Tailandesa contemporánea, en Sukhumvit 61', precio: '~3.800–4.200 THB++', precioThb: [3800, 4200], q: 'NAWA restaurant Bangkok', web: bkk('nawa'), loc: { lat: 13.7233, lng: 100.5839 } },
+        { nombre: 'Wana Yook', estrellas: 1, tipo: 'Tailandesa contemporánea, junto a Victory Monument', precio: '~3.825–4.950 THB++', precioThb: [3825, 4950], q: 'Wana Yook Bangkok', web: bkk('wana-yook'), loc: { lat: 13.7632, lng: 100.5377 } },
+        { nombre: 'AKKEE', estrellas: 1, tipo: 'Tailandesa contemporánea', nota: 'En Nonthaburi (Pak Kret), ~20 km al norte del centro.', precio: '~3.850 THB', precioThb: [3850, 3850], q: 'AKKEE restaurant Nonthaburi', web: michelin('nonthaburi-region/nonthaburi/restaurant/akkee'), loc: { lat: 13.8985, lng: 100.5151 } },
+        { nombre: 'Nahm', estrellas: 1, tipo: 'Tailandesa, en el COMO Metropolitan', precio: 'Menú degustación ~3.900 THB', precioThb: [3900, 3900], q: 'Nahm restaurant Bangkok', web: bkk('nahm'), loc: { lat: 13.7232, lng: 100.5390 } },
+        { nombre: 'Juksunchae', estrellas: 1, tipo: 'Coreana contemporánea, en Sukhumvit 49', precio: '~3.900 THB++', precioThb: [3900, 3900], q: 'Juksunchae Bangkok', web: bkk('juksunchae'), loc: { lat: 13.7328, lng: 100.5767 } },
+        { nombre: 'Samrub Samrub Thai', estrellas: 1, tipo: 'Tailandesa, en Silom', precio: '~3.900–4.290 THB++', precioThb: [3900, 4290], q: 'Samrub Samrub Thai Bangkok', web: bkk('samrub-samrub-thai'), loc: { lat: 13.7269, lng: 100.5374 } },
+        { nombre: 'Bo.lan', estrellas: 1, tipo: 'Tailandesa, en Sukhumvit 53', precio: '~3.980 THB', precioThb: [3980, 3980], q: 'Bo.lan restaurant Bangkok', web: bkk('bo-lan'), loc: { lat: 13.7263, lng: 100.5779 } },
+        { nombre: 'Aksorn', estrellas: 1, tipo: 'Tailandesa de recetarios antiguos (David Thompson), en Charoen Krung', precio: '~2.650–4.150 THB++', precioThb: [2650, 4150], q: 'Aksorn Bangkok Central The Original Store', web: bkk('aksorn'), loc: { lat: 13.7245, lng: 100.5162 } },
+        { nombre: 'Le Du', estrellas: 1, tipo: 'Tailandesa contemporánea, en Silom', precio: 'Menú degustación ~4.500 THB++', precioThb: [4500, 4500], q: 'Le Du restaurant Bangkok', web: bkk('le-du'), loc: { lat: 13.7289, lng: 100.5348 } },
+        { nombre: '80/20', estrellas: 1, tipo: 'Tailandesa contemporánea, en Charoen Krung', precio: 'Menú degustación ~4.500 THB++', precioThb: [4500, 4500], q: '80/20 restaurant Charoen Krung Bangkok', web: bkk('80-20'), loc: { lat: 13.7311, lng: 100.5155 } },
+        { nombre: 'Signature', estrellas: 1, tipo: 'Francesa, en el VIE Hotel', precio: '~4.500–4.800 THB++', precioThb: [4500, 4800], q: 'Signature restaurant VIE Hotel Bangkok', web: bkk('signature-1194955'), loc: { lat: 13.7505, lng: 100.5320 } },
+        { nombre: 'GOAT', estrellas: 1, tipo: 'Tailandesa contemporánea, en Ekkamai', precio: '~4.590 THB++', precioThb: [4590, 4590], q: 'GOAT restaurant Ekkamai Bangkok', web: bkk('goat'), loc: { lat: 13.7274, lng: 100.5872 } },
+        { nombre: 'Cannubi by Umberto Bombana', estrellas: 1, tipo: 'Italiana contemporánea, en el Dusit Thani', precio: '~5.500 THB++', precioThb: [5500, 5500], q: 'Cannubi Dusit Thani Bangkok', web: bkk('cannubi-by-umberto-bombana'), loc: { lat: 13.7280, lng: 100.5377 } },
+        { nombre: 'IGNIV', estrellas: 1, tipo: 'Europea contemporánea para compartir, en el St. Regis', precio: '~5.500 THB++', precioThb: [5500, 5500], q: 'IGNIV St Regis Bangkok', web: bkk('igniv'), loc: { lat: 13.7401, lng: 100.5401 } },
+        { nombre: 'POTONG', estrellas: 1, tipo: 'Tailandesa-china innovadora, en Chinatown', precio: 'Menú degustación ~5.500–6.300 THB', precioThb: [5500, 6300], q: 'Potong restaurant Bangkok', web: bkk('potong'), loc: { lat: 13.7392, lng: 100.5085 } },
+        { nombre: 'Sushi Saito', estrellas: 1, tipo: 'Sushi Edomae, junto al río', precio: '~5.800 THB++', precioThb: [5800, 5800], q: 'Sushi Saito Four Seasons Bangkok', web: bkk('sushi-saito-1208794'), loc: { lat: 13.7124, lng: 100.5099 } },
+        { nombre: 'AVANT', estrellas: 1, tipo: 'Cocina moderna, planta 30 del Kimpton Maa-Lai', precio: '~5.900 THB++', precioThb: [5900, 5900], q: 'AVANT Kimpton Maa-Lai Bangkok', web: bkk('avant'), loc: { lat: 13.7377, lng: 100.5434 } },
+        { nombre: 'Nusara', estrellas: 1, tipo: 'Tailandesa contemporánea, frente a Wat Pho', precio: '~5.990 THB++', precioThb: [5990, 5990], q: 'Nusara restaurant Bangkok', web: bkk('nusara-1192382'), loc: { lat: 13.7457, lng: 100.4915 } },
+        { nombre: 'Gaggan', estrellas: 1, tipo: 'India innovadora (Gaggan Anand), en Sukhumvit 31', precio: 'Menú degustación ~16.000 THB', precioThb: [16000, 16000], q: 'Gaggan Anand restaurant Bangkok', web: bkk('gaggan-anand'), loc: { lat: 13.7408, lng: 100.5676 } },
+        { nombre: 'Suan Thip', estrellas: 1, tipo: 'Tailandesa tradicional, en un jardín junto al río', nota: 'En Nonthaburi (Pak Kret), ~25 km al norte del centro.', precio: '~500–1.000 THB/persona a la carta', precioThb: [500, 1000], q: 'Suan Thip restaurant Nonthaburi', web: michelin('nonthaburi-region/nonthaburi/restaurant/suan-thip'), loc: { lat: 13.9271, lng: 100.5022 } }
+      ],
       recomendados: [
         { nombre: 'Thipsamai Pad Thai', tipo: 'Bib Gourmand · el pad thai más famoso de Bangkok, desde 1966', precio: '~40–150 THB/plato', precioThb: [40, 150], q: 'Thipsamai Pad Thai Bangkok', loc: { lat: 13.7478, lng: 100.5034 } },
         { nombre: 'Krua Apsorn', tipo: 'Bib Gourmand · cocina tailandesa casera', precio: '~150–200 THB/persona', precioThb: [150, 200], q: 'Krua Apsorn Dinso Road Bangkok', loc: { lat: 13.7582, lng: 100.5022 } },
@@ -2321,14 +2367,19 @@
         { nombre: 'Papaya Restaurant', tipo: 'Tailandesa e india', precio: '~200–300 THB/plato', precioThb: [200, 300], q: 'Papaya Restaurant Koh Phi Phi Tonsai', loc: { lat: 7.7412, lng: 98.7779 } }
       ] },
     { zona: 'Phuket', fechas: '7 – 9 dic (2 noches)',
-      intro: 'Phuket tiene un restaurante con estrella Michelin (PRU, en Trisara) pero su menú de degustación va de 4.680 a 6.900 THB (~120–180 €) por persona — muy por encima de los 40 €, así que no está en la lista. En su lugar, marisco y street food bien valorados cerca de Rawai.',
-      estrellas: [],
+      intro: 'Phuket tiene un restaurante con estrella Michelin (PRU, en el norte de la isla) y hay otro en Phang Nga, pasado el puente de Sarasin (Aulis). Los dos quedan lejos de Rawai: cuenta 1 h o más en coche. Debajo, marisco y street food bien valorados cerca de Rawai.',
+      estrellas: [
+        { nombre: 'PRU', estrellas: 1, tipo: 'Km 0 — ingredientes de su propia granja, en el resort Trisara', nota: 'También tiene la Estrella Verde Michelin. Precio vigente desde el 1 de octubre de 2026.', precio: 'Menú degustación ~7.500 THB++', precioThb: [7500, 7500], q: 'PRU restaurant Trisara Phuket', web: michelin('phuket-region/phuket/restaurant/pru'), loc: { lat: 8.0385, lng: 98.2765 } },
+        { nombre: 'Aulis', estrellas: 1, tipo: 'Creativa (Simon Rogan), en Iniala Beach House', nota: 'En la playa de Natai (Phang Nga), fuera de la isla. Abre de martes a sábado.', precio: 'Menú degustación ~6.000 THB++', precioThb: [6000, 6000], q: 'Aulis Phuket Iniala Beach House', web: michelin('th-phang-nga-region/th-phang-nga/restaurant/aulis-1210910'), loc: { lat: 8.2879, lng: 98.2742 } }
+      ],
       recomendados: [
         { nombre: 'Salaloy Seafood Restaurant', tipo: 'Marisco con vistas, selección Michelin, en Rawai', precio: '~600–800 THB/persona', precioThb: [600, 800], q: 'Salaloy Seafood Restaurant Rawai Phuket', loc: { lat: 7.7719, lng: 98.3063 } },
         { nombre: 'Kan Eang @ Pier', tipo: 'Clásico de marisco local en la playa', precio: '~900–1.000 THB/persona', precioThb: [900, 1000], q: 'Kan Eang @ Pier Phuket', loc: { lat: 7.7731, lng: 98.3071 } },
         { nombre: 'A Pong Mae Sunee', tipo: 'Bib Gourmand · khanom a pong (crepes de coco), en el casco antiguo de Phuket', nota: 'A ~18 km de Rawai, en Phuket Town.', precio: 'Muy barato, unos pocos cientos de THB', precioThb: [50, 150], q: 'A Pong Mae Sunee Phuket Town', loc: { lat: 7.8848, lng: 98.3892 } }
       ] }
   ];
+
+  COMER_SEED.forEach(z => z.estrellas.sort((a, b) => b.estrellas - a.estrellas || a.precioThb[0] - b.precioThb[0]));
 
   const gmapsSearchHref = q => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
   const appleMapsSearchHref = q => `https://maps.apple.com/?q=${encodeURIComponent(q)}`;
@@ -2397,24 +2448,53 @@
     return c;
   }
 
+  // Ciudades de Comer abiertas o cerradas a mano en esta sesión (zona -> bool),
+  // para que un re-render no las vuelva a plegar.
+  const comerPlegado = {};
+
+  // Por defecto solo se abre la ciudad en la que estáis hoy (del check-in al
+  // check-out, ambos incluidos: el día del cambio se abren las dos).
+  function comerAbierta(zona, aloj) {
+    if (zona.zona in comerPlegado) return comerPlegado[zona.zona];
+    const hoy = hoyYMD();
+    return !!(aloj && aloj.checkin && aloj.checkout && aloj.checkin <= hoy && hoy <= aloj.checkout);
+  }
+
+  const ESTRELLAS_TXT = { 3: '3 estrellas Michelin', 2: '2 estrellas Michelin', 1: '1 estrella Michelin' };
+
   function comerCard(zona, idx, aloj) {
     const key = 'comer-' + idx;
-    const c = zonaCard(zona, key);
+    const c = el('details', 'zona zona--fold');
+    c.open = comerAbierta(zona, aloj);
+    const nE = zona.estrellas.length, nR = zona.recomendados.length;
+    const cuenta = [nE ? `${nE} con estrella` : 'Sin estrellas', nR ? `${nR} recomendado${nR > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ');
+    c.innerHTML =
+      `<summary class="zona__head"><h3 class="zona__nombre">${esc(zona.zona)}</h3><span class="zona__fechas">${esc(zona.fechas)}</span>` +
+      `<span class="zona__cuenta">${esc(cuenta)}</span><span class="zona__chev" aria-hidden="true">${ICON.chev}</span></summary>` +
+      `<div class="zmap" id="zmap-${key}"></div>`;
+    c.addEventListener('toggle', () => {
+      comerPlegado[zona.zona] = c.open;
+      // El mapa no se puede crear mientras la ciudad está plegada (mide 0)
+      if (c.open) refreshZoneMaps();
+    });
     if (zona.intro) {
       const p = el('p', 'zona__intro');
       p.textContent = zona.intro;
       c.appendChild(p);
     }
-    let n = 0;
-    if (zona.estrellas.length) {
-      const lab = el('p', 'sub-label sub-label--star');
-      lab.textContent = 'Estrellas Michelin';
-      c.appendChild(lab);
-      zona.estrellas.forEach(v => c.appendChild(venueCard('comer', v, aloj, ++n, key)));
-    }
-    if (zona.recomendados.length) {
+    let n = 0, grupo = 0;
+    zona.estrellas.forEach(v => {
+      if (v.estrellas !== grupo) {
+        grupo = v.estrellas;
+        const lab = el('p', 'sub-label sub-label--star');
+        lab.textContent = ESTRELLAS_TXT[grupo];
+        c.appendChild(lab);
+      }
+      c.appendChild(venueCard('comer', v, aloj, ++n, key));
+    });
+    if (nR) {
       const lab = el('p', 'sub-label');
-      lab.textContent = 'También recomendados';
+      lab.textContent = nE ? 'También recomendados' : 'Recomendados';
       c.appendChild(lab);
       zona.recomendados.forEach(v => c.appendChild(venueCard('comer', v, aloj, ++n, key)));
     }
@@ -2426,7 +2506,7 @@
     if (!body) return;
     destroyZoneMaps('comer-');
     body.innerHTML = '';
-    body.appendChild(notice('Guía Michelin Thailand 2026 y recomendaciones locales, revisadas en septiembre de 2026 — confirma disponibilidad y reserva con tiempo, sobre todo en los restaurantes con estrella. Distancias en línea recta desde el alojamiento, no ruta real.'));
+    body.appendChild(notice('Guía Michelin Thailand 2026 y recomendaciones locales, revisadas en septiembre de 2026. Precios aproximados por persona y sin bebidas — confirma y reserva con tiempo, sobre todo en los restaurantes con estrella. Distancias en línea recta desde el alojamiento, no ruta real. Toca una ciudad para desplegarla.'));
     COMER_SEED.forEach((zona, idx) => {
       const aloj = state.alojamientos.find(a => a.zona === zona.zona);
       body.appendChild(comerCard(zona, idx, aloj));
