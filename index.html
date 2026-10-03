@@ -41,7 +41,7 @@
   <!-- Leaflet (local) — mapas pequeños de la pestaña "Comer" -->
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 
@@ -147,6 +147,10 @@
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15h4"/></svg>
       <span>Itinerario</span>
     </button>
+    <button class="tab tab--taz" data-tab="taz" type="button" aria-current="false">
+      <img class="tab__taz" src="icons/taz.png" alt="" width="26" height="26">
+      <span>La hora Taz</span>
+    </button>
     <button class="tab" data-tab="comer" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2v7a2 2 0 0 0 2 2v11"/><path d="M7 2v6M9 2v6M11 2v9"/><path d="M17 2c-1.6 0-3 2.2-3 5s1.4 5 3 5v10"/></svg>
       <span>Comer</span>
@@ -154,10 +158,6 @@
     <button class="tab" data-tab="quever" type="button" aria-current="false">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
       <span>Qué ver</span>
-    </button>
-    <button class="tab tab--taz" data-tab="taz" type="button" aria-current="false">
-      <img class="tab__taz" src="icons/taz.png" alt="" width="26" height="26">
-      <span>La hora Taz</span>
     </button>
   </nav>
 
@@ -200,6 +200,6 @@
 
   <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="vendor/suncalc/suncalc.js" defer></script>
-  <script src="app.js?v=11" defer></script>
+  <script src="app.js?v=12" defer></script>
 </body>
 </html>
