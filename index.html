@@ -41,7 +41,7 @@
   <!-- Leaflet (local) — mapas pequeños de la pestaña "Comer" -->
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 
@@ -82,22 +82,59 @@
       <div id="comer-body"></div>
     </section>
 
-    <!-- ============ TRANSPORTE (guías: transporte local, comida callejera, templos, temporada) ============ -->
-    <section class="screen" id="screen-transporte" data-screen="transporte" hidden>
+    <!-- ============ QUÉ VER (Transporte y guías + Muay Thai, plegados) ============ -->
+    <section class="screen" id="screen-quever" data-screen="quever" hidden>
       <div class="screen-head">
-        <h2>Transporte y guías</h2>
-        <p class="muted">Tuk-tuk, Grab, trenes y ferris — y cómo moverte sin líos. Comida callejera, templos y temporada.</p>
+        <h2>Qué ver</h2>
+        <p class="muted">Toca un bloque para desplegarlo.</p>
       </div>
-      <div id="transporte-body"></div>
+
+      <details class="qv" id="qv-transporte">
+        <summary class="qv__head">
+          <span class="qv__ico" aria-hidden="true">🛺</span>
+          <span class="qv__txt">
+            <h3 class="qv__title">Transporte y guías</h3>
+            <span class="qv__sub">Tuk-tuk, Grab, trenes y ferris — y cómo moverte sin líos. Comida callejera, templos y temporada.</span>
+          </span>
+          <span class="qv__chev" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="qv__body" id="transporte-body"></div>
+      </details>
+
+      <details class="qv" id="qv-muaythai">
+        <summary class="qv__head">
+          <span class="qv__ico" aria-hidden="true">🥊</span>
+          <span class="qv__txt">
+            <h3 class="qv__title">Muay Thai</h3>
+            <span class="qv__sub">Estadios cerca de cada alojamiento y qué días tienen cartel.</span>
+          </span>
+          <span class="qv__chev" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="qv__body" id="muaythai-body"></div>
+      </details>
     </section>
 
-    <!-- ============ MUAY THAI ============ -->
-    <section class="screen" id="screen-muaythai" data-screen="muaythai" hidden>
+    <!-- ============ LA HORA TAZ (bloqueada) ============ -->
+    <section class="screen" id="screen-taz" data-screen="taz" hidden>
       <div class="screen-head">
-        <h2>Muay Thai</h2>
-        <p class="muted">Estadios cerca de cada alojamiento y qué días tienen cartel.</p>
+        <h2>La hora Taz</h2>
+        <p class="muted">Aquí se cuece algo… todavía no se puede ver.</p>
       </div>
-      <div id="muaythai-body"></div>
+      <div class="taz">
+        <div class="taz__stage">
+          <img class="taz__gif" src="https://media.giphy.com/media/26CaMOXjjDM3Xl2s8/giphy.gif" alt="El Demonio de Tasmania girando como un tornado" width="480" height="360" loading="lazy" decoding="async">
+        </div>
+        <div class="taz__lock">
+          <span class="taz__padlock" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></span>
+          <p class="taz__lock-title">Contenido bloqueado</p>
+          <p class="taz__lock-sub">Taz está girando… se desbloqueará cuando llegue la hora.</p>
+        </div>
+        <div class="taz__teaser" aria-hidden="true">
+          <div class="taz__ghost"></div>
+          <div class="taz__ghost"></div>
+          <div class="taz__ghost"></div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -114,13 +151,13 @@
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2v7a2 2 0 0 0 2 2v11"/><path d="M7 2v6M9 2v6M11 2v9"/><path d="M17 2c-1.6 0-3 2.2-3 5s1.4 5 3 5v10"/></svg>
       <span>Comer</span>
     </button>
-    <button class="tab" data-tab="transporte" type="button" aria-current="false">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16V8a2 2 0 0 1 2-2h10l4 4v6a1 1 0 0 1-1 1h-1"/><circle cx="8" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M4 16h3M11 6v6h9"/></svg>
-      <span>Transporte</span>
+    <button class="tab" data-tab="quever" type="button" aria-current="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span>Qué ver</span>
     </button>
-    <button class="tab" data-tab="muaythai" type="button" aria-current="false">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V7a3 3 0 0 1 6 0v1a3 3 0 0 1 3 3v2"/><path d="M16 13v3a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-3a3 3 0 0 1 3-3h1"/><path d="M10 8V6a2 2 0 0 1 4 0v2"/></svg>
-      <span>Muay Thai</span>
+    <button class="tab tab--taz" data-tab="taz" type="button" aria-current="false">
+      <img class="tab__taz" src="icons/taz.png" alt="" width="26" height="26">
+      <span>La hora Taz</span>
     </button>
   </nav>
 
@@ -163,6 +200,6 @@
 
   <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="vendor/suncalc/suncalc.js" defer></script>
-  <script src="app.js?v=10" defer></script>
+  <script src="app.js?v=11" defer></script>
 </body>
 </html>

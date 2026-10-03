@@ -1124,6 +1124,132 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 .zona--fold[open] .zona__chev { transform: rotate(180deg); }
 .zona .zmap { margin-bottom: 0; }
 
+/* ============================================================
+   QUÉ VER · bloques plegables (Transporte y guías, Muay Thai)
+   ============================================================ */
+.qv {
+  margin-bottom: var(--space-16);
+  background: var(--card);
+  border: var(--stroke);
+  border-radius: var(--radius-l);
+  box-shadow: var(--pop);
+}
+.qv > summary { list-style: none; cursor: pointer; }
+.qv > summary::-webkit-details-marker { display: none; }
+.qv__head {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-16);
+  border-radius: var(--radius-l);
+}
+.qv__head:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+.qv__ico {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  font-size: 26px;
+  background: var(--lime);
+  border: var(--stroke);
+  border-radius: var(--radius-m);
+  box-shadow: var(--pop-s);
+}
+#qv-muaythai .qv__ico { background: var(--blue-soft); }
+.qv__title { font-size: var(--step-3); }
+.qv__sub { display: block; margin-top: var(--space-4); font-size: var(--step-0); line-height: 1.4; color: var(--ink-2); }
+.qv__chev {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--ink);
+  background: var(--lime);
+  border: 2px solid var(--edge);
+  border-radius: 50%;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.qv[open] .qv__chev { transform: rotate(180deg); }
+.qv[open] > .qv__head { border-bottom: 2px dashed var(--edge); border-radius: var(--radius-l) var(--radius-l) 0 0; }
+.qv__body { padding: var(--space-16); }
+.qv[open] .qv__body { animation: enter var(--dur-3) var(--ease-out); }
+
+/* ============================================================
+   LA HORA TAZ · sección bloqueada
+   ============================================================ */
+.tab__taz {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--edge);
+  border-radius: 50%;
+}
+.tab--taz[aria-current="page"] .tab__taz { animation: tazSpin 0.7s var(--ease-out); }
+@keyframes tazSpin { from { transform: rotate(-720deg) scale(0.6); } to { transform: none; } }
+
+.taz__stage {
+  overflow: hidden;
+  background: var(--night);
+  border: var(--stroke);
+  border-radius: var(--radius-l);
+  box-shadow: var(--pop-l);
+}
+.taz__gif { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.taz__lock {
+  position: relative;
+  margin-top: var(--space-20);
+  padding: var(--space-32) var(--space-16) var(--space-20);
+  text-align: center;
+  background: var(--card);
+  border: var(--stroke);
+  border-radius: var(--radius-l);
+  box-shadow: var(--pop);
+  overflow: hidden;
+}
+/* Cinta de «prohibido el paso» */
+.taz__lock::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 12px;
+  background: repeating-linear-gradient(-45deg, var(--orange) 0 12px, var(--ink) 12px 24px);
+  border-bottom: 2px solid var(--edge);
+}
+.taz__padlock {
+  display: inline-grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  color: var(--ink);
+  background: var(--orange);
+  border: var(--stroke);
+  border-radius: 50%;
+  box-shadow: var(--pop-s);
+}
+.taz__lock-title { margin-top: var(--space-12); font-family: var(--font-display); font-size: var(--step-3); font-weight: 800; font-stretch: 84%; }
+.taz__lock-sub { margin-top: var(--space-6); color: var(--ink-2); }
+.taz__teaser { display: grid; gap: var(--space-12); margin-top: var(--space-20); }
+.taz__ghost {
+  position: relative;
+  height: 74px;
+  background:
+    linear-gradient(var(--line), var(--line)) 16px 18px / 55% 14px no-repeat,
+    linear-gradient(var(--line), var(--line)) 16px 44px / 35% 10px no-repeat,
+    var(--card);
+  border: 2px dashed var(--ink-2);
+  border-radius: var(--radius-m);
+  opacity: 0.6;
+  filter: blur(1.5px);
+}
+.taz__ghost::after {
+  content: "🔒";
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  font-size: 22px;
+}
+
 .sub-label { display: flex; align-items: center; gap: var(--space-10); margin: var(--space-24) 0 var(--space-12); font-family: var(--font-display); font-size: var(--step-2); font-weight: 800; font-stretch: 88%; }
 .sub-label::after { content: ""; flex: 1; height: 0; border-top: 2px dashed var(--edge); }
 .sub-label--star::before { content: "★"; color: var(--ink); display: grid; place-items: center; width: 26px; height: 26px; font-size: 14px; background: var(--lime); border: 2px solid var(--edge); border-radius: 50%; }

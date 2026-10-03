@@ -3011,9 +3011,18 @@
   /* ==========================================================
      Navegación por pestañas
      ========================================================== */
-  const SCREENS = ['datos', 'itinerario', 'comer', 'transporte', 'muaythai'];
+  const SCREENS = ['datos', 'itinerario', 'comer', 'quever', 'taz'];
+
+  // Transporte y Muay Thai viven ahora plegados dentro de «Qué ver»: los
+  // enlaces antiguos abren esa pantalla con su bloque desplegado.
+  const QV_LEGACY = { transporte: 'qv-transporte', muaythai: 'qv-muaythai' };
 
   function showScreen(name) {
+    if (QV_LEGACY[name]) {
+      const d = document.getElementById(QV_LEGACY[name]);
+      if (d) d.open = true;
+      name = 'quever';
+    }
     if (!SCREENS.includes(name)) name = 'datos';
     SCREENS.forEach(s => {
       const scr = $('#screen-' + s);
@@ -3021,7 +3030,7 @@
       const tab = $(`.tab[data-tab="${s}"]`);
       if (tab) tab.setAttribute('aria-current', s === name ? 'page' : 'false');
     });
-    if (name === 'comer' || name === 'muaythai' || name === 'itinerario') {
+    if (name === 'comer' || name === 'quever' || name === 'itinerario') {
       // La sección ya es visible: crea/redimensiona tras el reflujo.
       // Doble pasada (60 ms y 300 ms) para que Leaflet mida bien los contenedores.
       refreshMaps();
@@ -3035,6 +3044,14 @@
 
   $$('.tab').forEach(t => t.addEventListener('click', () => showScreen(t.dataset.tab)));
   window.addEventListener('hashchange', () => showScreen(location.hash.slice(1)));
+
+  // Los mapas de Muay Thai miden 0 mientras el bloque está plegado: se crean al abrirlo.
+  on('#qv-muaythai', 'toggle', e => {
+    if (!e.currentTarget.open) return;
+    refreshMaps();
+    setTimeout(refreshMaps, 60);
+    setTimeout(refreshMaps, 300);
+  });
 
   /* ==========================================================
      Bottom sheet

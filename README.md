@@ -10,7 +10,7 @@ genera sola el enlace de la **ruta completa en Google Maps** a partir de
 las paradas con ubicación que vayas añadiendo. Incluye un **registro de
 gastos** en THB y € con el tipo de cambio del día (BCE vía frankfurter.dev,
 cacheado, con ajuste manual) y un resumen por categoría. La pestaña
-**Transporte y guías** reúne cómo moverte (tuk-tuk/Grab, trenes, ferris a las
+**Qué ver** agrupa, plegados, dos bloques: **Transporte y guías**, que reúne cómo moverte (tuk-tuk/Grab, trenes, ferris a las
 islas, alquiler de scooter), comida callejera, etiqueta en los templos, un
 calendario de **temporada por región** (el patrón de monzón cambia según la
 zona del país, incluido el patrón invertido del Golfo de Tailandia), un plan
@@ -21,10 +21,11 @@ SunCalc), con la acción concreta — poncho, posibles calles anegadas o
 ferris cancelados. La pestaña **Dónde comer** reúne las estrellas Michelin
 y los sitios mejor valorados cerca de cada alojamiento, con la distancia
 en línea recta desde el alojamiento, el precio medio, un mapa por ciudad
-(Leaflet) y enlace directo a Google Maps y Apple Maps. La pestaña
-**Muay Thai** reúne los estadios
+(Leaflet) y enlace directo a Google Maps y Apple Maps. El bloque
+**Muay Thai** (también en Qué ver) reúne los estadios
 cerca de cada alojamiento con los días de la semana en los que suelen
-tener cartel, para saber qué noche de la estancia encaja. Datos
+tener cartel, para saber qué noche de la estancia encaja. **La hora Taz**
+es una pestaña bloqueada por ahora, con el Demonio de Tasmania girando. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del
 pasaporte, vacunas, facturar los vuelos con su fecha límite calculada en
 cuanto los añadas...) y una **lista de equipaje** curada para el clima
