@@ -423,7 +423,8 @@
     oneNimman: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/One_Nimman.jpg/960px-One_Nimman.jpg',
     khaoSoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Khao_soi_Chiang_Mai.jpg/960px-Khao_soi_Chiang_Mai.jpg',
     plataChiangMai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg/960px-Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg',
-    montanaRusa: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg/960px-Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg',
+    maeKachan: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/View_Hot_Sping_Chiangrai_By_HS3CMI_-_panoramio.jpg/960px-View_Hot_Sping_Chiangrai_By_HS3CMI_-_panoramio.jpg',
+    montanaRusa:'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg/960px-Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg',
     puenting:'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Bungee_Jump_is_freedom.jpg/960px-Bungee_Jump_is_freedom.jpg',
     mercadoAoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Selection_of_fruits_at_Ao_Nang_street_market.jpg/960px-Selection_of_fruits_at_Ao_Nang_street_market.jpg',
     monosAoNang:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg/960px-Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg',
@@ -636,6 +637,7 @@
       franjas: [
         { f: 'Mañana', e: [
           'Chiang Mai (sobre las 06:00) → Chiang Rai (sobre las 09:30) con el goat: https://sunnychiangrai.com/',
+          { alt: 'Transporte a Chiang Rai', foto: 'maeKachan', desc: 'Sunny Chiang Rai es un servicio de chófer privado (con conductor que habla inglés) en Chiang Mai y Chiang Rai. Son unos 190 km por la carretera 118, entre montañas, unas 3 h. A mitad de camino se suele parar en las aguas termales de Mae Kachan (en la foto), con su chorro de agua caliente y puestos para desayunar.' },
           { n: 'Wat Rong Khun (Templo Blanco)', p: '200 baht', x: '1–1,5 h', foto: 'watRongKhun', desc: 'Templo contemporáneo blanco cubierto de espejos y esculturas simbólicas, obra del artista Chalermchai Kositpipat.' },
           { n: 'Wat Rong Suea Ten (Templo Azul)', p: 'gratis', x: '30 min–1 h', foto: 'watRongSueaTen', desc: 'Templo de un azul cobalto intenso con detalles dorados.' },
           { n: 'Wat Huay Pla Kang (conjunto de cosas)', p: 'gratis', x: '1 h', foto: 'watHuayPlaKang', desc: 'Conjunto con una enorme estatua blanca de la diosa Guanyin y una pagoda de nueve pisos.' }
