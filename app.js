@@ -268,7 +268,7 @@
       }]
     },
     {
-      id: 'seed-vu-vuelta', tipo: 'Vuelta', reserva: '', antelacion: '3 h', equipaje: '',
+      id: 'seed-vu-vuelta', tipo: 'Vuelta', reserva: '', antelacion: '2 h', equipaje: '',
       notas: 'Qatar Airways, clase turista. Escala en Doha (DOH) de 3 h 50 min; 18 h 25 min en total.\nOJO: en la reserva ponía QR851 a las 08:55 con llegada a Madrid a las 20:55, pero el QR851 ya no se vende y lleva días cancelándose. Qatar vende ahora el QR843 a las 08:20 y el QR151 llega a Madrid a las 20:45. Confirmad en «Mis reservas» de qatarairways.com a qué vuelo os han pasado.',
       tramos: [{
         aerolinea: 'Qatar Airways', numero: 'QR843', clase: 'Turista', operadoPor: '',
@@ -826,13 +826,14 @@
   // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
   // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
   // guardado.
-  const SEED_V = 4;
+  const SEED_V = 5;
 
   function migrarSeeds(s) {
     if (s.seedV >= SEED_V) return s;
     if (s.seedV < 2) aplicarPlanV2(s);
     if (s.seedV < 3) aplicarPinKrabi(s);
     if (s.seedV < 4) aplicarHorariosQatar(s);
+    if (s.seedV < 5) aplicarAntelacionVuelta(s);
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
@@ -868,6 +869,13 @@
       a.loc = JSON.parse(JSON.stringify(n.loc));
       if (/pin del mapa es aproximado/.test(a.notas || '')) a.notas = n.notas;
     }
+  }
+
+  // v5: en la vuelta basta con estar 2 h antes en el aeropuerto de Phuket.
+  // Solo se cambia si seguía con las 3 h precargadas.
+  function aplicarAntelacionVuelta(s) {
+    const v = s.vuelos.find(x => x.id === 'seed-vu-vuelta');
+    if (v && (v.antelacion === '3 h' || !v.antelacion)) v.antelacion = '2 h';
   }
 
   // v4: ida y vuelta con los horarios actuales de Qatar y las horas de la
