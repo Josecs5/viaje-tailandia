@@ -2885,6 +2885,7 @@
       (v.loc ? `<button class="reco-link reco-link--map" type="button" data-pin>${ICON.locate} Ver en el mapa</button>` : '') +
       `<a class="reco-link" href="${esc(gmapsSearchHref(q))}" target="_blank" rel="noopener">Google Maps</a>` +
       `<a class="reco-link" href="${esc(appleMapsSearchHref(q))}" target="_blank" rel="noopener">Apple Maps</a>` +
+      (v.entradas ? `<a class="reco-link" href="${esc(v.entradas)}" target="_blank" rel="noopener">Entradas</a>` : '') +
       (v.web ? `<a class="reco-link" href="${esc(v.web)}" target="_blank" rel="noopener">Más información</a>` : '') +
       `</div></div>`;
     w.querySelectorAll('.venue__n, [data-pin]').forEach(b => b.addEventListener('click', () => selectVenue(key, n)));
@@ -3877,11 +3878,12 @@
     { zona: 'Bangkok', fechas: '25 – 29 nov (4 noches)',
       lugares: [
         { nombre: 'Rajadamnern Stadium', nota: 'Uno de los dos estadios históricos de Bangkok. Cartel todas las noches de la semana.',
-          dias: 'Cualquier noche del 25 al 28 nov.', horario: 'Puertas ~18:00, combates desde las 19:00.', web: 'https://rajadamnern.com/',
+          dias: 'Viernes 27 nov: velada a las 19:00 (es la del plan, a la vuelta de Ayutthaya).', horario: 'Puertas ~18:00, combates desde las 19:00.', web: 'https://rajadamnern.com/',
+          entradas: 'https://www.ticketmelon.com/raj/knockout-27nov26',
           precio: 'Entrada ~1.500–4.500 THB según localidad', precioThb: [1500, 4500],
           loc: { lat: 13.7640, lng: 100.5092 }, foto: FOTO.rajadamnern, desc: 'El estadio de Muay Thai más antiguo del mundo (desde 1945), uno de los dos templos del boxeo tailandés en Bangkok.' },
         { nombre: 'Lumpinee Boxing Stadium', nota: 'El otro estadio histórico, ahora bajo el sello ONE Championship y trasladado a las afueras (Ram Inthra), ya no en su antigua sede de Rama IV. Los «ONE Friday Fights» son semanales, los viernes.',
-          dias: 'Viernes 27 nov (ese día hay excursión a Ayutthaya con vuelta ~18:30 — confirma la hora de inicio antes de ir).', horario: 'Desde las 18:30.', web: 'https://www.onefc.com/',
+          dias: 'Solo los viernes (ONE Friday Fights). El viernes 27 nov el plan es la velada de Rajadamnern.', horario: 'Desde las 18:30.', web: 'https://www.onefc.com/',
           precio: 'Entrada ~1.000–3.500 THB según localidad', precioThb: [1000, 3500],
           loc: { lat: 13.8630, lng: 100.6323 }, foto: FOTO.lumpinee, desc: 'El otro gran estadio histórico de Bangkok, hoy sede de los combates televisados de ONE Championship.' }
       ] },
