@@ -325,10 +325,10 @@
       checkin: '2026-11-29', checkout: '2026-12-03', zona: 'Chiang Mai', reserva: '',
       link: 'https://maps.app.goo.gl/BFcokj1bJzJH9dw5A',
       notas: '4 noches. 130 € (33 €/noche). Check-in hecho sobre las 11:00.' },
-    { id: 'seed-al-krabi', nombre: 'KG Private Pool Villas Soi 9', loc: { texto: 'Ao Nang, Krabi', lat: 8.0313, lng: 98.8228 },
+    { id: 'seed-al-krabi', nombre: 'KG Private Pool Villas Soi 9', loc: { texto: '1003/2 Soi-9, Ao Nang, Mueang Krabi District, Krabi 81180, Tailandia', lat: 8.0376719, lng: 98.8380055 },
       checkin: '2026-12-03', checkout: '2026-12-05', zona: 'Krabi / Ao Nang', reserva: '',
       link: 'https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=/maps/place//data%3D!4m2!3m1!1s0x3051eb023f252ce1:0xb9002739da0a9f01%3Fsa%3DX%26ved%3D1t:8290%26ictx%3D111&ved=2ahUKEwiAv4WY6-SWAxUl3AIHHeALCT0Q4kB6BAgtEAM&usg=AOvVaw33Gpn54xYr-WA3JpsQsO-w',
-      notas: '2 noches. 55 € (27,5 €/noche). El pin del mapa es aproximado (centro de Ao Nang); el enlace lleva a la ubicación exacta.' },
+      notas: '2 noches. 55 € (27,5 €/noche).' },
     { id: 'seed-al-phiphi', nombre: 'Phi Phi Maiyada Resort', loc: { texto: 'Koh Phi Phi', lat: 7.7392054, lng: 98.7661381 },
       checkin: '2026-12-05', checkout: '2026-12-07', zona: 'Koh Phi Phi', reserva: '',
       link: 'https://maps.app.goo.gl/piuyjui1VFbBoaESA',
@@ -821,7 +821,7 @@
 
   // Versión de los datos precargados. Al subirla, aplicarPlanV2 actualiza
   // una sola vez lo que cada móvil ya tenía guardado.
-  const SEED_V = 2;
+  const SEED_V = 3;
 
   // Plan v2: el Itinerario sale de PLAN_DIAS/PLAN_GRUPOS, así que se quitan
   // los lugares, excursiones y comidas precargados antes (ids seed-lg/ex/cm),
@@ -830,6 +830,7 @@
   // haya añadido cada uno y su diario no se tocan.
   function aplicarPlanV2(s) {
     if (s.seedV >= SEED_V) return s;
+    if (s.seedV === 2) return aplicarPinKrabi(s);
     const clon = x => JSON.parse(JSON.stringify(x));
     const viejo = x => /^seed-(lg|ex|cm)-/.test(x.id || '');
     s.lugares = s.lugares.filter(x => !viejo(x));
@@ -843,6 +844,21 @@
     });
     VUELOS_SEED.forEach(v => { if (!s.vuelos.some(x => x.id === v.id)) s.vuelos.push(clon(v)); });
     GASTOS_SEED.forEach(g => { if (!s.gastos.some(x => x.id === g.id)) s.gastos.push(clon(g)); });
+    s.seedV = SEED_V;
+    setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
+    return s;
+  }
+
+  // v3: quien ya tenía el plan v2 guardado solo recibe el pin exacto de la
+  // villa de Krabi (y su nota sin el aviso de «pin aproximado»); el resto de
+  // lo que haya editado desde entonces no se toca.
+  function aplicarPinKrabi(s) {
+    const n = ALOJ_SEED.find(a => a.id === 'seed-al-krabi');
+    const a = s.alojamientos.find(x => x.id === 'seed-al-krabi');
+    if (a && n) {
+      a.loc = JSON.parse(JSON.stringify(n.loc));
+      if (/pin del mapa es aproximado/.test(a.notas || '')) a.notas = n.notas;
+    }
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
