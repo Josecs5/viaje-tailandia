@@ -566,6 +566,7 @@ main {
 }
 .pass__top {
   display: flex;
+  flex-wrap: wrap;   /* en el móvil, una etiqueta larga («Interno») baja de línea en vez de cortarse */
   align-items: center;
   justify-content: space-between;
   gap: var(--space-12);
@@ -576,6 +577,7 @@ main {
 .pass__route { display: flex; align-items: center; gap: var(--space-10); font-family: var(--font-display); font-weight: 800; font-size: 2.6rem; line-height: 1; letter-spacing: -0.02em; }
 .pass__route svg { flex-shrink: 0; }
 .pass__tipo {
+  flex-shrink: 0;
   padding: 3px 12px;
   font-family: var(--font-display);
   font-weight: 800;

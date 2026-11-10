@@ -251,9 +251,15 @@
   // 10 nov 2026. Cambian respecto a la reserva (ida a las 22:05 en vez de
   // 22:25; el QR851 de la vuelta ya no se vende y lo sustituye el QR843), por
   // eso las notas piden confirmarlo en la reserva.
+  // Equipaje incluido en los billetes de Qatar (ida y vuelta), por persona.
+  const EQUIPAJE_QATAR = 'Incluido por persona (7 de cada en total):\n' +
+    '· 1 accesorio personal: va debajo del asiento de delante.\n' +
+    '· 1 equipaje de mano de 25 × 37 × 50 cm, máx. 7 kg.\n' +
+    '· 1 maleta facturada de máx. 25 kg.';
+
   const VUELOS_SEED = [
     {
-      id: 'seed-vu-ida', tipo: 'Ida', reserva: '', antelacion: '3 h', equipaje: '',
+      id: 'seed-vu-ida', tipo: 'Ida', reserva: '', antelacion: '3 h', equipaje: EQUIPAJE_QATAR,
       notas: 'Qatar Airways, clase turista. Escala en Doha (DOH) de 2 h 15 min; 15 h 20 min en total.\nOJO: Qatar ha adelantado la salida de Madrid a las 22:05 (en la reserva ponía 22:25). Confirmadlo en «Mis reservas» de qatarairways.com.',
       tramos: [{
         aerolinea: 'Qatar Airways', numero: 'QR152', clase: 'Turista', operadoPor: '',
@@ -268,7 +274,7 @@
       }]
     },
     {
-      id: 'seed-vu-vuelta', tipo: 'Vuelta', reserva: '', antelacion: '2 h', equipaje: '',
+      id: 'seed-vu-vuelta', tipo: 'Vuelta', reserva: '', antelacion: '2 h', equipaje: EQUIPAJE_QATAR,
       notas: 'Qatar Airways, clase turista. Escala en Doha (DOH) de 3 h 50 min; 18 h 25 min en total.\nOJO: en la reserva ponía QR851 a las 08:55 con llegada a Madrid a las 20:55, pero el QR851 ya no se vende y lleva días cancelándose. Qatar vende ahora el QR843 a las 08:20 y el QR151 llega a Madrid a las 20:45. Confirmad en «Mis reservas» de qatarairways.com a qué vuelo os han pasado.',
       tramos: [{
         aerolinea: 'Qatar Airways', numero: 'QR843', clase: 'Turista', operadoPor: '',
@@ -826,7 +832,7 @@
   // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
   // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
   // guardado.
-  const SEED_V = 5;
+  const SEED_V = 6;
 
   function migrarSeeds(s) {
     if (s.seedV >= SEED_V) return s;
@@ -834,6 +840,7 @@
     if (s.seedV < 3) aplicarPinKrabi(s);
     if (s.seedV < 4) aplicarHorariosQatar(s);
     if (s.seedV < 5) aplicarAntelacionVuelta(s);
+    if (s.seedV < 6) aplicarEquipajeQatar(s);
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
@@ -869,6 +876,16 @@
       a.loc = JSON.parse(JSON.stringify(n.loc));
       if (/pin del mapa es aproximado/.test(a.notas || '')) a.notas = n.notas;
     }
+  }
+
+  // v6: equipaje incluido en la ida y la vuelta con Qatar. Si alguien ya
+  // había apuntado algo en ese campo, se añade debajo sin borrarlo.
+  function aplicarEquipajeQatar(s) {
+    ['seed-vu-ida', 'seed-vu-vuelta'].forEach(id => {
+      const v = s.vuelos.find(x => x.id === id);
+      if (!v || (v.equipaje || '').includes('25 × 37 × 50')) return;
+      v.equipaje = v.equipaje ? v.equipaje + '\n\n' + EQUIPAJE_QATAR : EQUIPAJE_QATAR;
+    });
   }
 
   // v5: en la vuelta basta con estar 2 h antes en el aeropuerto de Phuket.
@@ -1854,7 +1871,12 @@
     tr.forEach((t, i) => {
       const ts = dtParts(t.salida), ta = dtParts(t.llegada);
       html += `<div class="fly-leg">` +
-        `<div class="fly-leg__head"><span class="mono">${esc(t.numero || '')}</span> · ${esc(t.aerolinea || '')}${t.operadoPor ? ' · op. ' + esc(t.operadoPor) : ''}${t.clase ? ' · ' + esc(t.clase) : ''}</div>` +
+        `<div class="fly-leg__head">${[
+          t.numero ? `<span class="mono">${esc(t.numero)}</span>` : '',
+          esc(t.aerolinea || ''),
+          t.operadoPor ? 'op. ' + esc(t.operadoPor) : '',
+          esc(t.clase || '')
+        ].filter(Boolean).join(' · ')}</div>` +
         `<div class="fly-leg__route"><span>${esc(t.origen || '')}${t.origenTerminal ? ' <em>T' + esc(t.origenTerminal) + '</em>' : ''} ${ts.time || ''}</span><span class="fly-leg__arrow">→</span><span>${esc(t.destino || '')}${t.destinoTerminal ? ' <em>T' + esc(t.destinoTerminal) + '</em>' : ''} ${ta.time || ''}</span></div>` +
         (t.duracion ? `<div class="fly-leg__dur">${esc(t.duracion)}</div>` : '') +
         `</div>`;
