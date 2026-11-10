@@ -353,10 +353,9 @@
       notas: '2 noches, última etapa del viaje. 98 € (49 €/noche).' }
   ];
 
-  // Fotos: URLs directas de Wikimedia Commons (vía la API pageimages de
-  // Wikipedia), un archivo real y verificado por sitio. Si un lugar no tiene
-  // una foto suya fiable en Commons, se deja sin `foto` en vez de forzar una
-  // imagen que no sea la del sitio.
+  // Fotos: URLs directas de Wikimedia Commons, un archivo real y verificado
+  // por sitio. Si un lugar no tiene foto suya en Commons se usa una de su
+  // calle, su zona o su plato típico, y la descripción lo deja claro.
   const FOTO = {
     granPalacio: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/0005574_-_Wat_Phra_Kaew_006.jpg/960px-0005574_-_Wat_Phra_Kaew_006.jpg',
     watPhraKaew: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Wat_Phra_Kaew_by_Ninara_TSP_edit_crop.jpg/960px-Wat_Phra_Kaew_by_Ninara_TSP_edit_crop.jpg',
@@ -404,7 +403,44 @@
     jimThompson: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Main_House_of_Jim_Thompson_photo_Don_Ramey_Logan.jpg/960px-Main_House_of_Jim_Thompson_photo_Don_Ramey_Logan.jpg',
     bambooIsland: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Ko_Mai_Phai_%28Bamboo_Island%29.jpg/960px-Ko_Mai_Phai_%28Bamboo_Island%29.jpg',
     phangNgaBay: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Dramatic_karst_landscape_of_Phang_Nga_Bay%2C_Thailand.jpg/960px-Dramatic_karst_landscape_of_Phang_Nga_Bay%2C_Thailand.jpg',
-    phuketOldTown: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Soi_Rommanee%2C_Phuket_Town.jpg/960px-Soi_Rommanee%2C_Phuket_Town.jpg'
+    phuketOldTown: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Soi_Rommanee%2C_Phuket_Town.jpg/960px-Soi_Rommanee%2C_Phuket_Town.jpg',
+    // Bares, restaurantes y actividades sin foto propia en Commons: foto de
+    // la calle, la zona o el plato, y la explicación dice qué es el sitio.
+    silom: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Silom_Saladaeng_Soi_1_night_view_Don_Ramey_Logan.jpg/960px-Silom_Saladaeng_Soi_1_night_view_Don_Ramey_Logan.jpg',
+    sukhumvit11: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Sukhumvit_Soi_11_tuktuks.jpg/960px-Sukhumvit_Soi_11_tuktuks.jpg',
+    fiestaBkk: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/DJ_Tiesto_in_808_Nightclub%2C_progressive_trance_music%2C_waves_of_euphoria%2C_Bangkok%2C_Thailand.jpg/960px-DJ_Tiesto_in_808_Nightclub%2C_progressive_trance_music%2C_waves_of_euphoria%2C_Bangkok%2C_Thailand.jpg',
+    trenAyutthaya: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Ayutthaya_railway_station_1.jpg/960px-Ayutthaya_railway_station_1.jpg',
+    furgoneta: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Toyota_Hiace_in_Thailand.jpg/960px-Toyota_Hiace_in_Thailand.jpg',
+    somTam: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Som_Tam_green_papaya_salad%2C_Bangkok%2C_Thailand.jpg/960px-Som_Tam_green_papaya_salad%2C_Bangkok%2C_Thailand.jpg',
+    padThai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Phat_Thai_kung_Chang_Khien_street_stall.jpg/960px-Phat_Thai_kung_Chang_Khien_street_stall.jpg',
+    chaoPhraya: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Chao_Phraya_River_03.jpg/960px-Chao_Phraya_River_03.jpg',
+    thaTien: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Tha_Tien_Pier.jpg/960px-Tha_Tien_Pier.jpg',
+    oneCityCentre: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/One_City_Centre_BKK_September_2022.jpg/960px-One_City_Centre_BKK_September_2022.jpg',
+    skylineSukhumvit: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Bangkok_Skyline_from_Movenpick_Hotel%2C_Asok%2C_Bangkok_at_night.jpg/960px-Bangkok_Skyline_from_Movenpick_Hotel%2C_Asok%2C_Bangkok_at_night.jpg',
+    octave: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/Bangkok_City_as_viewed_from_Octave_Rooftop_Bar_and_Lounge.jpg/960px-Bangkok_City_as_viewed_from_Octave_Rooftop_Bar_and_Lounge.jpg',
+    lannaComida: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Lanna_cuisine_starters.JPG/960px-Lanna_cuisine_starters.JPG',
+    baresChiangMai: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Chiang_Mai_bars_at_night-KayEss-1.jpeg',
+    oneNimman: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/One_Nimman.jpg/960px-One_Nimman.jpg',
+    khaoSoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Khao_soi_Chiang_Mai.jpg/960px-Khao_soi_Chiang_Mai.jpg',
+    plataChiangMai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg/960px-Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg',
+    puenting: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Bungee_Jump_is_freedom.jpg/960px-Bungee_Jump_is_freedom.jpg',
+    monosAoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg/960px-Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg',
+    pilehLagoon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/A_Long-tail_Boat_in_Pileh_Lagoon%2C_Phi_Phi_Le.jpg/960px-A_Long-tail_Boat_in_Pileh_Lagoon%2C_Phi_Phi_Le.jpg',
+    tonsaiBay: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Tonsai_Bay.jpg/960px-Tonsai_Bay.jpg',
+    lohDalum: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Loh_Dalum_Beach.jpg/960px-Loh_Dalum_Beach.jpg',
+    ferryPhuket: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/An_Island_Cruise_to_Phi_Phi_Islands%2C_Phuket%2C_Thailand_%283179176541%29.jpg/960px-An_Island_Cruise_to_Phi_Phi_Islands%2C_Phuket%2C_Thailand_%283179176541%29.jpg',
+    amanecerPhangNga: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Sunrise%2C_Koh_Yao_Noi_%28island%29%2C_Phang_Nga_Bay%2C_Thailand.jpg/960px-Sunrise%2C_Koh_Yao_Noi_%28island%29%2C_Phang_Nga_Bay%2C_Thailand.jpg',
+    chalongPier: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Chalong_Pier.jpg/960px-Chalong_Pier.jpg',
+    rachaYai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Racha_Yai_Island.jpg/960px-Racha_Yai_Island.jpg',
+    khaiNok: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Isla_Khai_Nok%2C_Tailandia%2C_2013-08-19%2C_DD_05.JPG/960px-Isla_Khai_Nok%2C_Tailandia%2C_2013-08-19%2C_DD_05.JPG',
+    similan: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Similan_Island_01_%28MK%29.jpg/960px-Similan_Island_01_%28MK%29.jpg',
+    tirolina: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Zip-line_over_rainforest_canopy_4_January_2005%2C_Costa_Rica.jpg/960px-Zip-line_over_rainforest_canopy_4_January_2005%2C_Costa_Rica.jpg',
+    masaje: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Thai_massage_%282362463368%29.jpg/960px-Thai_massage_%282362463368%29.jpg',
+    naka: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Nene_Royal_performing_at_Naka_Market.jpg',
+    watKaron: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Karon_Tempel_-_panoramio.jpg/960px-Karon_Tempel_-_panoramio.jpg',
+    rawai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Phuket_-_Rawai_Beach_11.jpg/960px-Phuket_-_Rawai_Beach_11.jpg',
+    simonCabaret: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Photography_during_the_Simon_Cabaret_show_is_not_allowed_but_the_performers_line_up_afterwards.jpg/960px-Photography_during_the_Simon_Cabaret_show_is_not_allowed_but_the_performers_line_up_afterwards.jpg',
+    fantasea: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Phuket_FantaSea_2023.jpg/960px-Phuket_FantaSea_2023.jpg'
   };
 
   // Gastos del plan (versión 2): lo ya pagado o previsto por persona, en €.
@@ -430,6 +466,8 @@
        { h: 'Previa' }               subtítulo dentro de la franja
        { n, p, x, foto, desc, l }    sitio: nombre, precio, texto extra,
                                      foto + descripción, enlaces [[etiqueta, url]]
+       { foto, desc, alt }           solo foto + descripción, para un sitio que
+                                     sale nombrado en el párrafo de encima
      ---------------------------------------------------------- */
   const PLAN_RESUMEN = {
     personas: 7,
@@ -451,11 +489,14 @@
   // Noche del 26, repetida el 27.
   const NOCHE_BKK = [
     { h: 'Previa' },
-    { n: 'Revolución Cocktail BKK (latina)', l: [['Web', 'https://revolucion-bkk.com/']] },
+    { n: 'Revolución Cocktail BKK (latina)', l: [['Web', 'https://revolucion-bkk.com/']],
+      foto: 'silom', desc: 'REVO: bar de cócteles con música latina y DJs en la calle Silom (dentro del Holiday Inn Silom), en Bang Rak; cada noche de la semana tiene un plan distinto.' },
     { n: 'Khao San Road, beber buckets', foto: 'khaoSan', desc: 'La calle mochilera de Bangkok, en el barrio de Banglamphu: bares, puestos de comida y música a todo volumen hasta tarde.' },
     { h: 'Fiesta' },
-    { n: 'Havana Social BKK (latina)', l: [['Web', 'https://havanasocialbkk.com/']] },
-    { n: 'Beyond Project (latina; hacen fiestas, no es una discoteca en sí)', l: [['Web', 'https://beyondproject.co']] }
+    { n: 'Havana Social BKK (latina)', l: [['Web', 'https://havanasocialbkk.com/']],
+      foto: 'sukhumvit11', desc: 'Bar escondido de ambiente cubano de los años 40 en Sukhumvit Soi 11: se entra por una cabina de teléfono. Abre de 18:00 a 02:00 y piden ir arreglados (los chicos, sin pantalón corto, sin camiseta de tirantes y con zapato cerrado).' },
+    { n: 'Beyond Project (latina; hacen fiestas, no es una discoteca en sí)', l: [['Web', 'https://beyondproject.co']],
+      foto: 'fiestaBkk', desc: 'Organizan fiestas latinas con DJs internacionales en clubs y azoteas de Bangkok; el sitio cambia en cada fecha, así que hay que mirar en la web o en su Instagram dónde toca.' }
   ];
 
   const PLAN_DIAS = {
@@ -488,7 +529,10 @@
           { n: 'Wat Arun', p: '200 baht', foto: 'watArun', desc: 'El «Templo del Amanecer», con una torre central decorada con porcelana china, en la otra orilla del Chao Phraya.' },
           'Ruta: https://maps.app.goo.gl/h9gyGeDbTPiyEA2z9'
         ] },
-        { f: 'Comida', e: ['Supanniga Eating Room (Michelin, Tha Tien). Reserva confirmada a las 15:00.'] },
+        { f: 'Comida', e: [
+          'Supanniga Eating Room (Michelin, Tha Tien). Reserva confirmada a las 15:00.',
+          { alt: 'Supanniga Eating Room', foto: 'thaTien', desc: 'Supanniga está en el muelle de Tha Tien, al lado de Wat Pho: cocina casera tailandesa de recetas de familia, con terraza que mira al río y a Wat Arun.' }
+        ] },
         { f: 'Tarde', h: 'idea', e: [
           'Ir a Talat Noi (Chinatown antiguo) y luego a Chinatown moderno, picar algo e ir al hotel.',
           { n: 'Talat Noi (Chinatown antiguo)', foto: 'talatNoi', desc: 'Barrio histórico chino junto al río, con talleres antiguos, callejones estrechos y arte urbano.' },
@@ -502,8 +546,10 @@
       zona: 'Bangkok – Ayutthaya', titulo: 'Bangkok – Ayutthaya', hotel: H_BKK,
       franjas: [
         { f: 'Transporte a Ayutthaya', e: [
-          { n: 'Tren', p: '20 baht', x: 'Tren lento.', l: [['Web oficial', 'https://dticket.railway.co.th/DTicketPublicWeb/home/Home']] },
-          { n: 'Bus privado', p: '4.000 baht ida y vuelta, unos 100 € entre los 7', l: [['Web', 'https://bangkoktaxicab.com/bangkok-to-ayutthaya/']] }
+          { n: 'Tren', p: '20 baht', x: 'Tren lento.', l: [['Web oficial', 'https://dticket.railway.co.th/DTicketPublicWeb/home/Home']],
+            foto: 'trenAyutthaya', desc: 'Tren de Bangkok a la estación de Ayutthaya, en 1,5–2 h. La estación queda al otro lado del río, frente a la isla de los templos: se cruza en una barca que sale justo enfrente.' },
+          { n: 'Bus privado', p: '4.000 baht ida y vuelta, unos 100 € entre los 7', l: [['Web', 'https://bangkoktaxicab.com/bangkok-to-ayutthaya/']],
+            foto: 'furgoneta', desc: 'Furgoneta con conductor para los 7, de puerta a puerta: algo más de 1 h por autopista hasta Ayutthaya, sin depender de horarios.' }
         ] },
         { f: 'Mañana', e: [
           'Alquilamos unas bicis o motos.',
@@ -515,16 +561,20 @@
           'Acabamos sobre las 12:30–13:00.'
         ] },
         { f: 'Comida', e: [
-          { n: 'Sukunya Somtum', l: [['Ver', 'https://share.google/LueMnwCdCTSqJUWMt']] },
-          { n: 'Noodle Soup & Padthai', l: [['Ver', 'https://share.google/1rRIQpXA9rPqoP1KN']] },
-          { n: 'Si queremos gozar fuerte: The Artisan', l: [['Web', 'https://theartisansayutthaya.com/en/index.php']] }
+          { n: 'Sukunya Somtum', l: [['Ver', 'https://share.google/LueMnwCdCTSqJUWMt']],
+            foto: 'somTam', desc: 'Local sencillo de som tam, la ensalada picante de papaya verde del noreste (Isan), que se machaca al momento en mortero con lima, chile y cacahuete.' },
+          { n: 'Noodle Soup & Padthai', l: [['Ver', 'https://share.google/1rRIQpXA9rPqoP1KN']],
+            foto: 'padThai', desc: 'Sitio de fideos: sopa de fideos y pad thai, el salteado de fideos de arroz con huevo, brotes de soja, cacahuete y lima.' },
+          { n: 'Si queremos gozar fuerte: The Artisan', l: [['Web', 'https://theartisansayutthaya.com/en/index.php']],
+            foto: 'chaoPhraya', desc: 'The Artisans, restaurante a orillas del río Chao Phraya, frente al templo Wat Tamle Thai: cocina tailandesa casera de recetas antiguas, hecha en fogón de leña y ollas de barro.' }
         ] },
         { f: 'Tarde', e: [
           { n: '6. Wat Phra Si Sanphet (antiguo templo real)', p: '50 baht', foto: 'watPhraSiSanphet', desc: 'El templo del antiguo palacio real, con tres grandes chedis que guardan las cenizas de tres reyes.' },
           { n: '7. Wat Lokayasutharam (Buda reclinado de 42 m)', p: 'gratis', foto: 'watLokayasutharam', desc: 'Un gran Buda reclinado al aire libre, sin techo, entre las ruinas del templo.' },
           { n: '8. Wat Chaiwatthanaram (puesta de sol obligatoria, pasadas las 17:00)', p: '50 baht', foto: 'watChaiwatthanaram', desc: 'Templo a orillas del río con una gran torre central rodeada de capillas menores.' },
           'Coste total de los monumentos: 290 THB/persona.',
-          { n: 'Velada de Muay Thai (19:00)', l: [['Entradas', 'https://www.ticketmelon.com/raj/knockout-27nov26']] },
+          { n: 'Velada de Muay Thai (19:00)', l: [['Entradas', 'https://www.ticketmelon.com/raj/knockout-27nov26']],
+            foto: 'rajadamnern', desc: 'La velada es en el estadio Rajadamnern, en Bangkok: el estadio de Muay Thai más antiguo del mundo (1945).' },
           'Ideas para cenar: Lao Dtom Lao (comida típica de Laos) / The Family.'
         ] },
         { f: 'Noche', e: [
@@ -544,9 +594,12 @@
         ] },
         { f: 'Comida', e: [] },
         { f: 'Tarde', e: [
-          'https://akaraskyhanuman.com/order',
-          'https://www.tichuca.co/res',
-          'https://www.marriott.com/es/dining/restaurant-bar/bkkms-bangkok-marriott-hotel-sukhumvit/5428678-octave-rooftop-lounge-bar.mi'
+          { n: 'Akara Sky (Hanuman Sky Bar)', l: [['Reservar', 'https://akaraskyhanuman.com/order']],
+            foto: 'oneCityCentre', desc: 'Mirador, bar y mercado nocturno en las plantas 58 a 61 del rascacielos One City Centre, en Phloen Chit; el bar abre de 17:00 a 02:00.' },
+          { n: 'Tichuca Rooftop Bar', l: [['Reservar', 'https://www.tichuca.co/res']],
+            foto: 'skylineSukhumvit', desc: 'Azotea en el piso 46 del edificio T-One (Sukhumvit Soi 40), famosa por su árbol de luces que cambia de color, con vistas a los rascacielos de Sukhumvit.' },
+          { n: 'Octave Rooftop Lounge & Bar', l: [['Ver', 'https://www.marriott.com/es/dining/restaurant-bar/bkkms-bangkok-marriott-hotel-sukhumvit/5428678-octave-rooftop-lounge-bar.mi']],
+            foto: 'octave', desc: 'Azotea de tres pisos en lo alto del Bangkok Marriott Sukhumvit (Soi 57, Thong Lo), con vistas de 360° de la ciudad; la foto está hecha desde allí.' }
         ] },
         { f: 'Noche', e: ['Última noche en Bangkok :( Habrá que matarse como se merece.'] }
       ]
@@ -563,11 +616,15 @@
           { n: 'Wat Chedi Luang (súper chedi)', p: '50 baht', foto: 'watChediLuang', desc: 'Templo con una gran chedi en ruinas del siglo XIV que fue el edificio más alto de Chiang Mai.' },
           'Ruta completa del día: https://maps.app.goo.gl/SxTY2nh6g4TQtYJR6'
         ] },
-        { f: 'Comida', e: ['Reserva a las 14:00 en Baan Landai — https://www.baan-landai.com/en/old-town/menu/'] },
+        { f: 'Comida', e: [
+          'Reserva a las 14:00 en Baan Landai — https://www.baan-landai.com/en/old-town/menu/',
+          { alt: 'Baan Landai', foto: 'lannaComida', desc: 'Baan Landai, en el casco antiguo: cocina tailandesa y del norte (Lanna). En la foto, entrantes típicos del norte: nam prik noom (salsa de chile verde asado), salchicha sai ua y corteza de cerdo.' }
+        ] },
         { f: 'Tarde', e: ['Después de comer no hay nada programado; podemos descansar en la casa con unas birras o...'] },
         { f: 'Noche', e: [
           { n: '(Solo los domingos) Sunday Walking Street, a tope de 18:00 a 23:00', foto: 'sundayWalkingStreet', desc: 'Mercado peatonal que ocupa la calle principal del casco antiguo los domingos por la tarde.' },
-          'Por la noche, fiesta en Zoe in Yellow.'
+          'Por la noche, fiesta en Zoe in Yellow.',
+          { alt: 'Zoe in Yellow', foto: 'baresChiangMai', desc: 'Zoe in Yellow es un patio de bares al aire libre junto a la calle Ratvithi, en el casco antiguo: mochileros, música alta y ambiente hasta tarde.' }
         ] }
       ]
     },
@@ -589,8 +646,10 @@
         ] },
         { f: 'Noche', h: 'opciones', e: [
           { n: 'Relax con Muay Thai en el Loi Kroh Stadium', p: '500 THB', x: 'Mirarlo antes, porque algunos días no hay.', foto: 'muayThai', desc: 'Combates de boxeo tailandés en un estadio pequeño del centro de Chiang Mai.' },
-          { n: 'Nimman Road', x: 'Bares con música en directo, cervezas y street food.' },
-          { n: 'Cena: Huen Muan Jai (Michelin, cerca de casa, comida típica nortailandesa)', l: [['Guía Michelin', 'https://guide.michelin.com/es/es/chiang-mai-region/chiang-mai/restaurante/huen-muan-jai']] }
+          { n: 'Nimman Road', x: 'Bares con música en directo, cervezas y street food.',
+            foto: 'oneNimman', desc: 'Nimmanhaemin, el barrio moderno de Chiang Mai junto a la universidad: cafés, bares y tiendas alrededor del centro One Nimman (en la foto).' },
+          { n: 'Cena: Huen Muan Jai (Michelin, cerca de casa, comida típica nortailandesa)', l: [['Guía Michelin', 'https://guide.michelin.com/es/es/chiang-mai-region/chiang-mai/restaurante/huen-muan-jai']],
+            foto: 'khaoSoi', desc: 'Casa de comida del norte en una casa de madera; buen sitio para probar el khao soi (en la foto), la sopa de fideos al curry con leche de coco típica de Chiang Mai.' }
         ] }
       ]
     },
@@ -618,8 +677,10 @@
         ] },
         { f: 'Comida', e: ['(Pendiente: buscar sitio guapo para comer)'] },
         { f: 'Tarde', h: 'freestyle', e: [
-          { n: 'Hacerse un anillo de plata personalizado', l: [['Instagram', 'https://www.instagram.com/jaigayastudio?utm_source=qr&igsh=MW53M3k4YW4yOGVkMw%3D%3D']] },
-          { n: 'Chiang Mai X-Centre (actividades extremas)', l: [['Web', 'https://www.chiangmaixcentre.com/']] },
+          { n: 'Hacerse un anillo de plata personalizado', l: [['Instagram', 'https://www.instagram.com/jaigayastudio?utm_source=qr&igsh=MW53M3k4YW4yOGVkMw%3D%3D']],
+            foto: 'plataChiangMai', desc: 'Taller para diseñar y hacerte tu propio anillo de plata. Chiang Mai es ciudad de plateros: en la foto, los relieves de plata del templo Wat Sri Suphan, en la calle de la plata (Wua Lai).' },
+          { n: 'Chiang Mai X-Centre (actividades extremas)', l: [['Web', 'https://www.chiangmaixcentre.com/']],
+            foto: 'puenting', desc: 'Parque de aventura a las afueras de Chiang Mai: puenting sobre un lago, buggies por el barro, paintball y zorbing.' },
           'Montaña rusa por la selva.',
           'Perdernos por Nimman.'
         ] },
@@ -635,7 +696,10 @@
           'Playa de Ao Nang y comer por la zona. O hacer alguna actividad extrema o unas clases de cocina tailandesa. Meter la ruta de las 4 islas o algo así.',
           { n: 'Playa de Ao Nang', foto: 'aoNang', desc: 'La playa principal de Ao Nang, con los acantilados de piedra caliza de la costa de Krabi al fondo.' }
         ] },
-        { f: 'Tarde', e: ['Ao Nang Beach → Monkey Trail (https://rubenwanderlust.com/ao-nang-beach-monkey-trail-pai-plong-beach/) → Pai Plong Beach → Pai Plong Pier.'] },
+        { f: 'Tarde', e: [
+          'Ao Nang Beach → Monkey Trail (https://rubenwanderlust.com/ao-nang-beach-monkey-trail-pai-plong-beach/) → Pai Plong Beach → Pai Plong Pier.',
+          { alt: 'Monkey Trail', foto: 'monosAoNang', desc: 'El Monkey Trail es una pasarela de madera pegada a la roca que une el final de la playa de Ao Nang con la cala de Pai Plong. Está llena de monos: nada de comida ni bolsas a la vista.' }
+        ] },
         { f: 'Noche', e: ['A casa a apañarnos, cenar y pasear por el Ao Nang Landmark Night Market. Después de cenar, combates de Muay Thai y/o salir de fiesta.'] },
         { f: 'Pendiente', e: ['Investigar si se puede hacer este día el tour de las 4 islas y que nos deje en Railay para hacerla por la tarde; así ganamos un día en Tailandia.'] }
       ]
@@ -682,10 +746,12 @@
             foto: 'mayaBay', desc: 'Maya Bay, en Koh Phi Phi Leh: la bahía de la película «La Playa», cerrada por acantilados de piedra caliza.' },
           { n: 'Circuito compartido de medio día', p: 'desde 750 THB + parque',
             pro: 'barato', contra: 'horarios fijos y más gente',
-            l: [['Reservar', 'https://www.expedia.co.th/things-to-do/a.a51767832.activity-details']] },
+            l: [['Reservar', 'https://www.expedia.co.th/things-to-do/a.a51767832.activity-details']],
+            foto: 'pilehLagoon', desc: 'La laguna de Pi Leh, en Phi Phi Leh: agua turquesa encerrada entre paredes de roca, parada fija de los circuitos junto con Maya Bay y Viking Cave.' },
           { n: 'Atardecer + plancton en longtail', p: '800 THB', x: 'Salida a las 14:00 desde el muelle de Tonsai.',
             pro: 'atardecer y plancton, cerca de luna nueva', contra: 'pasas por Maya en hora punta',
-            l: [['Reservar', 'https://www.expedia.co.th/things-to-do/phi-phi-islands-sunset-tour-from-phi-phi-by-longtail-boat.a665328.activity-details']] },
+            l: [['Reservar', 'https://www.expedia.co.th/things-to-do/phi-phi-islands-sunset-tour-from-phi-phi-by-longtail-boat.a665328.activity-details']],
+            foto: 'tonsaiBay', desc: 'Salida en longtail desde la bahía de Tonsai: vuelta por las calas de las islas, atardecer en el mar y, ya de noche, baño entre plancton que brilla al moverte.' },
           { n: 'Mirador de Phi Phi (miradores 1 y 2)', p: '50 THB',
             pro: 'la foto icónica', contra: '30–45 min de subida, lleno al atardecer',
             l: [['Guía', 'https://www.thaiholidayguide.com/attraction/phi-phi-viewpoint/']],
@@ -696,7 +762,8 @@
             foto: 'bambooIsland', desc: 'Koh Mai Phai, islote plano de arena blanca al norte de Phi Phi Don, rodeado de arrecife.' },
           { n: 'Fiesta en Loh Dalum', p: 'gratis (pagas las bebidas)',
             pro: 'ambiente', contra: 'casos de bebidas adulteradas en los buckets',
-            l: [['Guía de timos', 'https://tabiji.ai/scams/koh-phi-phi/']] }
+            l: [['Guía de timos', 'https://tabiji.ai/scams/koh-phi-phi/']],
+            foto: 'lohDalum', desc: 'La playa de Loh Dalum, al otro lado del istmo de Tonsai: de día, agua tranquila y poco profunda; de noche, bares en la arena con espectáculos de fuego y buckets.' }
         ] }
       ],
       ideas: [
@@ -712,7 +779,8 @@
       zona: 'Phuket', hotel: 'Nariya Bayfront Phuket (noches del 7 y del 8)',
       logistica: [
         { n: 'Lunes 7, traslado: ferry de Phi Phi a Phuket', p: '500–700 THB', x: 'Unas 2 h.',
-          l: [['Horarios', 'https://www.visitthailandtoday.com/guides/phi-phi-to-phuket'], ['Reservar', 'https://www.directferries.ie/koh_phi_phi_phuket_ferry.htm']] },
+          l: [['Horarios', 'https://www.visitthailandtoday.com/guides/phi-phi-to-phuket'], ['Reservar', 'https://www.directferries.ie/koh_phi_phi_phuket_ferry.htm']],
+          foto: 'ferryPhuket', desc: 'Ferris grandes entre el muelle de Tonsai (Phi Phi) y el de Rassada (Phuket), con cubierta al aire libre y sala con aire acondicionado.' },
         'Idea inicial, sin cerrar: Phang Nga Bay + James Bond el 7 y la ruta por el sur de la isla el 8.'
       ],
       secciones: [
@@ -723,23 +791,28 @@
             foto: 'khaoPhingKan', desc: 'Koh Tapu, el peñasco de piedra caliza de la bahía de Phang Nga que salió en «El hombre de la pistola de oro».' },
           { n: 'Phang Nga early bird', p: 'precio según operador',
             pro: 'llegas antes que la masa y tienes la tarde libre', contra: 'recogida en la bahía de Chalong a las 5:15–5:30',
-            l: [['Reservar', 'https://mythailandtours.com/?p=120542']] },
+            l: [['Reservar', 'https://mythailandtours.com/?p=120542']],
+            foto: 'amanecerPhangNga', desc: 'Amanecer en la bahía de Phang Nga: saliendo tan pronto se llega a las islas y las cuevas antes que las lanchas de media mañana.' },
           { n: 'Catamarán desde el muelle de Chalong', p: 'precio en la web',
             pro: 'muelle al lado del hotel, comida a bordo y krathong', contra: 'vuelves de noche',
-            l: [['Reservar', 'https://www.thaiholidayguide.com/tour/phuket-james-bond-island-phang-nga-bay-sunset-luxury-yacht/']] },
+            l: [['Reservar', 'https://www.thaiholidayguide.com/tour/phuket-james-bond-island-phang-nga-bay-sunset-luxury-yacht/']],
+            foto: 'chalongPier', desc: 'El muelle de Chalong, en la bahía del mismo nombre al sur de Phuket, de donde salen casi todas las excursiones en barco; queda al lado del hotel.' },
           { n: 'Hong by Starlight', p: 'desde 3.950 THB',
             pro: 'cuevas sin gente, krathong, plancton y cena', contra: 'caro; quizá no bajas en James Bond Island',
             l: [['Reservar', 'https://thaiholidayguide.com/tours/john-grays-hong-by-starlight-with-sea-cave-kayaking-loy-krathong-from-phuket'], ['En español', 'https://www.travelocity.com/es/things-to-do/tour-john-grays-hong-por-starlight-con-practica-de-kayak-en-el-mar-y-loy-krathong-flotantes.a446676.detalles-actividades'], ['Fuente', 'https://platform.magpie.travel/things-to-do/hong-by-starlight-sea-cave-kayaking-and-loy-krathong-floating/1553c6a8-6d0b-4903-ac2d-76a2f4f00f86']],
             foto: 'phangNgaBay', desc: 'Islas de piedra caliza de la bahía de Phang Nga, con lagunas interiores («hongs») a las que se entra en kayak por cuevas.' },
           { n: 'Racha + Coral Island', p: '1.300 THB por adulto',
             pro: 'sale de Chalong, al lado del hotel', contra: 'repetitivo si ya hicisteis snorkel en Phi Phi',
-            l: [['Opciones', 'https://www.tisland.travel/en/phuket/excursions/racha-island'], ['Reservar', 'https://www.click2gothailand.com/tours/00244']] },
+            l: [['Opciones', 'https://www.tisland.travel/en/phuket/excursions/racha-island'], ['Reservar', 'https://www.click2gothailand.com/tours/00244']],
+            foto: 'rachaYai', desc: 'Koh Racha Yai, al sur de Phuket: bahías de arena blanca y agua muy clara para snorkel. Coral Island queda de camino, más cerca de la costa.' },
           { n: 'Islas Khai', p: 'medio día desde 800 THB',
             pro: 'barato y corto', contra: 'islas pequeñas y llenas',
-            l: [['Guía', 'https://travelguidestip.com/best-day-trips-phuket/']] },
+            l: [['Guía', 'https://travelguidestip.com/best-day-trips-phuket/']],
+            foto: 'khaiNok', desc: 'Koh Khai Nok, islote de roca con una playa pequeña entre Phuket y Phang Nga, a unos 20–30 min en lancha; hay peces de colores en la misma orilla.' },
           { n: 'Similan', p: 'unos 2.900–3.900 THB desde Phuket',
             pro: 'el mejor snorkel', contra: 'un día durísimo de 12 h desde Phuket, y los fines de semana de diciembre se agotan',
-            l: [['Guía', 'https://asterofasia.com/blog/similan-islands-how-to-get-there-prices-2026'], ['Reservar', 'https://thailand-divers.com/similan-islands-snorkeling']] }
+            l: [['Guía', 'https://asterofasia.com/blog/similan-islands-how-to-get-there-prices-2026'], ['Reservar', 'https://thailand-divers.com/similan-islands-snorkeling']],
+            foto: 'similan', desc: 'Parque nacional de islas de granito en el mar de Andamán, a más de 60 km de la costa: rocas gigantes, arena blanca y el agua más transparente de la zona.' }
         ] },
         { titulo: 'Opciones: Phuket de día', opciones: [
           { n: 'Big Buddha, Wat Chalong, miradores, Promthep y playas', p: 'gratis',
@@ -748,10 +821,12 @@
             foto: 'bigBuddhaPhuket', desc: 'El Big Buddha de Phuket, de mármol blanco y 45 m, en lo alto de una colina con vistas a la bahía de Chalong.' },
           { n: 'Tirolina en Hanuman World', p: '1.780 THB (10 plataformas)',
             pro: 'adrenalina en la selva', contra: 'lejos del sur',
-            l: [['Reservar', 'https://www.travelocity.com/es/things-to-do/phuket-aventura-en-tirolina-por-el-mundo-de-hanuman.a44641592.detalles-actividades'], ['Fuente', 'https://www.expedia.co.th/things-to-do/a.a3629332.activity-details']] },
+            l: [['Reservar', 'https://www.travelocity.com/es/things-to-do/phuket-aventura-en-tirolina-por-el-mundo-de-hanuman.a44641592.detalles-actividades'], ['Fuente', 'https://www.expedia.co.th/things-to-do/a.a3629332.activity-details']],
+            foto: 'tirolina', desc: 'Circuito de tirolinas, puentes colgantes y rapeles por encima de los árboles de la selva, en las colinas de Kathu, en el centro de la isla.' },
           { n: 'Masaje tailandés', p: '200–280 THB la hora en Rawai / Nai Harn',
             pro: 'barato y cerca del hotel', contra: 'en Bangla Road son caros y te presionan para añadir extras',
-            l: [['Guía', 'https://phuketexpatguide.pages.dev/blog/phuket-thai-massage-guide/'], ['Guía', 'https://phuketexpatguide.pages.dev/blog/phuket-spas-massage-guide/']] }
+            l: [['Guía', 'https://phuketexpatguide.pages.dev/blog/phuket-thai-massage-guide/'], ['Guía', 'https://phuketexpatguide.pages.dev/blog/phuket-spas-massage-guide/']],
+            foto: 'masaje', desc: 'Masaje tradicional tailandés: sin aceite y vestido, a base de presión y estiramientos. Una hora sienta de lujo después de un día de barco.' }
         ] },
         { titulo: 'Opciones: noches', opciones: [
           { n: 'Sunday Walking Street (Old Town)', p: 'gratis', x: 'Domingos de 16:00 a 22:00.',
@@ -760,14 +835,17 @@
             foto: 'phuketOldTown', desc: 'El casco antiguo de Phuket, con casas chino-portuguesas de colores; los domingos su calle principal se llena de puestos.' },
           { n: 'Naka Weekend Market', p: 'gratis', x: 'Sábados y domingos de 16:00 a 22:00.',
             pro: 'el más grande de la isla',
-            l: [['Guía', 'https://www.visitthailandtoday.com/guides/phuket-night-markets']] },
+            l: [['Guía', 'https://www.visitthailandtoday.com/guides/phuket-night-markets']],
+            foto: 'naka', desc: 'El mercado de fin de semana de Phuket Town: ropa, comida callejera y un escenario con música en directo.' },
           { n: 'Karon Temple Market', p: 'gratis', x: 'Martes y viernes de 16:00 a 22:00.',
             pro: 'os encaja el día 8',
-            l: [['Guía', 'https://www.visitthailandtoday.com/guides/phuket-night-markets'], ['Guía', 'https://klook.com/en-AU/blog/phuket-markets']] },
+            l: [['Guía', 'https://www.visitthailandtoday.com/guides/phuket-night-markets'], ['Guía', 'https://klook.com/en-AU/blog/phuket-markets']],
+            foto: 'watKaron', desc: 'Mercado montado en el recinto del templo de Karon (en la foto), a un paso de la playa: puestos de comida, ropa y recuerdos.' },
           { n: 'Rawai Seafood Market', p: 'el marisco más unos 100 baht por kilo por cocinarlo',
             x: 'Los locales cierran sobre las 21:00.',
             pro: 'cerca del hotel', contra: 'hay que regatear',
-            l: [['Info', 'https://phuket-insider.com/en/places/rawai-seafood-market/']] },
+            l: [['Info', 'https://phuket-insider.com/en/places/rawai-seafood-market/']],
+            foto: 'rawai', desc: 'En la playa de Rawai, junto a los barcos de pescadores: compras el marisco al peso en los puestos y uno de los restaurantes de enfrente te lo cocina.' },
           { n: 'Muay Thai (Bangla Boxing)', p: 'grada 1.500–1.600 THB, ringside VIP 1.900–2.000 THB',
             x: 'Primer combate a las 21:00.',
             pro: 'ambiente auténtico',
@@ -775,10 +853,12 @@
             foto: 'bangla', desc: 'Estadio de Muay Thai en Patong, junto a Bangla Road.' },
           { n: 'Simon Cabaret', p: '800 THB normal / 1.000 THB VIP',
             pro: 'muy vistoso', contra: 'algunas reseñas critican el playback',
-            l: [['Entradas', 'https://www.expedia.co.th/things-to-do/a.a2270119.activity-details']] },
+            l: [['Entradas', 'https://www.expedia.co.th/things-to-do/a.a2270119.activity-details']],
+            foto: 'simonCabaret', desc: 'Cabaret de ladyboys en Patong, con vestuario de plumas y números de baile. Dentro no se pueden hacer fotos; al acabar, las artistas posan en la puerta (se deja propina).' },
           { n: 'Phuket FantaSea', p: '1.800 THB, o 2.200 con cena', x: 'Abre martes, viernes y domingos.',
             contra: 'está en Kamala, lejos del hotel, y el espectáculo incluye elefantes',
-            l: [['Info', 'https://phuket-insider.com/en/places/phuket-fantasea'], ['Entradas', 'https://www.headout.com/phuket-fantasea-tickets/tickets-to-phuket-fantasea-with-round-trip-shared-transfers-and-optional-dinner-e-21392']] }
+            l: [['Info', 'https://phuket-insider.com/en/places/phuket-fantasea'], ['Entradas', 'https://www.headout.com/phuket-fantasea-tickets/tickets-to-phuket-fantasea-with-round-trip-shared-transfers-and-optional-dinner-e-21392']],
+            foto: 'fantasea', desc: 'Parque temático nocturno en Kamala: un pueblo lleno de luces, tiendas y bufé, y un gran espectáculo sobre la cultura tailandesa.' }
         ] }
       ],
       ideas: []
@@ -2609,7 +2689,7 @@
   function planFoto(e) {
     const src = e.foto && FOTO[e.foto];
     if (src) {
-      return `<figure class="plan-foto"><img src="${esc(src)}" alt="${esc(e.n || '')}" loading="lazy" onerror="this.remove()">` +
+      return `<figure class="plan-foto"><img src="${esc(src)}" alt="${esc(e.n || e.alt || '')}" loading="lazy" onerror="this.remove()">` +
         (e.desc ? `<figcaption>${esc(e.desc)}</figcaption>` : '') + `</figure>`;
     }
     return e.desc ? `<p class="plan-desc">${esc(e.desc)}</p>` : '';
@@ -2617,6 +2697,7 @@
   function planEntrada(e) {
     if (typeof e === 'string') return `<p class="plan-txt">${linkify(e)}</p>`;
     if (e.h) return `<p class="plan-subt">${esc(e.h)}</p>`;
+    if (!e.n) return planFoto(e);
     return `<div class="plan-item">` +
       `<div class="plan-item__n">${linkify(e.n)}${e.p ? ` <span class="plan-precio">${esc(e.p)}</span>` : ''}</div>` +
       (e.x ? `<p class="plan-item__x">${linkify(e.x)}</p>` : '') +
