@@ -985,6 +985,55 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 .slot__opcion .slot__opcion-foto-wrap { box-shadow: none; border-width: 1.5px; border-radius: var(--radius-s); }
 .slot__opcion .slot__opcion-foto { border-bottom-width: 1.5px; }
 
+/* ---------- Plan del viaje: franjas del día y días de opciones ---------- */
+.plan-resumen { margin-bottom: var(--space-16); padding: var(--space-12) var(--space-16); background: var(--card); border: var(--stroke); border-radius: var(--radius-m); box-shadow: var(--pop-s); }
+.plan-resumen__t { margin: 0 0 var(--space-8); font-size: var(--step-2); }
+.plan-resumen ul { margin: 0; padding: 0; list-style: none; }
+.plan-resumen li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--space-8); padding: 5px 0; border-top: 1px dashed var(--line); font-size: var(--step-0); }
+.plan-resumen li:first-child { border-top: 0; }
+.plan-resumen__f { font-weight: 800; }
+
+.plan-head { margin: 0 0 var(--space-16); }
+.plan-head__t { margin: 0; font-family: var(--font-display); font-size: var(--step-2); font-weight: 700; line-height: 1.25; }
+.plan-head__h { margin: var(--space-4) 0 0; font-size: var(--step-0); font-weight: 600; color: var(--ink-2); }
+.plan-nota { margin: 0 0 var(--space-16); padding: var(--space-12) var(--space-16); font-family: var(--font-display); font-size: var(--step-2); font-weight: 700; background: var(--pink-soft); border: 1.5px solid var(--edge); border-radius: var(--radius-m); }
+
+.franjas { display: flex; flex-direction: column; gap: var(--space-12); margin-bottom: var(--space-16); }
+.franja { background: var(--card); border: 1.5px solid var(--edge); border-radius: var(--radius-m); overflow: hidden; }
+.franja__label { margin: 0; padding: var(--space-6) var(--space-12); font-size: var(--step-1); font-weight: 800; color: var(--ink); background: var(--lime); border-bottom: 1.5px solid var(--edge); }
+.franja__label span { font-weight: 600; }
+.franja__body { padding: var(--space-10) var(--space-12); }
+.franja__vacia { margin: 0; color: var(--ink-2); }
+.plan-txt { margin: 0 0 var(--space-8); line-height: 1.5; overflow-wrap: anywhere; }
+.plan-txt:last-child { margin-bottom: 0; }
+.plan-subt { margin: var(--space-12) 0 var(--space-6); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--pink-deep); }
+.plan-subt:first-child { margin-top: 0; }
+.plan-item { margin: 0 0 var(--space-10); padding: var(--space-10) 0 0; border-top: 1px dashed var(--line); }
+.plan-item:first-child { padding-top: 0; border-top: 0; }
+.plan-item:last-child { margin-bottom: 0; }
+.plan-item__n { font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.plan-item__x { margin: 3px 0 0; color: var(--ink-2); font-size: var(--step-0); line-height: 1.45; overflow-wrap: anywhere; }
+.plan-precio { display: inline-block; padding: 0 8px; font-size: var(--step--1); font-weight: 700; color: var(--text); white-space: nowrap; background: var(--orange-soft); border: 1.5px solid var(--edge); border-radius: var(--radius-pill); }
+.plan-precio--op { margin-top: var(--space-4); white-space: normal; }
+.plan-link { font-weight: 700; color: var(--pink-deep); overflow-wrap: anywhere; }
+.plan-desc { margin: var(--space-6) 0 0; font-size: var(--step-0); color: var(--ink-2); line-height: 1.45; }
+/* Foto pequeña al lado de su descripción: en el móvil no se come la pantalla */
+.plan-foto { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--space-10); align-items: start; margin: var(--space-8) 0 0; }
+.plan-foto img { display: block; width: 96px; height: 72px; object-fit: cover; background: var(--line); border: 1.5px solid var(--edge); border-radius: var(--radius-s); }
+.plan-foto figcaption { font-size: var(--step-0); color: var(--ink-2); line-height: 1.45; }
+.plan-foto:not(:has(img)) { display: block; }
+
+.plan-opciones { margin-bottom: var(--space-16); }
+.plan-opciones__nota { margin: -4px 0 var(--space-10); font-size: var(--step-0); font-weight: 600; }
+.plan-op__pro, .plan-op__contra { margin: var(--space-6) 0 0; font-size: var(--step-0); line-height: 1.45; }
+
+.plan-agenda { margin: var(--space-8) 0 var(--space-12); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.day__badge--rango { font-size: 1.6rem; }
+.day-sub { margin-top: var(--space-20); padding-top: var(--space-16); border-top: 2px dashed var(--edge); }
+.day-sub__t { margin: 0 0 var(--space-8); font-size: var(--step-2); }
+.day-sub__t span { font-weight: 600; color: var(--ink-2); }
+.day-sub__now { padding: 1px 8px; font-size: var(--step--1); color: var(--ink); background: var(--lime); border: 1.5px solid var(--edge); border-radius: var(--radius-pill); }
+
 .leg { display: flex; align-items: center; gap: var(--space-6); margin: -8px 0 var(--space-12) 84px; font-size: var(--step--1); font-weight: 600; color: var(--ink-2); }
 
 /* ============================================================
