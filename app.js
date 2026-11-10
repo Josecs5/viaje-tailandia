@@ -247,35 +247,39 @@
   // blanco en vez de inventarlo.
   const META_SEED = { titulo: 'Viaje a Tailandia', fechaInicio: '2026-11-24', fechaFin: '2026-12-09' };
 
+  // Ida y vuelta con Qatar: horarios que Qatar vendía para estas fechas el
+  // 10 nov 2026. Cambian respecto a la reserva (ida a las 22:05 en vez de
+  // 22:25; el QR851 de la vuelta ya no se vende y lo sustituye el QR843), por
+  // eso las notas piden confirmarlo en la reserva.
   const VUELOS_SEED = [
     {
       id: 'seed-vu-ida', tipo: 'Ida', reserva: '', antelacion: '3 h', equipaje: '',
-      notas: 'Qatar Airways, clase turista, 1 escala en Doha (DOH), 15 h de duración total. Las horas de llegada y salida en Doha no venían en la reserva: consúltalas en el billete.',
+      notas: 'Qatar Airways, clase turista. Escala en Doha (DOH) de 2 h 15 min; 15 h 20 min en total.\nOJO: Qatar ha adelantado la salida de Madrid a las 22:05 (en la reserva ponía 22:25). Confirmadlo en «Mis reservas» de qatarairways.com.',
       tramos: [{
         aerolinea: 'Qatar Airways', numero: 'QR152', clase: 'Turista', operadoPor: '',
         origen: 'MAD', origenNombre: 'Madrid-Barajas', origenTerminal: '',
         destino: 'DOH', destinoNombre: 'Doha Hamad', destinoTerminal: '',
-        salida: '2026-11-24T22:25', llegada: '', duracion: ''
+        salida: '2026-11-24T22:05', llegada: '2026-11-25T06:40', duracion: '6 h 35 min'
       }, {
         aerolinea: 'Qatar Airways', numero: 'QR826', clase: 'Turista', operadoPor: '',
         origen: 'DOH', origenNombre: 'Doha Hamad', origenTerminal: '',
         destino: 'BKK', destinoNombre: 'Bangkok Suvarnabhumi', destinoTerminal: '',
-        salida: '', llegada: '2026-11-25T19:25', duracion: ''
+        salida: '2026-11-25T08:55', llegada: '2026-11-25T19:25', duracion: '6 h 30 min'
       }]
     },
     {
       id: 'seed-vu-vuelta', tipo: 'Vuelta', reserva: '', antelacion: '3 h', equipaje: '',
-      notas: 'Qatar Airways, clase turista, 1 escala en Doha (DOH), 18 h de duración total. Las horas de llegada y salida en Doha no venían en la reserva: consúltalas en el billete.',
+      notas: 'Qatar Airways, clase turista. Escala en Doha (DOH) de 3 h 50 min; 18 h 25 min en total.\nOJO: en la reserva ponía QR851 a las 08:55 con llegada a Madrid a las 20:55, pero el QR851 ya no se vende y lleva días cancelándose. Qatar vende ahora el QR843 a las 08:20 y el QR151 llega a Madrid a las 20:45. Confirmad en «Mis reservas» de qatarairways.com a qué vuelo os han pasado.',
       tramos: [{
-        aerolinea: 'Qatar Airways', numero: 'QR851', clase: 'Turista', operadoPor: '',
+        aerolinea: 'Qatar Airways', numero: 'QR843', clase: 'Turista', operadoPor: '',
         origen: 'HKT', origenNombre: 'Phuket', origenTerminal: '',
         destino: 'DOH', destinoNombre: 'Doha Hamad', destinoTerminal: '',
-        salida: '2026-12-09T08:55', llegada: '', duracion: ''
+        salida: '2026-12-09T08:20', llegada: '2026-12-09T11:25', duracion: '7 h 05 min'
       }, {
         aerolinea: 'Qatar Airways', numero: 'QR151', clase: 'Turista', operadoPor: '',
         origen: 'DOH', origenNombre: 'Doha Hamad', origenTerminal: '',
         destino: 'MAD', destinoNombre: 'Madrid-Barajas', destinoTerminal: '',
-        salida: '', llegada: '2026-12-09T20:55', duracion: ''
+        salida: '2026-12-09T15:15', llegada: '2026-12-09T20:45', duracion: '7 h 30 min'
       }]
     },
     {
@@ -819,18 +823,27 @@
     return list;
   }
 
-  // Versión de los datos precargados. Al subirla, aplicarPlanV2 actualiza
-  // una sola vez lo que cada móvil ya tenía guardado.
-  const SEED_V = 3;
+  // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
+  // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
+  // guardado.
+  const SEED_V = 4;
 
-  // Plan v2: el Itinerario sale de PLAN_DIAS/PLAN_GRUPOS, así que se quitan
-  // los lugares, excursiones y comidas precargados antes (ids seed-lg/ex/cm),
-  // se ponen los alojamientos del plan (conservando el localizador si alguien
-  // lo apuntó) y se añaden los vuelos internos y los gastos del plan. Lo que
+  function migrarSeeds(s) {
+    if (s.seedV >= SEED_V) return s;
+    if (s.seedV < 2) aplicarPlanV2(s);
+    if (s.seedV < 3) aplicarPinKrabi(s);
+    if (s.seedV < 4) aplicarHorariosQatar(s);
+    s.seedV = SEED_V;
+    setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
+    return s;
+  }
+
+  // v2: el Itinerario sale de PLAN_DIAS/PLAN_GRUPOS, así que se quitan los
+  // lugares, excursiones y comidas precargados antes (ids seed-lg/ex/cm), se
+  // ponen los alojamientos del plan (conservando el localizador si alguien lo
+  // apuntó) y se añaden los vuelos internos y los gastos del plan. Lo que
   // haya añadido cada uno y su diario no se tocan.
   function aplicarPlanV2(s) {
-    if (s.seedV >= SEED_V) return s;
-    if (s.seedV === 2) return aplicarPinKrabi(s);
     const clon = x => JSON.parse(JSON.stringify(x));
     const viejo = x => /^seed-(lg|ex|cm)-/.test(x.id || '');
     s.lugares = s.lugares.filter(x => !viejo(x));
@@ -844,14 +857,10 @@
     });
     VUELOS_SEED.forEach(v => { if (!s.vuelos.some(x => x.id === v.id)) s.vuelos.push(clon(v)); });
     GASTOS_SEED.forEach(g => { if (!s.gastos.some(x => x.id === g.id)) s.gastos.push(clon(g)); });
-    s.seedV = SEED_V;
-    setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
-    return s;
   }
 
-  // v3: quien ya tenía el plan v2 guardado solo recibe el pin exacto de la
-  // villa de Krabi (y su nota sin el aviso de «pin aproximado»); el resto de
-  // lo que haya editado desde entonces no se toca.
+  // v3: pin exacto de la villa de Krabi (y su nota sin el aviso de «pin
+  // aproximado»); el resto de lo que haya editado cada uno no se toca.
   function aplicarPinKrabi(s) {
     const n = ALOJ_SEED.find(a => a.id === 'seed-al-krabi');
     const a = s.alojamientos.find(x => x.id === 'seed-al-krabi');
@@ -859,9 +868,19 @@
       a.loc = JSON.parse(JSON.stringify(n.loc));
       if (/pin del mapa es aproximado/.test(a.notas || '')) a.notas = n.notas;
     }
-    s.seedV = SEED_V;
-    setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
-    return s;
+  }
+
+  // v4: ida y vuelta con los horarios actuales de Qatar y las horas de la
+  // escala en Doha. Se cambian tramos y notas; localizador, equipaje y
+  // antelación que haya apuntado cada uno se conservan.
+  function aplicarHorariosQatar(s) {
+    ['seed-vu-ida', 'seed-vu-vuelta'].forEach(id => {
+      const n = VUELOS_SEED.find(v => v.id === id);
+      const v = s.vuelos.find(x => x.id === id);
+      if (!n || !v) return;
+      v.tramos = JSON.parse(JSON.stringify(n.tramos));
+      v.notas = n.notas;
+    });
   }
 
   function load() {
@@ -870,7 +889,7 @@
       if (!raw) return seedState();
       const p = JSON.parse(raw);
       const b = blankState();
-      return aplicarPlanV2({
+      return migrarSeeds({
         seedV: p.seedV || 0,
         meta: Object.assign(b.meta, p.meta || {}),
         vuelos: (p.vuelos || []).map(migrateVuelo).map(upgradeSeedVuelo),
