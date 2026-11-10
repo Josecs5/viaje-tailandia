@@ -5,7 +5,7 @@
  */
 'use strict';
 
-const SHELL_CACHE = 'shell-v33';
+const SHELL_CACHE = 'shell-v34';
 // Solo se tocan las cachés de este proyecto: en GitHub Pages el origen es
 // compartido con otros proyectos del usuario y caches.keys() no está acotado
 // por scope.
@@ -15,7 +15,7 @@ const SHELL_ASSETS = [
   './',                       // redundante a propósito (red de seguridad);
   './index.html',             // la navegación resuelve contra './index.html'.
   './style.css?v=16',
-  './app.js?v=26',
+  './app.js?v=27',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',

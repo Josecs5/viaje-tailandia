@@ -423,7 +423,8 @@
     oneNimman: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/One_Nimman.jpg/960px-One_Nimman.jpg',
     khaoSoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Khao_soi_Chiang_Mai.jpg/960px-Khao_soi_Chiang_Mai.jpg',
     plataChiangMai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg/960px-Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg',
-    maeKachan: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/View_Hot_Sping_Chiangrai_By_HS3CMI_-_panoramio.jpg/960px-View_Hot_Sping_Chiangrai_By_HS3CMI_-_panoramio.jpg',
+    ferryPhiPhi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Ferry_to_Phi_Phi_Island_%286223245222%29.jpg/960px-Ferry_to_Phi_Phi_Island_%286223245222%29.jpg',
+    maeKachan:'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/View_Hot_Sping_Chiangrai_By_HS3CMI_-_panoramio.jpg/960px-View_Hot_Sping_Chiangrai_By_HS3CMI_-_panoramio.jpg',
     montanaRusa:'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg/960px-Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg',
     puenting:'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Bungee_Jump_is_freedom.jpg/960px-Bungee_Jump_is_freedom.jpg',
     mercadoAoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Selection_of_fruits_at_Ao_Nang_street_market.jpg/960px-Selection_of_fruits_at_Ao_Nang_street_market.jpg',
@@ -744,6 +745,7 @@
       zona: 'Islas Phi Phi', hotel: 'Phi Phi Maiyada Resort (noches del 5 y del 6)',
       logistica: [
         'Sábado 5, mañana: levantarse prontito y coger el ferry/speedboat de Ao Nang a Phi Phi sobre las 08:00. Llegada a las 10:00, check-in y vuelta rápida por el centro para comer.',
+        { alt: 'Ferry de Ao Nang a Phi Phi', foto: 'ferryPhiPhi', desc: 'Desde Ao Nang, los ferris y lanchas rápidas a Phi Phi salen del muelle de Nopparat Thara, al final de la playa. El ferry tarda unas 2 h (suele parar en Railay) y la lancha rápida, menos de 1 h. Se llega al muelle de Tonsai, donde se paga una pequeña tasa de entrada a la isla. En la foto, a bordo del ferry de Krabi a Phi Phi.' },
         'Si vamos a Maya Bay, hay que madrugar MUCHO.'
       ],
       secciones: [
