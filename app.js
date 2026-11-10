@@ -423,7 +423,8 @@
     oneNimman: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/One_Nimman.jpg/960px-One_Nimman.jpg',
     khaoSoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Khao_soi_Chiang_Mai.jpg/960px-Khao_soi_Chiang_Mai.jpg',
     plataChiangMai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg/960px-Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg',
-    puenting: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Bungee_Jump_is_freedom.jpg/960px-Bungee_Jump_is_freedom.jpg',
+    montanaRusa: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg/960px-Laterns-Kuehboden-summer_toboggan-run_%28type_Wiegand%29-08ASD.jpg',
+    puenting:'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Bungee_Jump_is_freedom.jpg/960px-Bungee_Jump_is_freedom.jpg',
     mercadoAoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Selection_of_fruits_at_Ao_Nang_street_market.jpg/960px-Selection_of_fruits_at_Ao_Nang_street_market.jpg',
     monosAoNang:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg/960px-Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg',
     pilehLagoon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/A_Long-tail_Boat_in_Pileh_Lagoon%2C_Phi_Phi_Le.jpg/960px-A_Long-tail_Boat_in_Pileh_Lagoon%2C_Phi_Phi_Le.jpg',
@@ -683,6 +684,7 @@
           { n: 'Chiang Mai X-Centre (actividades extremas)', l: [['Web', 'https://www.chiangmaixcentre.com/']],
             foto: 'puenting', desc: 'Parque de aventura a las afueras de Chiang Mai: puenting sobre un lago, buggies por el barro, paintball y zorbing.' },
           'Montaña rusa por la selva.',
+          { alt: 'Montaña rusa por la selva', foto: 'montanaRusa', desc: 'La de Chiang Mai es la Pongyang Jungle Coaster, en Mae Rim, a unos 40 min en coche al norte de la ciudad: un trineo sobre raíles que baja por la ladera entre la selva, y cada uno regula la velocidad con su freno. En la foto, una montaña rusa del mismo tipo en Austria (no hay foto libre de la de Pongyang).' },
           'Perdernos por Nimman.'
         ] },
         { f: 'Noche', e: ['Cena relajada y preparación para el salto al sur. Cena: Huen Muan Jai.'] }
