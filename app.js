@@ -243,34 +243,56 @@
   // Todo sigue siendo editable desde la app: esto es solo el punto de partida
   // para quien abre la web por primera vez. Sin nombres, teléfonos, emails ni
   // localizadores de reserva (la web es pública) — donde el usuario no dio un
-  // dato concreto (número de vuelo, aeropuerto de escala, hora exacta) se ha
-  // dejado en blanco en vez de inventarlo; los pocos casos donde sí se ha
-  // calculado algo a partir de otros datos que el usuario SÍ dio (la hora de
-  // salida de Madrid del vuelo de ida) lo dice explícitamente en sus notas.
+  // dato concreto (p. ej. las horas de la escala en Doha) se ha dejado en
+  // blanco en vez de inventarlo.
   const META_SEED = { titulo: 'Viaje a Tailandia', fechaInicio: '2026-11-24', fechaFin: '2026-12-09' };
 
   const VUELOS_SEED = [
     {
       id: 'seed-vu-ida', tipo: 'Ida', reserva: '', antelacion: '3 h', equipaje: '',
-      notas: 'Qatar Airways, clase turista, 1 escala, ~15h de duración total (aeropuerto de la escala no indicado). Hora de salida de Madrid no confirmada: solo se sabe que sale la noche del 24, calculado a partir de la llegada a Bangkok (19:25 del 25) y la duración total — confírmala con el billete real.',
+      notas: 'Qatar Airways, clase turista, 1 escala en Doha (DOH), 15 h de duración total. Las horas de llegada y salida en Doha no venían en la reserva: consúltalas en el billete.',
       tramos: [{
-        aerolinea: 'Qatar Airways', numero: '', clase: 'Turista', operadoPor: '',
+        aerolinea: 'Qatar Airways', numero: 'QR152', clase: 'Turista', operadoPor: '',
         origen: 'MAD', origenNombre: 'Madrid-Barajas', origenTerminal: '',
+        destino: 'DOH', destinoNombre: 'Doha Hamad', destinoTerminal: '',
+        salida: '2026-11-24T22:25', llegada: '', duracion: ''
+      }, {
+        aerolinea: 'Qatar Airways', numero: 'QR826', clase: 'Turista', operadoPor: '',
+        origen: 'DOH', origenNombre: 'Doha Hamad', origenTerminal: '',
         destino: 'BKK', destinoNombre: 'Bangkok Suvarnabhumi', destinoTerminal: '',
-        salida: '2026-11-24', llegada: '2026-11-25T19:25', duracion: '~15h (1 escala)'
+        salida: '', llegada: '2026-11-25T19:25', duracion: ''
       }]
     },
     {
       id: 'seed-vu-vuelta', tipo: 'Vuelta', reserva: '', antelacion: '3 h', equipaje: '',
-      notas: 'Qatar Airways, clase turista, 1 escala, ~18h de duración total (aeropuerto de la escala no indicado).',
+      notas: 'Qatar Airways, clase turista, 1 escala en Doha (DOH), 18 h de duración total. Las horas de llegada y salida en Doha no venían en la reserva: consúltalas en el billete.',
       tramos: [{
-        aerolinea: 'Qatar Airways', numero: '', clase: 'Turista', operadoPor: '',
+        aerolinea: 'Qatar Airways', numero: 'QR851', clase: 'Turista', operadoPor: '',
         origen: 'HKT', origenNombre: 'Phuket', origenTerminal: '',
+        destino: 'DOH', destinoNombre: 'Doha Hamad', destinoTerminal: '',
+        salida: '2026-12-09T08:55', llegada: '', duracion: ''
+      }, {
+        aerolinea: 'Qatar Airways', numero: 'QR151', clase: 'Turista', operadoPor: '',
+        origen: 'DOH', origenNombre: 'Doha Hamad', origenTerminal: '',
         destino: 'MAD', destinoNombre: 'Madrid-Barajas', destinoTerminal: '',
-        salida: '2026-12-09T08:55', llegada: '2026-12-09T20:55', duracion: '~18h (1 escala)'
+        salida: '', llegada: '2026-12-09T20:55', duracion: ''
       }]
     }
   ];
+
+  // Quien ya abrió la web antes tiene guardados los vuelos precargados antiguos
+  // (un solo tramo, sin número de vuelo ni hora de salida de Madrid). Si siguen
+  // tal cual, se sustituyen por los datos completos; si el usuario ya los
+  // editó (puso un número de vuelo o añadió tramos) no se tocan.
+  function upgradeSeedVuelo(v) {
+    const seed = VUELOS_SEED.find(x => x.id === v.id);
+    if (!seed || !Array.isArray(v.tramos) || v.tramos.length !== 1 || v.tramos[0].numero) return v;
+    const nuevo = JSON.parse(JSON.stringify(seed));
+    nuevo.reserva = v.reserva || '';
+    nuevo.antelacion = v.antelacion || nuevo.antelacion;
+    nuevo.equipaje = v.equipaje || '';
+    return nuevo;
+  }
 
   const ALOJ_SEED = [
     { id: 'seed-al-bkk', nombre: 'Prince Palace Hotel Bangkok',
@@ -569,7 +591,7 @@
       const b = blankState();
       return {
         meta: Object.assign(b.meta, p.meta || {}),
-        vuelos: (p.vuelos || []).map(migrateVuelo),
+        vuelos: (p.vuelos || []).map(migrateVuelo).map(upgradeSeedVuelo),
         coches: p.coches || [],
         alojamientos: p.alojamientos || [],
         excursiones: p.excursiones || [],
