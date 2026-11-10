@@ -257,9 +257,9 @@
     '· 1 equipaje de mano de 25 × 37 × 50 cm, máx. 7 kg.\n' +
     '· 1 maleta facturada de máx. 25 kg.';
 
-  // Bangkok → Chiang Mai: la hora del plan (08:10) no coincide con ningún
-  // vuelo que AirAsia venda hoy para el 29 nov, así que se deja sin número.
-  const NOTA_DMK_CNX = 'Directo.\nOJO: el 29 nov Thai AirAsia no vende ningún vuelo a las 08:10. Los más cercanos son el FD3411 (07:35 → 08:50) y el FD3416 (08:25 → 09:40). Confirmad en la reserva de AirAsia la hora y el número de vuelo.';
+  // Bangkok → Chiang Mai: el plan decía 08:10 → 09:25, pero AirAsia no
+  // vende ningún vuelo a esa hora el 29 nov; el grupo eligió el FD3416.
+  const NOTA_DMK_CNX = 'Directo. El plan decía 08:10 → 09:25; ese día AirAsia vende el FD3416 de 08:25 a 09:40. Confirmad en la reserva de AirAsia que es este vuelo.';
 
   const VUELOS_SEED = [
     {
@@ -296,10 +296,10 @@
       id: 'seed-vu-dmk-cnx', tipo: 'Interno', reserva: '', antelacion: '', equipaje: 'Maleta facturada de 25 kg: 32 €.',
       notas: NOTA_DMK_CNX,
       tramos: [{
-        aerolinea: 'Thai AirAsia', numero: '', clase: '', operadoPor: '',
+        aerolinea: 'Thai AirAsia', numero: 'FD3416', clase: '', operadoPor: '',
         origen: 'DMK', origenNombre: 'Bangkok Don Mueang', origenTerminal: '',
         destino: 'CNX', destinoNombre: 'Chiang Mai', destinoTerminal: '',
-        salida: '2026-11-29T08:10', llegada: '2026-11-29T09:25', duracion: '1 h 15 min'
+        salida: '2026-11-29T08:25', llegada: '2026-11-29T09:40', duracion: '1 h 15 min'
       }]
     },
     {
@@ -556,7 +556,7 @@
       zona: 'Chiang Mai', titulo: 'Vuelo a Chiang Mai y primera toma de contacto', hotel: H_CNX,
       franjas: [
         { f: 'Mañana', e: [
-          'Vuelo DMK → CNX de 08:10 a 09:25 (+ maleta facturada de 25 kg, 32 €). Sobre las 11:00 estaremos disponibles con el check-in hecho.',
+          'Vuelo DMK → CNX (FD3416) de 08:25 a 09:40 (+ maleta facturada de 25 kg, 32 €). Sobre las 11:00 estaremos disponibles con el check-in hecho.',
           { n: 'Wat Chiang Man (chedi de 1296)', p: 'gratis', foto: 'watChiangMan', desc: 'El templo más antiguo de Chiang Mai, fundado en 1296 por el rey Mengrai al construir la ciudad.' },
           { n: 'Wat Phra Singh (peazo buda)', p: 'gratis', foto: 'watPhraSingh', desc: 'Templo principal de Chiang Mai, con una de las imágenes de Buda más veneradas del norte.' },
           { n: 'Wat Phan Tao (madera de teca)', p: 'gratis', foto: 'watPhanTao', desc: 'Pequeño templo hecho entero de madera de teca, antiguo pabellón real.' },
@@ -836,7 +836,7 @@
   // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
   // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
   // guardado.
-  const SEED_V = 7;
+  const SEED_V = 8;
 
   function migrarSeeds(s) {
     if (s.seedV >= SEED_V) return s;
@@ -846,6 +846,7 @@
     if (s.seedV < 5) aplicarAntelacionVuelta(s);
     if (s.seedV < 6) aplicarEquipajeQatar(s);
     if (s.seedV < 7) aplicarVuelosAirAsia(s);
+    if (s.seedV < 8) aplicarFD3416(s);
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
@@ -881,6 +882,17 @@
       a.loc = JSON.parse(JSON.stringify(n.loc));
       if (/pin del mapa es aproximado/.test(a.notas || '')) a.notas = n.notas;
     }
+  }
+
+  // v8: el Bangkok → Chiang Mai pasa a ser el FD3416 (08:25 → 09:40). Se
+  // cambia si su tramo sigue sin número de vuelo (como venía precargado);
+  // la nota se cambia si sigue siendo una de las precargadas.
+  function aplicarFD3416(s) {
+    const v = s.vuelos.find(x => x.id === 'seed-vu-dmk-cnx');
+    if (!v || !v.tramos || !v.tramos[0] || v.tramos[0].numero) return;
+    const n = VUELOS_SEED.find(x => x.id === 'seed-vu-dmk-cnx').tramos[0];
+    Object.assign(v.tramos[0], { numero: n.numero, salida: n.salida, llegada: n.llegada, duracion: n.duracion });
+    if (!v.notas || /^Directo\./.test(v.notas)) v.notas = NOTA_DMK_CNX;
   }
 
   // v7: número de vuelo del Chiang Mai → Krabi (FD3072) y aviso de que el
