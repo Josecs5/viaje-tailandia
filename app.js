@@ -424,7 +424,8 @@
     khaoSoi: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Khao_soi_Chiang_Mai.jpg/960px-Khao_soi_Chiang_Mai.jpg',
     plataChiangMai: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg/960px-Silver_Reliefs_of_Wat_Sri_Suphan%2C_Chiang_Mai-ship_1.jpg',
     puenting: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Bungee_Jump_is_freedom.jpg/960px-Bungee_Jump_is_freedom.jpg',
-    monosAoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg/960px-Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg',
+    mercadoAoNang: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Selection_of_fruits_at_Ao_Nang_street_market.jpg/960px-Selection_of_fruits_at_Ao_Nang_street_market.jpg',
+    monosAoNang:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg/960px-Monkeys_at_Ao_Nang_beach_%2812359615635%29.jpg',
     pilehLagoon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/A_Long-tail_Boat_in_Pileh_Lagoon%2C_Phi_Phi_Le.jpg/960px-A_Long-tail_Boat_in_Pileh_Lagoon%2C_Phi_Phi_Le.jpg',
     tonsaiBay: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Tonsai_Bay.jpg/960px-Tonsai_Bay.jpg',
     lohDalum: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Loh_Dalum_Beach.jpg/960px-Loh_Dalum_Beach.jpg',
@@ -700,7 +701,10 @@
           'Ao Nang Beach → Monkey Trail (https://rubenwanderlust.com/ao-nang-beach-monkey-trail-pai-plong-beach/) → Pai Plong Beach → Pai Plong Pier.',
           { alt: 'Monkey Trail', foto: 'monosAoNang', desc: 'El Monkey Trail es una pasarela de madera pegada a la roca que une el final de la playa de Ao Nang con la cala de Pai Plong. Está llena de monos: nada de comida ni bolsas a la vista.' }
         ] },
-        { f: 'Noche', e: ['A casa a apañarnos, cenar y pasear por el Ao Nang Landmark Night Market. Después de cenar, combates de Muay Thai y/o salir de fiesta.'] },
+        { f: 'Noche', e: [
+          'A casa a apañarnos, cenar y pasear por el Ao Nang Landmark Night Market. Después de cenar, combates de Muay Thai y/o salir de fiesta.',
+          { alt: 'Ao Nang Landmark Night Market', foto: 'mercadoAoNang', desc: 'El Ao Nang Landmark Night Market está en la avenida principal, cerca de la playa: puestos de comida callejera, batidos de fruta, ropa y recuerdos, con mesas para cenar allí mismo. En la foto, un puesto de fruta de un mercado de Ao Nang.' }
+        ] },
         { f: 'Pendiente', e: ['Investigar si se puede hacer este día el tour de las 4 islas y que nos deje en Railay para hacerla por la tarde; así ganamos un día en Tailandia.'] }
       ]
     },
