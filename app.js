@@ -257,6 +257,10 @@
     '· 1 equipaje de mano de 25 × 37 × 50 cm, máx. 7 kg.\n' +
     '· 1 maleta facturada de máx. 25 kg.';
 
+  // Bangkok → Chiang Mai: la hora del plan (08:10) no coincide con ningún
+  // vuelo que AirAsia venda hoy para el 29 nov, así que se deja sin número.
+  const NOTA_DMK_CNX = 'Directo.\nOJO: el 29 nov Thai AirAsia no vende ningún vuelo a las 08:10. Los más cercanos son el FD3411 (07:35 → 08:50) y el FD3416 (08:25 → 09:40). Confirmad en la reserva de AirAsia la hora y el número de vuelo.';
+
   const VUELOS_SEED = [
     {
       id: 'seed-vu-ida', tipo: 'Ida', reserva: '', antelacion: '3 h', equipaje: EQUIPAJE_QATAR,
@@ -290,7 +294,7 @@
     },
     {
       id: 'seed-vu-dmk-cnx', tipo: 'Interno', reserva: '', antelacion: '', equipaje: 'Maleta facturada de 25 kg: 32 €.',
-      notas: 'Directo.',
+      notas: NOTA_DMK_CNX,
       tramos: [{
         aerolinea: 'Thai AirAsia', numero: '', clase: '', operadoPor: '',
         origen: 'DMK', origenNombre: 'Bangkok Don Mueang', origenTerminal: '',
@@ -302,7 +306,7 @@
       id: 'seed-vu-cnx-kbv', tipo: 'Interno', reserva: '', antelacion: '', equipaje: 'Maleta extra: 35 €.',
       notas: 'Directo.',
       tramos: [{
-        aerolinea: 'Thai AirAsia', numero: '', clase: '', operadoPor: '',
+        aerolinea: 'Thai AirAsia', numero: 'FD3072', clase: '', operadoPor: '',
         origen: 'CNX', origenNombre: 'Chiang Mai', origenTerminal: '',
         destino: 'KBV', destinoNombre: 'Krabi', destinoTerminal: '',
         salida: '2026-12-03T07:55', llegada: '2026-12-03T09:55', duracion: '2 h'
@@ -832,7 +836,7 @@
   // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
   // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
   // guardado.
-  const SEED_V = 6;
+  const SEED_V = 7;
 
   function migrarSeeds(s) {
     if (s.seedV >= SEED_V) return s;
@@ -841,6 +845,7 @@
     if (s.seedV < 4) aplicarHorariosQatar(s);
     if (s.seedV < 5) aplicarAntelacionVuelta(s);
     if (s.seedV < 6) aplicarEquipajeQatar(s);
+    if (s.seedV < 7) aplicarVuelosAirAsia(s);
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
@@ -876,6 +881,16 @@
       a.loc = JSON.parse(JSON.stringify(n.loc));
       if (/pin del mapa es aproximado/.test(a.notas || '')) a.notas = n.notas;
     }
+  }
+
+  // v7: número de vuelo del Chiang Mai → Krabi (FD3072) y aviso de que el
+  // Bangkok → Chiang Mai de las 08:10 no aparece a la venta. Solo se tocan
+  // si siguen como venían precargados.
+  function aplicarVuelosAirAsia(s) {
+    const kbv = s.vuelos.find(x => x.id === 'seed-vu-cnx-kbv');
+    if (kbv && kbv.tramos && kbv.tramos[0] && !kbv.tramos[0].numero) kbv.tramos[0].numero = 'FD3072';
+    const cnx = s.vuelos.find(x => x.id === 'seed-vu-dmk-cnx');
+    if (cnx && (cnx.notas === 'Directo.' || !cnx.notas)) cnx.notas = NOTA_DMK_CNX;
   }
 
   // v6: equipaje incluido en la ida y la vuelta con Qatar. Si alguien ya
