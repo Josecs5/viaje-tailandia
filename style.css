@@ -600,6 +600,7 @@ main {
 .pass__body { padding: var(--space-16); }
 .fly-summary { font-size: var(--step-1); color: var(--ink-2); }
 .fly-summary b { color: var(--text); font-family: var(--font-display); font-size: var(--step-2); }
+.fly-summary + .fly-summary { margin-top: var(--space-4); }
 .fly-legs { display: flex; flex-direction: column; gap: var(--space-8); margin: var(--space-12) 0; }
 .fly-leg { padding: var(--space-10) var(--space-12); background: var(--blue-soft); border: 1.5px solid var(--edge); border-radius: var(--radius-s); }
 .fly-leg__head { margin-bottom: var(--space-4); font-size: var(--step--1); color: var(--ink-2); }

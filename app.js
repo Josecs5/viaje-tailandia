@@ -1819,6 +1819,22 @@
   }
   const escLines = s => esc(s).split('\n').join('<br>');
 
+  // Horas en el aire (suma de la duración de cada tramo) y total de puerta a
+  // puerta con las escalas. null si a algún tramo le falta la duración.
+  function vueloHoras(tr) {
+    const legs = tr.map(t => parseDurLoose(t.duracion));
+    if (!legs.length || legs.some(m => m == null)) return null;
+    const vuelo = legs.reduce((a, b) => a + b, 0);
+    const esc = vueloEscalas(tr).map(x => x.min);
+    const total = esc.some(m => m == null) ? null : vuelo + esc.reduce((a, b) => a + b, 0);
+    return { vuelo, total: tr.length > 1 ? total : null };
+  }
+  function vueloHorasTxt(tr) {
+    const h = vueloHoras(tr);
+    if (!h) return '';
+    return fmtDur(h.vuelo) + ' de vuelo' + (h.total ? ' · ' + fmtDur(h.total) + ' en total' : '');
+  }
+
   function vueloSummary(v) {
     const tr = v.tramos || [];
     const a = tr[0] || {}, z = tr[tr.length - 1] || {};
@@ -1828,6 +1844,11 @@
       `<div class="pass"><div class="pass__top"><span class="pass__route"><span class="mono">${esc(a.origen || '')}</span>${ICON.planeL}<span class="mono">${esc(z.destino || '')}</span></span><span class="pass__tipo">${esc(v.tipo || 'Vuelo')}</span></div>` +
       `<div class="pass__tear"></div><div class="pass__body">` +
       `<div class="fly-summary">${s.date ? fmtFecha(s.date, true) : '—'} · sale <b>${s.time || '—'}</b> · llega <b>${e.time || '—'}</b>${e.date && e.date !== s.date ? ' (' + fmtFecha(e.date) + ')' : ''}${tr.length > 1 ? ' · ' + tr.length + ' tramos' : ''}</div>`;
+    const horas = vueloHoras(tr);
+    if (horas) {
+      html += `<div class="fly-summary">✈️ <b>${fmtDur(horas.vuelo)}</b> de vuelo` +
+        (horas.total ? ` · ${fmtDur(horas.total)} en total con la escala` : '') + `</div>`;
+    }
 
     html += '<div class="fly-legs">';
     tr.forEach((t, i) => {
@@ -2002,6 +2023,8 @@
       if (p.time) subBits.push('Sale ' + p.time + (a.origen ? ' ' + a.origen : ''));
       if (arr.time) subBits.push('llega ' + arr.time + (z.destino ? ' ' + z.destino : '') + (arr.date && arr.date !== p.date ? ' (' + fmtFecha(arr.date) + ')' : ''));
       if (escTxt.length) subBits.push('escala ' + escTxt.join(', '));
+      const horasTxt = vueloHorasTxt(tr);
+      if (horasTxt) subBits.push(horasTxt);
 
       const antesMin = parseDurLoose(v.antelacion);
       const enAeropuerto = (antesMin != null && p.time) ? minusMin(p.time, antesMin) : '';
