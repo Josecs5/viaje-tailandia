@@ -3743,6 +3743,30 @@
       </div>`;
   }
 
+  // Torbellino de Taz sobre la ruleta: un embudo de aros girando con Taz
+  // dando vueltas dentro. Se deshace solo y resuelve la promesa al acabar.
+  const TAZ_TORNADO_MS = 2600;
+  function tazTornado(ruleta) {
+    return new Promise(resolve => {
+      if (!ruleta) { resolve(); return; }
+      const aros = Array.from({ length: 11 }, (_, i) =>
+        `<span class="tornado__aro" style="--i:${i}"></span>`).join('');
+      const polvo = Array.from({ length: 8 }, (_, i) =>
+        `<span class="tornado__polvo" style="--i:${i}"></span>`).join('');
+      const t = el('div', 'tornado');
+      t.setAttribute('aria-hidden', 'true');
+      t.innerHTML = `<div class="tornado__embudo"><span class="tornado__cuerpo"></span>${aros}<img class="tornado__taz" src="icons/taz.png?v=2" alt="" width="96" height="96"></div>${polvo}`;
+      ruleta.classList.add('is-tornado');
+      ruleta.appendChild(t);
+      if (navigator.vibrate) { try { navigator.vibrate([20, 30, 20, 30, 20, 30, 20]); } catch (e) { /* sin vibración */ } }
+      setTimeout(() => {
+        t.remove();
+        ruleta.classList.remove('is-tornado');
+        resolve();
+      }, TAZ_TORNADO_MS);
+    });
+  }
+
   function tazGenteHTML() {
     return `<div class="taz__gente" aria-label="En el bombo: ${TAZ_GENTE.map(p => p.nombre).join(', ')}">
       ${TAZ_GENTE.map(p => `<img src="${tazFoto(p)}" alt="" width="44" height="44" decoding="async">`).join('')}
@@ -3839,6 +3863,7 @@
       let ultimo = -1;
       const tic = () => {
         if (!tazGirando) return;
+        if (hecho) return;
         const m = new DOMMatrix(getComputedStyle(rueda).transform);
         const ang = (Math.atan2(m.b, m.a) * 180 / Math.PI + 360) % 360;
         const gajo = Math.floor(((360 - ang) % 360) / TAZ_SEG);
@@ -3856,8 +3881,13 @@
       const fin = () => {
         if (hecho) return;
         hecho = true;
-        tazGirando = false;
         rueda.style.transition = 'none';
+        if (reducido) revelar();
+        else tazTornado(root.querySelector('.ruleta')).then(revelar);
+      };
+      // Tras el torbellino: la persona elegida y el castigo.
+      const revelar = () => {
+        tazGirando = false;
         tazMarcarVisto(st.fecha);
         res.hidden = false;
         res.classList.remove('is-in');

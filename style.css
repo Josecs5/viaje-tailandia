@@ -1374,6 +1374,120 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 @keyframes tazTic { 40% { transform: rotate(-16deg); } }
 .taz__girar { font-size: var(--step-2); }
 
+/* Torbellino de Taz (aparece al pararse la ruleta, antes de revelar) */
+.ruleta__rueda, .ruleta__eje { transition: filter 300ms ease; }
+.ruleta.is-tornado .ruleta__rueda,
+.ruleta.is-tornado .ruleta__eje { filter: blur(3px) brightness(0.55) saturate(0.6); }
+.ruleta.is-tornado { animation: tazTiembla 90ms linear infinite; }
+@keyframes tazTiembla {
+  25% { transform: translate(-2px, 1px); }
+  75% { transform: translate(2px, -1px); }
+}
+.tornado {
+  position: absolute;
+  z-index: 3;
+  inset: -6% 0 0;
+  pointer-events: none;
+  perspective: 600px;
+  animation: tornadoVida 2600ms cubic-bezier(0.3, 0.7, 0.4, 1) forwards;
+}
+@keyframes tornadoVida {
+  0%   { opacity: 0; transform: scale(0.1) rotate(-90deg); }
+  14%  { opacity: 1; transform: scale(1.06) rotate(0); }
+  20%  { transform: scale(1); }
+  82%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.15) rotate(220deg); }
+}
+.tornado__embudo {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: tornadoBaile 520ms ease-in-out infinite alternate;
+}
+/* Cuerpo del tornado: un cono de franjas que corren de lado a lado */
+.tornado__cuerpo {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 7%;
+  bottom: 6%;
+  clip-path: polygon(0 0, 100% 0, 58% 100%, 42% 100%);
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.18) 0 3px, transparent 3px 19px),
+    repeating-linear-gradient(90deg, #e8c99b 0 14px, #a0693a 14px 24px, #f6ead8 24px 30px, #c4915c 30px 40px);
+  opacity: 0.88;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  animation: tornadoCuerpo 220ms linear infinite;
+}
+@keyframes tornadoCuerpo { to { background-position: 0 0, 40px 0; } }
+@keyframes tornadoBaile {
+  from { transform: translateX(-5%) skewX(5deg); }
+  to   { transform: translateX(5%) skewX(-5deg); }
+}
+/* Cada aro es un círculo tumbado (rotateX) que gira sobre sí mismo; de arriba
+   abajo se estrechan para formar el embudo y cada uno se balancea a su ritmo. */
+.tornado__aro {
+  --w: calc(86% - var(--i) * 6.6%);
+  position: absolute;
+  left: 50%;
+  top: calc(7% + var(--i) * 8%);
+  width: var(--w);
+  aspect-ratio: 1;
+  margin: calc(var(--w) / -2) 0 0 calc(var(--w) / -2);
+  border: 9px solid #e8c99b;
+  border-right-color: rgba(255, 255, 255, 0.9);
+  border-bottom-color: transparent;
+  border-left-style: dashed;
+  border-radius: 50%;
+  translate: 0 0;
+  transform: rotateX(76deg) rotateZ(0);
+  animation:
+    tornadoAro 300ms linear infinite,
+    tornadoVaiven 600ms ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -37ms), calc(var(--i) * -90ms);
+}
+.tornado__aro:nth-child(even) { border-color: #a0693a; border-right-color: #f6ead8; border-top-color: transparent; }
+@keyframes tornadoAro { to { transform: rotateX(76deg) rotateZ(-360deg); } }
+@keyframes tornadoVaiven { from { translate: -7% 0; } to { translate: 7% 0; } }
+.tornado__taz {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  width: 38%;
+  height: auto;
+  margin-left: -19%;
+  border: 3px solid #161a3c;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(139, 90, 43, 0.55), 0 0 26px 8px rgba(222, 184, 135, 0.7);
+  animation: tornadoTaz 180ms linear infinite;
+}
+@keyframes tornadoTaz {
+  0%   { transform: rotate(0) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+/* Polvo que sale despedido por la base */
+.tornado__polvo {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: #d2b48c;
+  border: 2px solid #8b5a2b;
+  border-radius: 50%;
+  opacity: 0;
+  animation: tornadoPolvo 700ms ease-out infinite;
+  animation-delay: calc(var(--i) * 85ms);
+  --dir: calc((var(--i) - 3.5) * 32px);
+}
+@keyframes tornadoPolvo {
+  0%   { opacity: 0.9; transform: translate(0, 0) scale(0.4); }
+  100% { opacity: 0; transform: translate(var(--dir), -28px) scale(1.4); }
+}
+
 /* Resultado */
 .taz-res {
   margin-top: var(--space-20);
@@ -1411,7 +1525,7 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 .taz-castigo p { margin-top: var(--space-4); }
 
 @media (prefers-reduced-motion: reduce) {
-  .ruleta__puntero.is-tic, .taz-res.is-in { animation: none; }
+  .ruleta__puntero.is-tic, .taz-res.is-in, .ruleta.is-tornado { animation: none; }
 }
 
 .sub-label { display: flex; align-items: center; gap: var(--space-10); margin: var(--space-24) 0 var(--space-12); font-family: var(--font-display); font-size: var(--step-2); font-weight: 800; font-stretch: 88%; }
