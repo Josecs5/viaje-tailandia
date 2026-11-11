@@ -3758,7 +3758,27 @@
     const d = new Date(ms);
     return { fecha: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes() };
   }
+  // Solo en local: ?tazdemo=beben|elige|doble|normal fuerza esa casilla con una
+  // persona al azar, para ver cómo queda sin destripar el sorteo de verdad.
+  let tazDemoPlan = null;
+  function tazDemo() {
+    if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return null;
+    const q = new URLSearchParams(location.search).get('tazdemo');
+    if (!q) return null;
+    if (!tazDemoPlan) {
+      const personas = TAZ_CASILLAS.map((c, i) => (c.persona != null ? i : -1)).filter(i => i >= 0);
+      const azar = personas[Math.floor(Math.random() * personas.length)];
+      const k = TAZ_ESPECIALES.findIndex(e => e.id === q);
+      tazDemoPlan = k < 0
+        ? { casilla: azar, segunda: null }
+        : { casilla: TAZ_CASILLAS.findIndex(c => c.esp === k), segunda: TAZ_ESPECIALES[k].retira ? azar : null };
+    }
+    return { fase: 'abierta', fecha: 'demo-' + q, min: 0, demo: true, plan: tazDemoPlan };
+  }
+
   function tazEstado() {
+    const demo = tazDemo();
+    if (demo) return demo;
     const a = tazAhora();
     if (a.fecha < TAZ_INICIO) return Object.assign({ fase: 'antes' }, a);
     if (a.fecha > TAZ_FIN) return Object.assign({ fase: 'despues' }, a);
@@ -3774,7 +3794,7 @@
   };
   const tazVistoKey = f => 'taz-visto-' + f;
   const tazVisto = f => { try { return localStorage.getItem(tazVistoKey(f)) === '1'; } catch (e) { return false; } };
-  const tazMarcarVisto = f => { try { localStorage.setItem(tazVistoKey(f), '1'); } catch (e) { /* sin almacenamiento */ } };
+  const tazMarcarVisto = f => { if (f.startsWith('demo')) return; try { localStorage.setItem(tazVistoKey(f), '1'); } catch (e) { /* sin almacenamiento */ } };
 
   const TAZ_SEG = 360 / TAZ_CASILLAS.length;
   let tazClave = '';
@@ -3929,7 +3949,7 @@
     const visto = tazVisto(st.fecha);
     const plan = st.plan;
     const final = plan.segunda != null ? plan.segunda : plan.casilla;
-    if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · ¡Ha llegado la hora Taz!';
+    if (sub) sub.textContent = (st.demo ? 'Modo prueba' : cap(tazFechaLarga(st.fecha))) + ' · ¡Ha llegado la hora Taz!';
     root.innerHTML = `
       <div class="taz__ruleta-card">
         ${tazRuedaHTML()}
