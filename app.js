@@ -3647,11 +3647,35 @@
     { id: 'toni',    nombre: 'Toni' }
   ];
   const TAZ_COLORES = ['#ff3d95', '#ccf62f', '#4c7dff', '#ff9f1c', '#a56bff', '#22d3b4', '#ffd23f'];
+  // Casillas especiales de la ruleta. `veces`: cuántos días del viaje sale cada
+  // una. `siguiente`: su efecto se aplica a quien le toque al día siguiente.
+  const TAZ_ESPECIALES = [
+    { id: 'beben', icono: '🍻', corto: 'Bebe todo el grupo', titulo: '¡Bebe todo el grupo!',
+      texto: 'Hoy no se libra nadie: bebéis todos.', veces: 1 },
+    { id: 'elige', icono: '👉', corto: 'El siguiente elige', titulo: '¡El siguiente elige!',
+      texto: 'Hoy os libráis todos. Mañana, a quien le toque podrá elegir quién del grupo hace el reto.',
+      efecto: 'Tiene el comodín de ayer: elige quién del grupo hace el reto.', siguiente: true, veces: 1 },
+    { id: 'doble', icono: '×2', corto: 'Reto doble', titulo: '¡Reto doble!',
+      texto: 'Hoy os libráis todos. Mañana, a quien le toque le caen dos castigos.',
+      efecto: 'Reto doble de ayer: hoy le caen dos castigos.', siguiente: true, veces: 1 }
+  ];
+  const TAZ_COLOR_ESPECIAL = '#2b2f63';
+  // Casillas de la rueda en orden: las caras con las especiales repartidas entre ellas.
+  const TAZ_CASILLAS = (() => {
+    const c = [];
+    let k = 0;
+    TAZ_GENTE.forEach((_, i) => {
+      c.push({ persona: i });
+      while (k < TAZ_ESPECIALES.length && i + 1 >= Math.round((k + 1) * TAZ_GENTE.length / TAZ_ESPECIALES.length)) c.push({ esp: k++ });
+    });
+    return c;
+  })();
   const TAZ_INICIO = '2026-11-24';
   const TAZ_FIN = '2026-12-09';
   const TAZ_VENTANA = [12, 24];          // se desbloquea entre las 12:00 y medianoche
   const TAZ_UTC_OFFSET = 7 * 3600e3;     // hora de Tailandia
-  // Castigo de cada día ('AAAA-MM-DD' → texto). De momento, vacío.
+  // Castigo de cada día ('AAAA-MM-DD' → texto, o lista de dos textos los días
+  // de reto doble). De momento, vacío.
   const TAZ_CASTIGOS = {};
   const tazFoto = p => `icons/caras/${p.id}.webp`;
 
@@ -3670,31 +3694,65 @@
     return h >>> 0;
   }
 
-  // Plan del viaje: tandas barajadas de los 7 (nadie repite hasta que han
-  // salido todos, y nunca dos días seguidos) y un minuto de desbloqueo al azar.
+  // Plan del viaje (una casilla y un minuto de desbloqueo por día):
+  // - cada especial sale `veces` días al azar, nunca dos especiales seguidas
+  //   y las de «al día siguiente» nunca el último día;
+  // - el resto de días, tandas barajadas de los 7 (nadie repite hasta que han
+  //   salido todos, y nunca dos turnos seguidos).
   const TAZ_PLAN = (() => {
     const rnd = mulberry32(hashStr('La hora Taz · Tailandia 2026'));
+    const barajar = arr => {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rnd() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    };
     const dias = [];
     for (let t = Date.parse(TAZ_INICIO + 'T00:00Z'); t <= Date.parse(TAZ_FIN + 'T00:00Z'); t += 864e5) {
       dias.push(new Date(t).toISOString().slice(0, 10));
     }
+    const n = dias.length;
+
+    const esp = new Array(n).fill(null);
+    const pendientes = [];
+    TAZ_ESPECIALES.forEach((e, k) => { for (let v = 0; v < (e.veces || 0); v++) pendientes.push(k); });
+    pendientes.sort((a, b) => (TAZ_ESPECIALES[b].siguiente ? 1 : 0) - (TAZ_ESPECIALES[a].siguiente ? 1 : 0));
+    const huecos = barajar(dias.map((_, i) => i));
+    pendientes.forEach(k => {
+      const i = huecos.find(h => esp[h] === null && esp[h - 1] == null && esp[h + 1] == null &&
+        !(TAZ_ESPECIALES[k].siguiente && h === n - 1));
+      if (i !== undefined) esp[i] = k;
+    });
+
+    const nTurnos = esp.filter(x => x === null).length;
     const orden = [];
-    while (orden.length < dias.length) {
-      const p = TAZ_GENTE.map((_, i) => i);
-      for (let i = p.length - 1; i > 0; i--) {
-        const j = Math.floor(rnd() * (i + 1));
-        [p[i], p[j]] = [p[j], p[i]];
-      }
+    while (orden.length < nTurnos) {
+      const p = barajar(TAZ_GENTE.map((_, i) => i));
       if (orden.length && p[0] === orden[orden.length - 1]) [p[0], p[1]] = [p[1], p[0]];
       orden.push(...p);
     }
+
     const plan = {};
     const [h0, h1] = TAZ_VENTANA;
+    let o = 0;
     dias.forEach((d, i) => {
-      plan[d] = { persona: orden[i], min: h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60) };
+      const persona = esp[i] === null ? orden[o++] : null;
+      const casilla = esp[i] !== null
+        ? TAZ_CASILLAS.findIndex(c => c.esp === esp[i])
+        : TAZ_CASILLAS.findIndex(c => c.persona === persona);
+      plan[d] = { casilla, min: h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60) };
     });
     return plan;
   })();
+
+  // Especial de ayer que afecta a hoy (El siguiente elige / Reto doble), o null.
+  function tazEfecto(fecha) {
+    const ayer = new Date(Date.parse(fecha + 'T00:00Z') - 864e5).toISOString().slice(0, 10);
+    const p = TAZ_PLAN[ayer];
+    const c = p && TAZ_CASILLAS[p.casilla];
+    return c && c.esp != null && TAZ_ESPECIALES[c.esp].siguiente ? TAZ_ESPECIALES[c.esp] : null;
+  }
 
   function tazAhora() {
     let ms = Date.now() + TAZ_UTC_OFFSET;
@@ -3724,23 +3782,68 @@
   const tazVisto = f => { try { return localStorage.getItem(tazVistoKey(f)) === '1'; } catch (e) { return false; } };
   const tazMarcarVisto = f => { try { localStorage.setItem(tazVistoKey(f), '1'); } catch (e) { /* sin almacenamiento */ } };
 
-  const TAZ_SEG = 360 / TAZ_GENTE.length;
+  const TAZ_SEG = 360 / TAZ_CASILLAS.length;
   let tazClave = '';
   let tazGiro = 0;        // rotación acumulada de la rueda (grados)
   let tazGirando = false;
 
   function tazRuedaHTML() {
-    const stops = TAZ_COLORES.map((c, i) => `${c} ${(i * TAZ_SEG).toFixed(3)}deg ${((i + 1) * TAZ_SEG).toFixed(3)}deg`).join(', ');
-    const caras = TAZ_GENTE.map((p, i) => `
-      <span class="ruleta__cara" style="--a:${(i * TAZ_SEG + TAZ_SEG / 2).toFixed(3)}deg">
-        <img src="${tazFoto(p)}" alt="" width="96" height="96" decoding="async">
-      </span>`).join('');
+    const stops = TAZ_CASILLAS.map((c, i) => {
+      const color = c.esp != null ? TAZ_COLOR_ESPECIAL : TAZ_COLORES[c.persona % TAZ_COLORES.length];
+      return `${color} ${(i * TAZ_SEG).toFixed(3)}deg ${((i + 1) * TAZ_SEG).toFixed(3)}deg`;
+    }).join(', ');
+    const casillas = TAZ_CASILLAS.map((c, i) => {
+      const a = (i * TAZ_SEG + TAZ_SEG / 2).toFixed(3);
+      if (c.esp != null) {
+        const e = TAZ_ESPECIALES[c.esp];
+        return `<span class="ruleta__esp ruleta__esp--${e.id}" style="--a:${a}deg" title="${esc(e.corto)}">${esc(e.icono)}</span>`;
+      }
+      return `<span class="ruleta__cara" style="--a:${a}deg"><img src="${tazFoto(TAZ_GENTE[c.persona])}" alt="" width="96" height="96" decoding="async"></span>`;
+    }).join('');
     return `
-      <div class="ruleta">
+      <div class="ruleta" style="--n:${TAZ_CASILLAS.length}">
         <svg class="ruleta__puntero" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 46 3 10a17 17 0 1 1 34 0z"/><circle cx="20" cy="17" r="6"/></svg>
-        <div class="ruleta__rueda" style="background: conic-gradient(${stops})">${caras}</div>
+        <div class="ruleta__rueda" style="background: conic-gradient(${stops})">${casillas}</div>
         <span class="ruleta__eje" aria-hidden="true"><img src="icons/taz.png?v=2" alt="" width="64" height="64"></span>
       </div>`;
+  }
+
+  // Tarjeta del resultado: persona (con el efecto de ayer, si lo hay) o casilla especial.
+  function tazResultadoHTML(fecha, casilla) {
+    const c = TAZ_CASILLAS[casilla];
+    const castigos = [].concat(TAZ_CASTIGOS[fecha] || []);
+    const cajaCastigo = (label, txt) => `
+        <div class="taz-castigo${txt ? '' : ' is-empty'}">
+          <span class="taz-castigo__label">${esc(label)}</span>
+          <p>${txt ? esc(txt) : 'Por anunciar…'}</p>
+        </div>`;
+
+    if (c.esp != null) {
+      const e = TAZ_ESPECIALES[c.esp];
+      return `
+        <span class="taz-res__esp taz-res__esp--${e.id}" aria-hidden="true">${esc(e.icono)}</span>
+        <p class="taz-res__kicker">Casilla especial</p>
+        <p class="taz-res__nombre">${esc(e.titulo)}</p>
+        <p class="taz-res__texto">${esc(e.texto)}</p>
+        ${e.id === 'beben' ? tazGenteHTML(true) : ''}`;
+    }
+
+    const persona = TAZ_GENTE[c.persona];
+    const efecto = tazEfecto(fecha);
+    let cajas;
+    if (efecto && efecto.id === 'doble') {
+      cajas = cajaCastigo('Castigo 1', castigos[0]) + cajaCastigo('Castigo 2', castigos[1]);
+    } else if (efecto && efecto.id === 'elige') {
+      cajas = cajaCastigo(`Reto · lo hace quien elija ${persona.nombre}`, castigos[0]);
+    } else {
+      cajas = cajaCastigo('Castigo', castigos[0]);
+    }
+    return `
+        <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">
+        <p class="taz-res__kicker">Hoy le toca a</p>
+        <p class="taz-res__nombre">${esc(persona.nombre)}</p>
+        ${efecto ? `<p class="taz-efecto"><span class="taz-efecto__ico">${esc(efecto.icono)}</span>${esc(efecto.efecto)}</p>` : ''}
+        ${cajas}`;
   }
 
   // Torbellino de Taz sobre la ruleta: un embudo de aros girando con Taz
@@ -3767,8 +3870,8 @@
     });
   }
 
-  function tazGenteHTML() {
-    return `<div class="taz__gente" aria-label="En el bombo: ${TAZ_GENTE.map(p => p.nombre).join(', ')}">
+  function tazGenteHTML(color) {
+    return `<div class="taz__gente${color ? ' taz__gente--color' : ''}" aria-label="En el bombo: ${TAZ_GENTE.map(p => p.nombre).join(', ')}">
       ${TAZ_GENTE.map(p => `<img src="${tazFoto(p)}" alt="" width="44" height="44" decoding="async">`).join('')}
     </div>`;
   }
@@ -3814,8 +3917,6 @@
     }
 
     // Abierta: ruleta del día
-    const persona = TAZ_GENTE[st.plan.persona];
-    const castigo = TAZ_CASTIGOS[st.fecha];
     const visto = tazVisto(st.fecha);
     if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · ¡Ha llegado la hora Taz!';
     root.innerHTML = `
@@ -3823,21 +3924,14 @@
         ${tazRuedaHTML()}
         <button class="btn btn--accent btn--block taz__girar" type="button">${visto ? 'Ver otra vez el giro' : '¡Girar la ruleta!'}</button>
       </div>
-      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>
-        <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">
-        <p class="taz-res__kicker">Hoy le toca a</p>
-        <p class="taz-res__nombre">${esc(persona.nombre)}</p>
-        <div class="taz-castigo${castigo ? '' : ' is-empty'}">
-          <span class="taz-castigo__label">Castigo</span>
-          <p>${castigo ? esc(castigo) : 'Por anunciar…'}</p>
-        </div>
+      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>${tazResultadoHTML(st.fecha, st.plan.casilla)}
       </div>`;
 
     const rueda = root.querySelector('.ruleta__rueda');
     const puntero = root.querySelector('.ruleta__puntero');
     const res = root.querySelector('.taz-res');
     const btn = root.querySelector('.taz__girar');
-    const centro = st.plan.persona * TAZ_SEG + TAZ_SEG / 2;
+    const centro = st.plan.casilla * TAZ_SEG + TAZ_SEG / 2;
 
     tazGiro = visto ? 360 - centro : 0;
     tazGirando = false;
