@@ -25,7 +25,11 @@ en línea recta desde el alojamiento, el precio medio, un mapa por ciudad
 **Muay Thai** (también en Qué ver) reúne los estadios
 cerca de cada alojamiento con los días de la semana en los que suelen
 tener cartel, para saber qué noche de la estancia encaja. **La hora Taz**
-es una pestaña bloqueada por ahora, con el Demonio de Tasmania girando. Datos
+es una ruleta diaria con las caras de los 7: cada día del viaje se
+desbloquea a una hora sorpresa (entre las 12:00 y las 23:00, hora de
+Tailandia) y la ruleta elige a uno. La persona y la hora salen de la fecha
+y una semilla fija, así que todos los móviles ven lo mismo sin servidor, y
+solo se puede ver la del día en curso. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del
 pasaporte, vacunas, facturar los vuelos con su fecha límite calculada en
 cuanto los añadas...) y una **lista de equipaje** curada para el clima

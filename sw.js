@@ -5,7 +5,7 @@
  */
 'use strict';
 
-const SHELL_CACHE = 'shell-v35';
+const SHELL_CACHE = 'shell-v36';
 // Solo se tocan las cachés de este proyecto: en GitHub Pages el origen es
 // compartido con otros proyectos del usuario y caches.keys() no está acotado
 // por scope.
@@ -14,8 +14,8 @@ const OWNED_CACHE = /^shell-v\d+$/;
 const SHELL_ASSETS = [
   './',                       // redundante a propósito (red de seguridad);
   './index.html',             // la navegación resuelve contra './index.html'.
-  './style.css?v=16',
-  './app.js?v=28',
+  './style.css?v=17',
+  './app.js?v=29',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -23,6 +23,13 @@ const SHELL_ASSETS = [
   './icons/apple-touch-icon.png',
   './icons/icon.svg',
   './icons/taz.png?v=2',
+  './icons/caras/alex.webp',
+  './icons/caras/beltran.webp',
+  './icons/caras/jose.webp',
+  './icons/caras/mascu.webp',
+  './icons/caras/ruben.webp',
+  './icons/caras/tibu.webp',
+  './icons/caras/toni.webp',
   './vendor/leaflet/leaflet.js',
   './vendor/leaflet/leaflet.css',
   './vendor/leaflet/images/marker-icon.png',

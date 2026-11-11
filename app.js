@@ -3631,6 +3631,257 @@
   }
 
   /* ==========================================================
+     La hora Taz — ruleta diaria
+     Todo sale de la fecha y de una semilla fija: la hora de desbloqueo y la
+     persona elegida son las mismas en todos los móviles, sin servidor. Las
+     horas van en hora de Tailandia (UTC+7), sea cual sea la zona del móvil.
+     Solo se ve la ruleta del día en curso.
+     ========================================================== */
+  const TAZ_GENTE = [
+    { id: 'alex',    nombre: 'Alex' },
+    { id: 'beltran', nombre: 'Beltrán' },
+    { id: 'jose',    nombre: 'Jose' },
+    { id: 'mascu',   nombre: 'Mascu' },
+    { id: 'ruben',   nombre: 'Rubén' },
+    { id: 'tibu',    nombre: 'Tibu' },
+    { id: 'toni',    nombre: 'Toni' }
+  ];
+  const TAZ_COLORES = ['#ff3d95', '#ccf62f', '#4c7dff', '#ff9f1c', '#a56bff', '#22d3b4', '#ffd23f'];
+  const TAZ_INICIO = '2026-11-24';
+  const TAZ_FIN = '2026-12-09';
+  const TAZ_VENTANA = [12, 23];          // se desbloquea entre las 12:00 y las 23:00
+  const TAZ_UTC_OFFSET = 7 * 3600e3;     // hora de Tailandia
+  // Castigo de cada día ('AAAA-MM-DD' → texto). De momento, vacío.
+  const TAZ_CASTIGOS = {};
+  const tazFoto = p => `icons/caras/${p.id}.webp`;
+
+  // PRNG con semilla (mulberry32) + hash de texto: mismo resultado en todos lados.
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function hashStr(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+    return h >>> 0;
+  }
+
+  // Plan del viaje: tandas barajadas de los 7 (nadie repite hasta que han
+  // salido todos, y nunca dos días seguidos) y un minuto de desbloqueo al azar.
+  const TAZ_PLAN = (() => {
+    const rnd = mulberry32(hashStr('La hora Taz · Tailandia 2026'));
+    const dias = [];
+    for (let t = Date.parse(TAZ_INICIO + 'T00:00Z'); t <= Date.parse(TAZ_FIN + 'T00:00Z'); t += 864e5) {
+      dias.push(new Date(t).toISOString().slice(0, 10));
+    }
+    const orden = [];
+    while (orden.length < dias.length) {
+      const p = TAZ_GENTE.map((_, i) => i);
+      for (let i = p.length - 1; i > 0; i--) {
+        const j = Math.floor(rnd() * (i + 1));
+        [p[i], p[j]] = [p[j], p[i]];
+      }
+      if (orden.length && p[0] === orden[orden.length - 1]) [p[0], p[1]] = [p[1], p[0]];
+      orden.push(...p);
+    }
+    const plan = {};
+    const [h0, h1] = TAZ_VENTANA;
+    dias.forEach((d, i) => {
+      plan[d] = { persona: orden[i], min: h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60) };
+    });
+    return plan;
+  })();
+
+  function tazAhora() {
+    let ms = Date.now() + TAZ_UTC_OFFSET;
+    // Solo en local: ?taz=2026-11-26T20:30 simula esa hora de Tailandia (pruebas).
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      const q = new URLSearchParams(location.search).get('taz');
+      if (q && /^\d{4}-\d\d-\d\dT\d\d:\d\d$/.test(q)) ms = Date.parse(q + 'Z');
+    }
+    const d = new Date(ms);
+    return { fecha: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes() };
+  }
+  function tazEstado() {
+    const a = tazAhora();
+    if (a.fecha < TAZ_INICIO) return Object.assign({ fase: 'antes' }, a);
+    if (a.fecha > TAZ_FIN) return Object.assign({ fase: 'despues' }, a);
+    const plan = TAZ_PLAN[a.fecha];
+    return Object.assign({ fase: a.min >= plan.min ? 'abierta' : 'cerrada', plan }, a);
+  }
+
+  const TAZ_DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  const TAZ_MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const tazFechaLarga = f => {
+    const d = new Date(f + 'T00:00Z');
+    return `${TAZ_DIAS[d.getUTCDay()]} ${d.getUTCDate()} de ${TAZ_MESES[d.getUTCMonth()]}`;
+  };
+  const tazVistoKey = f => 'taz-visto-' + f;
+  const tazVisto = f => { try { return localStorage.getItem(tazVistoKey(f)) === '1'; } catch (e) { return false; } };
+  const tazMarcarVisto = f => { try { localStorage.setItem(tazVistoKey(f), '1'); } catch (e) { /* sin almacenamiento */ } };
+
+  const TAZ_SEG = 360 / TAZ_GENTE.length;
+  let tazClave = '';
+  let tazGiro = 0;        // rotación acumulada de la rueda (grados)
+  let tazGirando = false;
+
+  function tazRuedaHTML() {
+    const stops = TAZ_COLORES.map((c, i) => `${c} ${(i * TAZ_SEG).toFixed(3)}deg ${((i + 1) * TAZ_SEG).toFixed(3)}deg`).join(', ');
+    const caras = TAZ_GENTE.map((p, i) => `
+      <span class="ruleta__cara" style="--a:${(i * TAZ_SEG + TAZ_SEG / 2).toFixed(3)}deg">
+        <img src="${tazFoto(p)}" alt="" width="96" height="96" decoding="async">
+      </span>`).join('');
+    return `
+      <div class="ruleta">
+        <svg class="ruleta__puntero" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 46 3 10a17 17 0 1 1 34 0z"/><circle cx="20" cy="17" r="6"/></svg>
+        <div class="ruleta__rueda" style="background: conic-gradient(${stops})">${caras}</div>
+        <span class="ruleta__eje" aria-hidden="true"><img src="icons/taz.png?v=2" alt="" width="64" height="64"></span>
+      </div>`;
+  }
+
+  function tazGenteHTML() {
+    return `<div class="taz__gente" aria-label="En el bombo: ${TAZ_GENTE.map(p => p.nombre).join(', ')}">
+      ${TAZ_GENTE.map(p => `<img src="${tazFoto(p)}" alt="" width="44" height="44" decoding="async">`).join('')}
+    </div>`;
+  }
+
+  function renderTaz(forzar) {
+    const root = $('#taz-body');
+    if (!root) return;
+    const st = tazEstado();
+    const clave = st.fase + '|' + st.fecha;
+    if (!forzar && clave === tazClave) return;
+    if (tazGirando && !forzar) return;   // no cortar un giro en marcha
+    tazClave = clave;
+    const sub = $('#taz-sub');
+
+    if (st.fase !== 'abierta') {
+      let titulo, texto;
+      if (st.fase === 'antes') {
+        titulo = 'Aún no ha empezado';
+        texto = `La primera hora Taz llega el ${tazFechaLarga(TAZ_INICIO)}. Cada día del viaje, a una hora sorpresa, la ruleta elegirá a uno.`;
+        if (sub) sub.textContent = 'Cada día del viaje, a una hora sorpresa, la ruleta elige a uno.';
+      } else if (st.fase === 'despues') {
+        titulo = 'Se acabó la hora Taz';
+        texto = 'El viaje ha terminado. Taz por fin descansa.';
+        if (sub) sub.textContent = 'Hasta el próximo viaje.';
+      } else {
+        titulo = 'Hoy hay hora Taz';
+        texto = st.min < TAZ_VENTANA[0] * 60
+          ? `Se desbloqueará a una hora sorpresa entre las ${pad2(TAZ_VENTANA[0])}:00 y las ${pad2(TAZ_VENTANA[1])}:00 (hora de Tailandia).`
+          : `Se desbloqueará a una hora sorpresa antes de las ${pad2(TAZ_VENTANA[1])}:00 (hora de Tailandia). Estad atentos.`;
+        if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · Taz está girando…';
+      }
+      root.innerHTML = `
+        <div class="taz__stage">
+          <img class="taz__gif" src="https://media.giphy.com/media/26CaMOXjjDM3Xl2s8/giphy.gif" alt="El Demonio de Tasmania girando como un tornado" width="480" height="360" loading="lazy" decoding="async">
+        </div>
+        <div class="taz__lock">
+          <span class="taz__padlock" aria-hidden="true">${svgIco('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/>', 30, 2.4)}</span>
+          <p class="taz__lock-title">${esc(titulo)}</p>
+          <p class="taz__lock-sub">${esc(texto)}</p>
+          ${tazGenteHTML()}
+        </div>`;
+      return;
+    }
+
+    // Abierta: ruleta del día
+    const persona = TAZ_GENTE[st.plan.persona];
+    const castigo = TAZ_CASTIGOS[st.fecha];
+    const visto = tazVisto(st.fecha);
+    if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · ¡Ha llegado la hora Taz!';
+    root.innerHTML = `
+      <div class="taz__ruleta-card">
+        ${tazRuedaHTML()}
+        <button class="btn btn--accent btn--block taz__girar" type="button">${visto ? 'Ver otra vez el giro' : '¡Girar la ruleta!'}</button>
+      </div>
+      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>
+        <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">
+        <p class="taz-res__kicker">Hoy le toca a</p>
+        <p class="taz-res__nombre">${esc(persona.nombre)}</p>
+        <div class="taz-castigo${castigo ? '' : ' is-empty'}">
+          <span class="taz-castigo__label">Castigo</span>
+          <p>${castigo ? esc(castigo) : 'Por anunciar…'}</p>
+        </div>
+      </div>`;
+
+    const rueda = root.querySelector('.ruleta__rueda');
+    const puntero = root.querySelector('.ruleta__puntero');
+    const res = root.querySelector('.taz-res');
+    const btn = root.querySelector('.taz__girar');
+    const centro = st.plan.persona * TAZ_SEG + TAZ_SEG / 2;
+
+    tazGiro = visto ? 360 - centro : 0;
+    tazGirando = false;
+    rueda.style.transform = `rotate(${tazGiro}deg)`;
+
+    btn.addEventListener('click', () => {
+      if (tazGirando) return;
+      tazGirando = true;
+      btn.disabled = true;
+      res.hidden = true;
+      const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const vueltas = reducido ? 2 : 8;
+      const dur = reducido ? 1600 : 6500;
+      // El puntero está arriba: la rueda gira hasta dejar el centro del gajo bajo él,
+      // con un pequeño desvío para que no caiga siempre clavado en el medio.
+      const desvio = (Math.random() - 0.5) * TAZ_SEG * 0.6;
+      const base = Math.ceil(tazGiro / 360) * 360 + vueltas * 360;
+      tazGiro = base + (360 - centro) + desvio;
+      rueda.style.transition = `transform ${dur}ms cubic-bezier(0.15, 0.85, 0.12, 1)`;
+      rueda.style.transform = `rotate(${tazGiro}deg)`;
+
+      // «Tic» del puntero al pasar cada gajo.
+      let ultimo = -1;
+      const tic = () => {
+        if (!tazGirando) return;
+        const m = new DOMMatrix(getComputedStyle(rueda).transform);
+        const ang = (Math.atan2(m.b, m.a) * 180 / Math.PI + 360) % 360;
+        const gajo = Math.floor(((360 - ang) % 360) / TAZ_SEG);
+        if (gajo !== ultimo) {
+          ultimo = gajo;
+          puntero.classList.remove('is-tic');
+          void puntero.getBoundingClientRect();
+          puntero.classList.add('is-tic');
+        }
+        requestAnimationFrame(tic);
+      };
+      requestAnimationFrame(tic);
+
+      let hecho = false;
+      const fin = () => {
+        if (hecho) return;
+        hecho = true;
+        tazGirando = false;
+        rueda.style.transition = 'none';
+        tazMarcarVisto(st.fecha);
+        res.hidden = false;
+        res.classList.remove('is-in');
+        void res.offsetWidth;
+        res.classList.add('is-in');
+        btn.disabled = false;
+        btn.textContent = 'Ver otra vez el giro';
+        if (navigator.vibrate) { try { navigator.vibrate([40, 60, 120]); } catch (e) { /* sin vibración */ } }
+        res.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'center' });
+        // Si mientras giraba cambió el día o la fase, se pone al día ahora.
+        if (tazEstado().fase + '|' + tazEstado().fecha !== tazClave) renderTaz(true);
+      };
+      rueda.addEventListener('transitionend', fin, { once: true });
+      setTimeout(fin, dur + 400);   // red de seguridad si no llega transitionend
+    });
+  }
+
+  // Comprueba cada 20 s (y al volver a la app) si toca desbloquear o cambiar de día.
+  setInterval(() => renderTaz(), 20000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') renderTaz();
+  });
+
+  /* ==========================================================
      Navegación por pestañas
      ========================================================== */
   const SCREENS = ['datos', 'itinerario', 'comer', 'quever', 'taz'];
@@ -3860,6 +4111,7 @@
     renderComer();
     renderTransporte();
     renderMuayThai();
+    renderTaz();
   }
 
   /* ==========================================================

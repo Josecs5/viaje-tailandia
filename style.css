@@ -1228,7 +1228,7 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 .qv[open] .qv__body { animation: enter var(--dur-3) var(--ease-out); }
 
 /* ============================================================
-   LA HORA TAZ · sección bloqueada
+   LA HORA TAZ · ruleta diaria
    ============================================================ */
 /* La cara de Taz es más grande que los demás iconos y asoma por encima de
    la barra como una chapa, para que se distinga bien. */
@@ -1285,26 +1285,133 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 }
 .taz__lock-title { margin-top: var(--space-12); font-family: var(--font-display); font-size: var(--step-3); font-weight: 800; font-stretch: 84%; }
 .taz__lock-sub { margin-top: var(--space-6); color: var(--ink-2); }
-.taz__teaser { display: grid; gap: var(--space-12); margin-top: var(--space-20); }
-.taz__ghost {
-  position: relative;
-  height: 74px;
-  background:
-    linear-gradient(var(--line), var(--line)) 16px 18px / 55% 14px no-repeat,
-    linear-gradient(var(--line), var(--line)) 16px 44px / 35% 10px no-repeat,
-    var(--card);
-  border: 2px dashed var(--ink-2);
-  border-radius: var(--radius-m);
-  opacity: 0.6;
-  filter: blur(1.5px);
+.taz__gente { display: flex; justify-content: center; margin-top: var(--space-16); padding-left: 10px; }
+.taz__gente img {
+  width: 44px;
+  height: 44px;
+  margin-left: -10px;
+  border: 2px solid var(--edge);
+  border-radius: 50%;
+  background: var(--card);
+  filter: grayscale(1) contrast(1.05);
+  opacity: 0.75;
 }
-.taz__ghost::after {
-  content: "🔒";
+
+/* Ruleta del día */
+.taz__ruleta-card {
+  padding: var(--space-24) var(--space-16) var(--space-16);
+  background: var(--night);
+  border: var(--stroke);
+  border-radius: var(--radius-l);
+  box-shadow: var(--pop-l);
+}
+.ruleta {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 1;
+  margin: var(--space-8) auto var(--space-20);
+}
+.ruleta__rueda {
   position: absolute;
+  inset: 0;
+  border: 3px solid #161a3c;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px var(--lime), 0 0 0 8px #161a3c;
+  will-change: transform;
+}
+/* Rayas entre gajos */
+.ruleta__rueda::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -0.5deg, #161a3c 0 1deg, transparent 1deg calc(360deg / 7));
+  pointer-events: none;
+}
+.ruleta__cara {
+  position: absolute;
+  left: 50%;
   top: 50%;
-  right: 18px;
-  transform: translateY(-50%);
-  font-size: 22px;
+  width: 24%;
+  aspect-ratio: 1;
+  margin: -12% 0 0 -12%;
+  transform: rotate(var(--a)) translateY(-138%);
+  border: 2.5px solid #161a3c;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 2px 2px 0 #161a3c;
+}
+.ruleta__cara img { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.ruleta__eje {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  background: var(--lime);
+  border: 3px solid #161a3c;
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 #161a3c;
+}
+.ruleta__eje img { width: 92%; height: 92%; }
+.ruleta__puntero {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: -18px;
+  width: 36px;
+  height: 44px;
+  margin-left: -18px;
+  transform-origin: 50% 30%;
+  filter: drop-shadow(2px 2px 0 #161a3c);
+}
+.ruleta__puntero path { fill: var(--pink); stroke: #161a3c; stroke-width: 3; stroke-linejoin: round; }
+.ruleta__puntero circle { fill: #fff; stroke: #161a3c; stroke-width: 2.5; }
+.ruleta__puntero.is-tic { animation: tazTic 140ms ease-out; }
+@keyframes tazTic { 40% { transform: rotate(-16deg); } }
+.taz__girar { font-size: var(--step-2); }
+
+/* Resultado */
+.taz-res {
+  margin-top: var(--space-20);
+  padding: var(--space-24) var(--space-16) var(--space-20);
+  text-align: center;
+  background: var(--card);
+  border: var(--stroke);
+  border-radius: var(--radius-l);
+  box-shadow: var(--pop);
+}
+.taz-res.is-in { animation: tazPop 520ms var(--ease-pop); }
+@keyframes tazPop { from { opacity: 0; transform: scale(0.7) rotate(-4deg); } }
+.taz-res__cara {
+  width: 140px;
+  height: 140px;
+  border: 3px solid var(--edge);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 0 0 6px var(--lime), 0 0 0 9px var(--edge);
+  margin: var(--space-8) auto var(--space-16);
+}
+.taz-res__kicker { color: var(--ink-2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--step--1); }
+.taz-res__nombre { font-family: var(--font-display); font-size: var(--step-4); font-weight: 800; font-stretch: 84%; line-height: 1.05; }
+.taz-castigo {
+  margin-top: var(--space-16);
+  padding: var(--space-12) var(--space-16);
+  text-align: left;
+  background: var(--orange-soft);
+  border: var(--stroke);
+  border-radius: var(--radius-m);
+  color: var(--text);
+}
+.taz-castigo.is-empty { background: transparent; border-style: dashed; color: var(--ink-2); }
+.taz-castigo__label { display: block; font-family: var(--font-display); font-weight: 800; font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.08em; }
+.taz-castigo p { margin-top: var(--space-4); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ruleta__puntero.is-tic, .taz-res.is-in { animation: none; }
 }
 
 .sub-label { display: flex; align-items: center; gap: var(--space-10); margin: var(--space-24) 0 var(--space-12); font-family: var(--font-display); font-size: var(--step-2); font-weight: 800; font-stretch: 88%; }
