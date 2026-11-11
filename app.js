@@ -3671,11 +3671,16 @@
     });
     return c;
   })();
-  const TAZ_INICIO = '2026-11-24';
-  const TAZ_FIN = '2026-12-09';
+  // Del aterrizaje en Bangkok (25 nov, 19:25) a la última noche antes del vuelo
+  // de vuelta (sale de Phuket el 9 dic a las 8:20).
+  const TAZ_INICIO = '2026-11-25';
+  const TAZ_FIN = '2026-12-08';
   const TAZ_VENTANA = [12, 24];          // día con un solo turno: entre las 12:00 y medianoche
   const TAZ_VENTANA_DIA = [12, 19];      // días con turno de noche: el de día…
   const TAZ_VENTANA_NOCHE = [21, 24];    // …y el de noche (discoteca)
+  const TAZ_VENTANA_LLEGADA = [21, 24];  // el primer día, ya en Bangkok tras aterrizar
+  const tazVentana = (fecha, doble) =>
+    fecha === TAZ_INICIO ? TAZ_VENTANA_LLEGADA : doble ? TAZ_VENTANA_DIA : TAZ_VENTANA;
   const tazHora = h => (h === 24 ? 'las 24:00' : `las ${pad2(h)}:00`);
   const TAZ_UTC_OFFSET = 7 * 3600e3;     // hora de Tailandia
   // Retos de «Taz dice que tienes que…». `donde` limita los días en que puede
@@ -3765,7 +3770,7 @@
 
     const nNoches = TAZ_RETOS.filter(r => r.disco).length;
     const noche = new Array(n).fill(false);
-    barajar(dias.map((_, i) => i).filter(i => tazEnTailandia(dias[i])))
+    barajar(dias.map((_, i) => i).filter(i => tazEnTailandia(dias[i]) && dias[i] !== TAZ_INICIO))
       .slice(0, nNoches).forEach(i => { noche[i] = true; });
 
     const conPersona = esp.map(k => k === null || !!TAZ_ESPECIALES[k].retira);
@@ -3787,7 +3792,7 @@
       const dia = esp[i] === null
         ? { clave: 'dia', casilla: cPersona, segunda: null }
         : { clave: 'dia', casilla: casillaDe(c => c.esp === esp[i]), segunda: cPersona };
-      dia.min = minuto(noche[i] ? TAZ_VENTANA_DIA : TAZ_VENTANA);
+      dia.min = minuto(tazVentana(d, noche[i]));
       const turnos = [dia];
       if (noche[i]) {
         const pn = orden[o++];
@@ -4126,15 +4131,15 @@
       let titulo, texto;
       if (st.fase === 'antes') {
         titulo = 'Aún no ha empezado';
-        texto = `La primera hora Taz llega el ${tazFechaLarga(TAZ_INICIO)}. Cada día del viaje, a una hora sorpresa, la ruleta elegirá a uno.`;
+        texto = `La primera hora Taz llega el ${tazFechaLarga(TAZ_INICIO)}, ya en Bangkok. Cada día del viaje, a una hora sorpresa, la ruleta elegirá a uno.`;
         if (sub) sub.textContent = 'Cada día del viaje, a una hora sorpresa, la ruleta elige a uno.';
       } else if (st.fase === 'despues') {
         titulo = 'Se acabó la hora Taz';
-        texto = 'El viaje ha terminado. Taz por fin descansa.';
+        texto = 'La última fue anoche. Taz por fin descansa. ¡Buen vuelo de vuelta!';
         if (sub) sub.textContent = 'Hasta el próximo viaje.';
       } else {
         const doble = st.turnos.length > 1;
-        const [h0, h1] = doble ? TAZ_VENTANA_DIA : TAZ_VENTANA;
+        const [h0, h1] = tazVentana(st.fecha, doble);
         titulo = doble ? 'Hoy hay doble hora Taz' : 'Hoy hay hora Taz';
         texto = st.min < h0 * 60
           ? `Se desbloqueará a una hora sorpresa entre ${tazHora(h0)} y ${tazHora(h1)} (hora de Tailandia).`

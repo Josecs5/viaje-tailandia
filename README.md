@@ -25,9 +25,10 @@ en línea recta desde el alojamiento, el precio medio, un mapa por ciudad
 **Muay Thai** (también en Qué ver) reúne los estadios
 cerca de cada alojamiento con los días de la semana en los que suelen
 tener cartel, para saber qué noche de la estancia encaja. **La hora Taz**
-es una ruleta diaria con las caras de los 7: cada día del viaje se
-desbloquea a una hora sorpresa (entre las 12:00 y las 24:00, hora de
-Tailandia) y la ruleta elige a uno, o cae en una casilla especial: bebe
+es una ruleta diaria con las caras de los 7: cada día en Tailandia (del
+aterrizaje el 25 nov a la última noche, el 8 dic) se desbloquea a una hora
+sorpresa (entre las 12:00 y las 24:00, hora de Tailandia; el primer día,
+entre las 21:00 y las 24:00) y la ruleta elige a uno, o cae en una casilla especial: bebe
 todo el grupo, o se vuelve a tirar y a quien salga elige quién hace el
 castigo (el siguiente elige) o carga con dos (reto doble). Algunos días hay doble
 hora Taz: una de día (12:00–19:00) y otra de noche (21:00–24:00) con un
