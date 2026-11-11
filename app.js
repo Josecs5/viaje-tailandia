@@ -3649,7 +3649,7 @@
   const TAZ_COLORES = ['#ff3d95', '#ccf62f', '#4c7dff', '#ff9f1c', '#a56bff', '#22d3b4', '#ffd23f'];
   const TAZ_INICIO = '2026-11-24';
   const TAZ_FIN = '2026-12-09';
-  const TAZ_VENTANA = [12, 23];          // se desbloquea entre las 12:00 y las 23:00
+  const TAZ_VENTANA = [12, 24];          // se desbloquea entre las 12:00 y medianoche
   const TAZ_UTC_OFFSET = 7 * 3600e3;     // hora de Tailandia
   // Castigo de cada día ('AAAA-MM-DD' → texto). De momento, vacío.
   const TAZ_CASTIGOS = {};
@@ -3772,8 +3772,8 @@
       } else {
         titulo = 'Hoy hay hora Taz';
         texto = st.min < TAZ_VENTANA[0] * 60
-          ? `Se desbloqueará a una hora sorpresa entre las ${pad2(TAZ_VENTANA[0])}:00 y las ${pad2(TAZ_VENTANA[1])}:00 (hora de Tailandia).`
-          : `Se desbloqueará a una hora sorpresa antes de las ${pad2(TAZ_VENTANA[1])}:00 (hora de Tailandia). Estad atentos.`;
+          ? `Se desbloqueará a una hora sorpresa entre las ${pad2(TAZ_VENTANA[0])}:00 y las 24:00 (hora de Tailandia).`
+          : 'Se desbloqueará a una hora sorpresa antes de medianoche (hora de Tailandia). Estad atentos.';
         if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · Taz está girando…';
       }
       root.innerHTML = `

@@ -26,7 +26,7 @@ en línea recta desde el alojamiento, el precio medio, un mapa por ciudad
 cerca de cada alojamiento con los días de la semana en los que suelen
 tener cartel, para saber qué noche de la estancia encaja. **La hora Taz**
 es una ruleta diaria con las caras de los 7: cada día del viaje se
-desbloquea a una hora sorpresa (entre las 12:00 y las 23:00, hora de
+desbloquea a una hora sorpresa (entre las 12:00 y las 24:00, hora de
 Tailandia) y la ruleta elige a uno. La persona y la hora salen de la fecha
 y una semilla fija, así que todos los móviles ven lo mismo sin servidor, y
 solo se puede ver la del día en curso. Datos
