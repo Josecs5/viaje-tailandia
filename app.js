@@ -257,9 +257,17 @@
     '· 1 equipaje de mano de 25 × 37 × 50 cm, máx. 7 kg.\n' +
     '· 1 maleta facturada de máx. 25 kg.';
 
-  // Bangkok → Chiang Mai: el plan decía 08:10 → 09:25, pero AirAsia no
-  // vende ningún vuelo a esa hora el 29 nov; el grupo eligió el FD3416.
-  const NOTA_DMK_CNX = 'Directo. El plan decía 08:10 → 09:25; ese día AirAsia vende el FD3416 de 08:25 a 09:40. Confirmad en la reserva de AirAsia que es este vuelo.';
+  // Vuelos internos comprados. La web es pública: solo nombres de pila y sin
+  // localizadores.
+  const VIAJEROS_INTERNOS = 'Viajeros (7): Antonio, Rubén B., Jose, Alejandro, Daniel, Rubén M. y Miguel Ángel.';
+  const EQUIPAJE_SL510 = 'Por persona:\n' +
+    '· Sin artículo personal.\n' +
+    '· 1 maleta de cabina de 23 × 36 × 56 cm, máx. 7 kg.\n' +
+    '· 1 maleta facturada de máx. 20 kg.';
+  const EQUIPAJE_FD3076 = 'Por persona:\n' +
+    '· 1 artículo personal: va debajo del asiento de delante.\n' +
+    '· 1 maleta de cabina de 23 × 36 × 56 cm, máx. 5 kg.\n' +
+    '· 1 maleta facturada de máx. 20 kg.';
 
   const VUELOS_SEED = [
     {
@@ -293,23 +301,23 @@
       }]
     },
     {
-      id: 'seed-vu-dmk-cnx', tipo: 'Interno', reserva: '', antelacion: '', equipaje: 'Maleta facturada de 25 kg: 32 €.',
-      notas: NOTA_DMK_CNX,
+      id: 'seed-vu-dmk-cnx', tipo: 'Interno', reserva: '', antelacion: '', equipaje: EQUIPAJE_SL510,
+      notas: 'Thai Lion Air, clase turista. Directo.\n' + VIAJEROS_INTERNOS,
       tramos: [{
-        aerolinea: 'Thai AirAsia', numero: 'FD3416', clase: '', operadoPor: '',
+        aerolinea: 'Thai Lion Air', numero: 'SL510', clase: 'Turista', operadoPor: '',
         origen: 'DMK', origenNombre: 'Bangkok Don Mueang', origenTerminal: '',
         destino: 'CNX', destinoNombre: 'Chiang Mai', destinoTerminal: '',
-        salida: '2026-11-29T08:25', llegada: '2026-11-29T09:40', duracion: '1 h 15 min'
+        salida: '2026-11-29T11:30', llegada: '2026-11-29T12:45', duracion: '1 h 15 min'
       }]
     },
     {
-      id: 'seed-vu-cnx-kbv', tipo: 'Interno', reserva: '', antelacion: '', equipaje: 'Maleta extra: 35 €.',
-      notas: 'Directo.',
+      id: 'seed-vu-cnx-kbv', tipo: 'Interno', reserva: '', antelacion: '', equipaje: EQUIPAJE_FD3076,
+      notas: 'Thai AirAsia, clase turista. Directo.\n' + VIAJEROS_INTERNOS,
       tramos: [{
-        aerolinea: 'Thai AirAsia', numero: 'FD3072', clase: '', operadoPor: '',
+        aerolinea: 'Thai AirAsia', numero: 'FD3076', clase: 'Turista', operadoPor: '',
         origen: 'CNX', origenNombre: 'Chiang Mai', origenTerminal: '',
         destino: 'KBV', destinoNombre: 'Krabi', destinoTerminal: '',
-        salida: '2026-12-03T07:55', llegada: '2026-12-03T09:55', duracion: '2 h'
+        salida: '2026-12-03T12:55', llegada: '2026-12-03T14:55', duracion: '2 h'
       }]
     }
   ];
@@ -613,7 +621,7 @@
       zona: 'Chiang Mai', titulo: 'Vuelo a Chiang Mai y primera toma de contacto', hotel: H_CNX,
       franjas: [
         { f: 'Mañana', e: [
-          'Vuelo DMK → CNX (FD3416) de 08:25 a 09:40 (+ maleta facturada de 25 kg, 32 €). Sobre las 11:00 estaremos disponibles con el check-in hecho.',
+          'Vuelo DMK → CNX con Thai Lion Air (SL510), de 11:30 a 12:45, directo. Por persona: sin artículo personal, maleta de cabina de 23 × 36 × 56 cm (máx. 7 kg) y maleta facturada de máx. 20 kg.',
           { n: 'Wat Chiang Man (chedi de 1296)', p: 'gratis', foto: 'watChiangMan', desc: 'El templo más antiguo de Chiang Mai, fundado en 1296 por el rey Mengrai al construir la ciudad.' },
           { n: 'Wat Phra Singh (peazo buda)', p: 'gratis', foto: 'watPhraSingh', desc: 'Templo principal de Chiang Mai, con una de las imágenes de Buda más veneradas del norte.' },
           { n: 'Wat Phan Tao (madera de teca)', p: 'gratis', foto: 'watPhanTao', desc: 'Pequeño templo hecho entero de madera de teca, antiguo pabellón real.' },
@@ -697,7 +705,7 @@
     '2026-12-03': {
       zona: 'Krabi (Ao Nang)', titulo: 'Vuelo al sur y llegada a Krabi', hotel: H_KBV,
       franjas: [
-        { f: 'Mañana', e: ['Vuelo CNX → KBV de 07:55 a 09:55 (+ maleta extra, 35 €). Pendiente: buscar el transfer del aeropuerto a la casa.'] },
+        { f: 'Mañana', e: ['Vuelo CNX → KBV con Thai AirAsia (FD3076), de 12:55 a 14:55, directo. Por persona: 1 artículo personal (bajo el asiento), maleta de cabina de 23 × 36 × 56 cm (máx. 5 kg) y maleta facturada de máx. 20 kg. Pendiente: buscar el transfer del aeropuerto a la casa.'] },
         { f: 'Mediodía', e: [
           'Playa de Ao Nang y comer por la zona. O hacer alguna actividad extrema o unas clases de cocina tailandesa. Meter la ruta de las 4 islas o algo así.',
           { n: 'Playa de Ao Nang', foto: 'aoNang', desc: 'La playa principal de Ao Nang, con los acantilados de piedra caliza de la costa de Krabi al fondo.' }
@@ -926,7 +934,7 @@
   // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
   // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
   // guardado.
-  const SEED_V = 8;
+  const SEED_V = 9;
 
   function migrarSeeds(s) {
     if (s.seedV >= SEED_V) return s;
@@ -935,8 +943,9 @@
     if (s.seedV < 4) aplicarHorariosQatar(s);
     if (s.seedV < 5) aplicarAntelacionVuelta(s);
     if (s.seedV < 6) aplicarEquipajeQatar(s);
-    if (s.seedV < 7) aplicarVuelosAirAsia(s);
-    if (s.seedV < 8) aplicarFD3416(s);
+    // v7 y v8 cambiaban los vuelos internos antiguos; v9 los sustituye
+    // enteros, así que ya no hace falta pasar por ellos.
+    if (s.seedV < 9) aplicarVuelosComprados(s);
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
@@ -974,25 +983,19 @@
     }
   }
 
-  // v8: el Bangkok → Chiang Mai pasa a ser el FD3416 (08:25 → 09:40). Se
-  // cambia si su tramo sigue sin número de vuelo (como venía precargado);
-  // la nota se cambia si sigue siendo una de las precargadas.
-  function aplicarFD3416(s) {
-    const v = s.vuelos.find(x => x.id === 'seed-vu-dmk-cnx');
-    if (!v || !v.tramos || !v.tramos[0] || v.tramos[0].numero) return;
-    const n = VUELOS_SEED.find(x => x.id === 'seed-vu-dmk-cnx').tramos[0];
-    Object.assign(v.tramos[0], { numero: n.numero, salida: n.salida, llegada: n.llegada, duracion: n.duracion });
-    if (!v.notas || /^Directo\./.test(v.notas)) v.notas = NOTA_DMK_CNX;
-  }
-
-  // v7: número de vuelo del Chiang Mai → Krabi (FD3072) y aviso de que el
-  // Bangkok → Chiang Mai de las 08:10 no aparece a la venta. Solo se tocan
-  // si siguen como venían precargados.
-  function aplicarVuelosAirAsia(s) {
-    const kbv = s.vuelos.find(x => x.id === 'seed-vu-cnx-kbv');
-    if (kbv && kbv.tramos && kbv.tramos[0] && !kbv.tramos[0].numero) kbv.tramos[0].numero = 'FD3072';
-    const cnx = s.vuelos.find(x => x.id === 'seed-vu-dmk-cnx');
-    if (cnx && (cnx.notas === 'Directo.' || !cnx.notas)) cnx.notas = NOTA_DMK_CNX;
+  // v9: los vuelos internos ya están comprados (SL510 de Thai Lion Air y
+  // FD3076 de Thai AirAsia). Se sustituyen tramo, equipaje y notas aunque se
+  // hubieran editado; el localizador y la antelación que haya apuntado cada
+  // uno se conservan.
+  function aplicarVuelosComprados(s) {
+    ['seed-vu-dmk-cnx', 'seed-vu-cnx-kbv'].forEach(id => {
+      const n = VUELOS_SEED.find(v => v.id === id);
+      const v = s.vuelos.find(x => x.id === id);
+      if (!n || !v) return;
+      v.tramos = JSON.parse(JSON.stringify(n.tramos));
+      v.equipaje = n.equipaje;
+      v.notas = n.notas;
+    });
   }
 
   // v6: equipaje incluido en la ida y la vuelta con Qatar. Si alguien ya
