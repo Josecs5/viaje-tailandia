@@ -1,0 +1,33 @@
+# Mantiene bot/taz-horario.json al día con el sorteo de app.js: si cambia la
+# hora Taz y nadie ha regenerado el horario, lo regenera y lo sube.
+name: Horario del bot de la hora Taz
+
+on:
+  push:
+    branches: [main]
+    paths: [app.js, bot/generar-horario.mjs]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  horario:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node bot/generar-horario.mjs
+      - name: Subir el horario si ha cambiado
+        run: |
+          if git diff --quiet -- bot/taz-horario.json; then
+            echo "El horario ya estaba al día"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bot/taz-horario.json
+          git commit -m "Hora Taz: horario del bot regenerado desde app.js"
+          git push

@@ -15,3 +15,7 @@ desktop.ini
 
 node_modules/
 package*.json
+
+# Bot de Telegram (Cloudflare Wrangler)
+.wrangler/
+.dev.vars

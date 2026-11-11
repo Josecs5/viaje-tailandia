@@ -1,0 +1,10 @@
+name = "hora-taz-bot"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Cada minuto: si en ese minuto se abre una hora Taz, avisa al grupo.
+[triggers]
+crons = ["* * * * *"]
+
+[observability]
+enabled = true

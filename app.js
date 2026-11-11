@@ -3637,6 +3637,9 @@
      horas van en hora de Tailandia (UTC+7), sea cual sea la zona del móvil.
      Solo se ve la ruleta del día en curso.
      ========================================================== */
+  // <taz-plan> Desde aquí hasta </taz-plan>, bot/generar-horario.mjs lo
+  // ejecuta en Node para sacar las horas del bot de Telegram: este bloque no
+  // puede tocar el DOM ni usar nada de fuera salvo pad2.
   const TAZ_GENTE = [
     { id: 'alex',    nombre: 'Alex' },
     { id: 'beltran', nombre: 'Beltrán' },
@@ -3880,6 +3883,7 @@
       });
     });
   })();
+  // </taz-plan>
 
   // Retos del turno; en modo prueba, unos al azar.
   function tazRetosDe(turno) {

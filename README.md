@@ -86,6 +86,31 @@ recarga la activa; las demás se actualizan al navegar. Si algo se queda raro,
 cierra la app del todo y vuelve a abrirla, o borra los datos del sitio en el
 navegador (se borran caché y datos).
 
+## Bot de Telegram de la hora Taz
+
+En `bot/` hay un Cloudflare Worker que avisa al grupo de Telegram en el minuto
+exacto en que se abre cada hora Taz, con un botón para abrir la ruleta. No dice
+a quién le toca.
+
+- `bot/generar-horario.mjs` ejecuta en Node el bloque del sorteo de `app.js`
+  (entre `// <taz-plan>` y `// </taz-plan>`) y escribe `bot/taz-horario.json`
+  con las horas, sin personas ni retos. Si se cambia el sorteo, hay que
+  ejecutarlo y subir el JSON; la acción `.github/workflows/taz-horario.yml`
+  lo hace sola si se olvida.
+- `bot/worker.js` se despierta cada minuto, lee el horario de GitHub (o la
+  copia empaquetada si GitHub falla) y manda el aviso.
+
+Puesta en marcha (una vez):
+
+```sh
+cd bot
+npx wrangler@4 login
+npx wrangler@4 secret put TELEGRAM_TOKEN   # token de @BotFather
+npx wrangler@4 secret put TELEGRAM_CHAT    # id del grupo (negativo)
+npx wrangler@4 secret put CLAVE_PRUEBA     # opcional, para /prueba?clave=…
+npx wrangler@4 deploy
+```
+
 ## Aviso
 
 App personal sin ánimo de lucro. No está afiliada a ninguna aerolínea,
