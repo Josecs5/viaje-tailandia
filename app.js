@@ -3740,7 +3740,7 @@
   // - los turnos de persona salen, por orden, de tandas barajadas de los 7:
   //   nadie repite hasta que han salido todos, y nunca dos turnos seguidos.
   const TAZ_PLAN = (() => {
-    const rnd = mulberry32(hashStr('La hora Taz · Tailandia 2026'));
+    const rnd = mulberry32(hashStr('Hora Taz · d89fbfc3f52d72bb20ff4fd8faf82944'));
     const barajar = arr => {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(rnd() * (i + 1));
@@ -3840,7 +3840,7 @@
   // Primero los huecos con menos opciones (días de viaje) para que no se
   // queden sin reto. A Beltrán, además, un reto duro de mentira (turno.duro).
   (() => {
-    const rnd = mulberry32(hashStr('Retos de la hora Taz · Tailandia 2026'));
+    const rnd = mulberry32(hashStr('Retos Taz · 8d0e2425344f9475aa6753f5f91cb0fa'));
     const huecos = [];
     Object.keys(TAZ_PLAN).forEach(f => {
       TAZ_PLAN[f].turnos.forEach(t => {
