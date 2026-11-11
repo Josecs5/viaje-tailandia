@@ -3705,7 +3705,8 @@
     { t: 'Ser el fotógrafo oficial de la noche: si al final falta la foto de algún momento, castigo.', donde: 'th' },
     { t: 'Llevar puesto toda la noche un accesorio ridículo que elija el grupo.', donde: 'mundo' },
     { t: 'Ser el jefe: eliges el siguiente bar y nadie puede protestar.', donde: 'th', disco: true },
-    { t: 'Apostar 10 euros en la casa de apuestas más cercana.', donde: 'madrid' }
+    { t: 'Apostar 10 euros en la casa de apuestas más cercana.', donde: 'madrid' },
+    { t: 'Invitar a una ronda a todo el grupo.', donde: 'mundo' }
   ];
   // Retos «de verdad» que le salen primero a Beltrán… hasta que Taz se apiada.
   const TAZ_RETOS_DUROS = [
