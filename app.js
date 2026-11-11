@@ -3648,16 +3648,17 @@
   ];
   const TAZ_COLORES = ['#ff3d95', '#ccf62f', '#4c7dff', '#ff9f1c', '#a56bff', '#22d3b4', '#ffd23f'];
   // Casillas especiales de la ruleta. `veces`: cuántos días del viaje sale cada
-  // una. `siguiente`: su efecto se aplica a quien le toque al día siguiente.
+  // una. `retira`: al caer en ella se vuelve a tirar y la persona que sale
+  // carga con el efecto (nadie se libra).
   const TAZ_ESPECIALES = [
     { id: 'beben', icono: '🍻', corto: 'Bebe todo el grupo', titulo: '¡Bebe todo el grupo!',
       texto: 'Hoy no se libra nadie: bebéis todos.', veces: 1 },
     { id: 'elige', icono: '👉', corto: 'El siguiente elige', titulo: '¡El siguiente elige!',
-      texto: 'Hoy os libráis todos. Mañana, a quien le toque podrá elegir quién del grupo hace el reto.',
-      efecto: 'Tiene el comodín de ayer: elige quién del grupo hace el reto.', siguiente: true, veces: 1 },
+      aviso: 'Se vuelve a tirar: a quien le toque elige quién hace el castigo.',
+      efecto: n => `${n} elige quién del grupo hace el castigo.`, retira: true, veces: 1 },
     { id: 'doble', icono: '×2', corto: 'Reto doble', titulo: '¡Reto doble!',
-      texto: 'Hoy os libráis todos. Mañana, a quien le toque le caen dos castigos.',
-      efecto: 'Reto doble de ayer: hoy le caen dos castigos.', siguiente: true, veces: 1 }
+      aviso: 'Se vuelve a tirar: a quien le toque le caen dos castigos.',
+      efecto: n => `A ${n} le caen dos castigos.`, retira: true, veces: 1 }
   ];
   const TAZ_COLOR_ESPECIAL = '#2b2f63';
   // Casillas de la rueda en orden: las caras con las especiales repartidas entre ellas.
@@ -3694,11 +3695,11 @@
     return h >>> 0;
   }
 
-  // Plan del viaje (una casilla y un minuto de desbloqueo por día):
-  // - cada especial sale `veces` días al azar, nunca dos especiales seguidas
-  //   y las de «al día siguiente» nunca el último día;
-  // - el resto de días, tandas barajadas de los 7 (nadie repite hasta que han
-  //   salido todos, y nunca dos turnos seguidos).
+  // Plan del viaje (casilla, segunda tirada si toca y minuto de desbloqueo):
+  // - cada especial sale `veces` días al azar, nunca dos especiales seguidas;
+  // - los turnos de persona (días normales y segundas tiradas) salen de tandas
+  //   barajadas de los 7: nadie repite hasta que han salido todos, y nunca
+  //   dos turnos seguidos.
   const TAZ_PLAN = (() => {
     const rnd = mulberry32(hashStr('La hora Taz · Tailandia 2026'));
     const barajar = arr => {
@@ -3717,15 +3718,14 @@
     const esp = new Array(n).fill(null);
     const pendientes = [];
     TAZ_ESPECIALES.forEach((e, k) => { for (let v = 0; v < (e.veces || 0); v++) pendientes.push(k); });
-    pendientes.sort((a, b) => (TAZ_ESPECIALES[b].siguiente ? 1 : 0) - (TAZ_ESPECIALES[a].siguiente ? 1 : 0));
     const huecos = barajar(dias.map((_, i) => i));
     pendientes.forEach(k => {
-      const i = huecos.find(h => esp[h] === null && esp[h - 1] == null && esp[h + 1] == null &&
-        !(TAZ_ESPECIALES[k].siguiente && h === n - 1));
+      const i = huecos.find(h => esp[h] === null && esp[h - 1] == null && esp[h + 1] == null);
       if (i !== undefined) esp[i] = k;
     });
 
-    const nTurnos = esp.filter(x => x === null).length;
+    const conPersona = esp.map(k => k === null || !!TAZ_ESPECIALES[k].retira);
+    const nTurnos = conPersona.filter(Boolean).length;
     const orden = [];
     while (orden.length < nTurnos) {
       const p = barajar(TAZ_GENTE.map((_, i) => i));
@@ -3733,26 +3733,20 @@
       orden.push(...p);
     }
 
+    const casillaDe = pred => TAZ_CASILLAS.findIndex(pred);
     const plan = {};
     const [h0, h1] = TAZ_VENTANA;
     let o = 0;
     dias.forEach((d, i) => {
-      const persona = esp[i] === null ? orden[o++] : null;
-      const casilla = esp[i] !== null
-        ? TAZ_CASILLAS.findIndex(c => c.esp === esp[i])
-        : TAZ_CASILLAS.findIndex(c => c.persona === persona);
-      plan[d] = { casilla, min: h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60) };
+      const persona = conPersona[i] ? orden[o++] : null;
+      const cPersona = persona === null ? null : casillaDe(c => c.persona === persona);
+      plan[d] = esp[i] === null
+        ? { casilla: cPersona, segunda: null }
+        : { casilla: casillaDe(c => c.esp === esp[i]), segunda: cPersona };
+      plan[d].min = h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60);
     });
     return plan;
   })();
-
-  // Especial de ayer que afecta a hoy (El siguiente elige / Reto doble), o null.
-  function tazEfecto(fecha) {
-    const ayer = new Date(Date.parse(fecha + 'T00:00Z') - 864e5).toISOString().slice(0, 10);
-    const p = TAZ_PLAN[ayer];
-    const c = p && TAZ_CASILLAS[p.casilla];
-    return c && c.esp != null && TAZ_ESPECIALES[c.esp].siguiente ? TAZ_ESPECIALES[c.esp] : null;
-  }
 
   function tazAhora() {
     let ms = Date.now() + TAZ_UTC_OFFSET;
@@ -3808,9 +3802,10 @@
       </div>`;
   }
 
-  // Tarjeta del resultado: persona (con el efecto de ayer, si lo hay) o casilla especial.
-  function tazResultadoHTML(fecha, casilla) {
-    const c = TAZ_CASILLAS[casilla];
+  // Tarjeta del resultado: persona (con el efecto de la especial, si la hubo)
+  // o la casilla «Bebe todo el grupo».
+  function tazResultadoHTML(fecha, plan) {
+    const c = TAZ_CASILLAS[plan.casilla];
     const castigos = [].concat(TAZ_CASTIGOS[fecha] || []);
     const cajaCastigo = (label, txt) => `
         <div class="taz-castigo${txt ? '' : ' is-empty'}">
@@ -3818,23 +3813,23 @@
           <p>${txt ? esc(txt) : 'Por anunciar…'}</p>
         </div>`;
 
-    if (c.esp != null) {
+    if (plan.segunda == null && c.esp != null) {
       const e = TAZ_ESPECIALES[c.esp];
       return `
         <span class="taz-res__esp taz-res__esp--${e.id}" aria-hidden="true">${esc(e.icono)}</span>
         <p class="taz-res__kicker">Casilla especial</p>
         <p class="taz-res__nombre">${esc(e.titulo)}</p>
         <p class="taz-res__texto">${esc(e.texto)}</p>
-        ${e.id === 'beben' ? tazGenteHTML(true) : ''}`;
+        ${tazGenteHTML(true)}`;
     }
 
-    const persona = TAZ_GENTE[c.persona];
-    const efecto = tazEfecto(fecha);
+    const persona = TAZ_GENTE[TAZ_CASILLAS[plan.segunda != null ? plan.segunda : plan.casilla].persona];
+    const efecto = plan.segunda != null ? TAZ_ESPECIALES[c.esp] : null;
     let cajas;
     if (efecto && efecto.id === 'doble') {
       cajas = cajaCastigo('Castigo 1', castigos[0]) + cajaCastigo('Castigo 2', castigos[1]);
     } else if (efecto && efecto.id === 'elige') {
-      cajas = cajaCastigo(`Reto · lo hace quien elija ${persona.nombre}`, castigos[0]);
+      cajas = cajaCastigo(`Castigo · lo hace quien elija ${persona.nombre}`, castigos[0]);
     } else {
       cajas = cajaCastigo('Castigo', castigos[0]);
     }
@@ -3842,8 +3837,22 @@
         <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">
         <p class="taz-res__kicker">Hoy le toca a</p>
         <p class="taz-res__nombre">${esc(persona.nombre)}</p>
-        ${efecto ? `<p class="taz-efecto"><span class="taz-efecto__ico">${esc(efecto.icono)}</span>${esc(efecto.efecto)}</p>` : ''}
+        ${efecto ? `<p class="taz-efecto"><span class="taz-efecto__ico">${esc(efecto.icono)}</span><span><strong>${esc(efecto.titulo)}</strong> ${esc(efecto.efecto(persona.nombre))}</span></p>` : ''}
         ${cajas}`;
+  }
+
+  // Aviso sobre la rueda cuando cae en una especial que obliga a volver a tirar.
+  function tazAviso(ruleta, e) {
+    return new Promise(resolve => {
+      const a = el('div', 'ruleta__aviso');
+      a.setAttribute('role', 'status');
+      a.innerHTML = `<span class="ruleta__aviso-ico ruleta__aviso-ico--${e.id}" aria-hidden="true">${esc(e.icono)}</span>
+        <strong>${esc(e.titulo)}</strong><span>${esc(e.aviso)}</span><em>¡Otra vez!</em>`;
+      ruleta.appendChild(a);
+      if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60]); } catch (err) { /* sin vibración */ } }
+      setTimeout(() => { a.classList.add('is-out'); }, 2600);
+      setTimeout(() => { a.remove(); resolve(); }, 2950);
+    });
   }
 
   // Torbellino de Taz sobre la ruleta: un embudo de aros girando con Taz
@@ -3918,84 +3927,96 @@
 
     // Abierta: ruleta del día
     const visto = tazVisto(st.fecha);
+    const plan = st.plan;
+    const final = plan.segunda != null ? plan.segunda : plan.casilla;
     if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · ¡Ha llegado la hora Taz!';
     root.innerHTML = `
       <div class="taz__ruleta-card">
         ${tazRuedaHTML()}
         <button class="btn btn--accent btn--block taz__girar" type="button">${visto ? 'Ver otra vez el giro' : '¡Girar la ruleta!'}</button>
       </div>
-      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>${tazResultadoHTML(st.fecha, st.plan.casilla)}
+      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>${tazResultadoHTML(st.fecha, plan)}
       </div>`;
 
+    const ruleta = root.querySelector('.ruleta');
     const rueda = root.querySelector('.ruleta__rueda');
     const puntero = root.querySelector('.ruleta__puntero');
     const res = root.querySelector('.taz-res');
     const btn = root.querySelector('.taz__girar');
-    const centro = st.plan.casilla * TAZ_SEG + TAZ_SEG / 2;
+    const centroDe = casilla => casilla * TAZ_SEG + TAZ_SEG / 2;
+    const reducido = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    tazGiro = visto ? 360 - centro : 0;
+    tazGiro = visto ? 360 - centroDe(final) : 0;
     tazGirando = false;
     rueda.style.transform = `rotate(${tazGiro}deg)`;
 
-    btn.addEventListener('click', () => {
+    // Una tirada: la rueda gira hasta dejar el centro del gajo bajo el puntero
+    // (arriba), con un pequeño desvío para que no caiga siempre clavado.
+    function tirada(casilla, vueltas, dur) {
+      return new Promise(resolve => {
+        const desvio = (Math.random() - 0.5) * TAZ_SEG * 0.6;
+        const base = Math.ceil(tazGiro / 360) * 360 + vueltas * 360;
+        tazGiro = base + (360 - centroDe(casilla)) + desvio;
+        rueda.style.transition = `transform ${dur}ms cubic-bezier(0.15, 0.85, 0.12, 1)`;
+        rueda.style.transform = `rotate(${tazGiro}deg)`;
+
+        let hecho = false;
+        let ultimo = -1;
+        const tic = () => {
+          if (hecho) return;
+          const m = new DOMMatrix(getComputedStyle(rueda).transform);
+          const ang = (Math.atan2(m.b, m.a) * 180 / Math.PI + 360) % 360;
+          const gajo = Math.floor(((360 - ang) % 360) / TAZ_SEG);
+          if (gajo !== ultimo) {
+            ultimo = gajo;
+            puntero.classList.remove('is-tic');
+            void puntero.getBoundingClientRect();
+            puntero.classList.add('is-tic');
+          }
+          requestAnimationFrame(tic);
+        };
+        requestAnimationFrame(tic);
+
+        const fin = () => {
+          if (hecho) return;
+          hecho = true;
+          rueda.removeEventListener('transitionend', fin);
+          rueda.style.transition = 'none';
+          resolve();
+        };
+        rueda.addEventListener('transitionend', fin);
+        setTimeout(fin, dur + 400);   // red de seguridad si no llega transitionend
+      });
+    }
+
+    btn.addEventListener('click', async () => {
       if (tazGirando) return;
       tazGirando = true;
       btn.disabled = true;
       res.hidden = true;
-      const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const vueltas = reducido ? 2 : 8;
-      const dur = reducido ? 1600 : 6500;
-      // El puntero está arriba: la rueda gira hasta dejar el centro del gajo bajo él,
-      // con un pequeño desvío para que no caiga siempre clavado en el medio.
-      const desvio = (Math.random() - 0.5) * TAZ_SEG * 0.6;
-      const base = Math.ceil(tazGiro / 360) * 360 + vueltas * 360;
-      tazGiro = base + (360 - centro) + desvio;
-      rueda.style.transition = `transform ${dur}ms cubic-bezier(0.15, 0.85, 0.12, 1)`;
-      rueda.style.transform = `rotate(${tazGiro}deg)`;
+      const r = reducido();
 
-      // «Tic» del puntero al pasar cada gajo.
-      let ultimo = -1;
-      const tic = () => {
-        if (!tazGirando) return;
-        if (hecho) return;
-        const m = new DOMMatrix(getComputedStyle(rueda).transform);
-        const ang = (Math.atan2(m.b, m.a) * 180 / Math.PI + 360) % 360;
-        const gajo = Math.floor(((360 - ang) % 360) / TAZ_SEG);
-        if (gajo !== ultimo) {
-          ultimo = gajo;
-          puntero.classList.remove('is-tic');
-          void puntero.getBoundingClientRect();
-          puntero.classList.add('is-tic');
-        }
-        requestAnimationFrame(tic);
-      };
-      requestAnimationFrame(tic);
+      await tirada(plan.casilla, r ? 2 : 8, r ? 1600 : 6500);
+      if (plan.segunda != null) {
+        // Cae en «El siguiente elige» o «Reto doble»: aviso y segunda tirada.
+        await tazAviso(ruleta, TAZ_ESPECIALES[TAZ_CASILLAS[plan.casilla].esp]);
+        await tirada(plan.segunda, r ? 2 : 6, r ? 1600 : 5200);
+      }
+      if (!r) await tazTornado(ruleta);
 
-      let hecho = false;
-      const fin = () => {
-        if (hecho) return;
-        hecho = true;
-        rueda.style.transition = 'none';
-        if (reducido) revelar();
-        else tazTornado(root.querySelector('.ruleta')).then(revelar);
-      };
       // Tras el torbellino: la persona elegida y el castigo.
-      const revelar = () => {
-        tazGirando = false;
-        tazMarcarVisto(st.fecha);
-        res.hidden = false;
-        res.classList.remove('is-in');
-        void res.offsetWidth;
-        res.classList.add('is-in');
-        btn.disabled = false;
-        btn.textContent = 'Ver otra vez el giro';
-        if (navigator.vibrate) { try { navigator.vibrate([40, 60, 120]); } catch (e) { /* sin vibración */ } }
-        res.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'center' });
-        // Si mientras giraba cambió el día o la fase, se pone al día ahora.
-        if (tazEstado().fase + '|' + tazEstado().fecha !== tazClave) renderTaz(true);
-      };
-      rueda.addEventListener('transitionend', fin, { once: true });
-      setTimeout(fin, dur + 400);   // red de seguridad si no llega transitionend
+      tazGirando = false;
+      tazMarcarVisto(st.fecha);
+      res.hidden = false;
+      res.classList.remove('is-in');
+      void res.offsetWidth;
+      res.classList.add('is-in');
+      btn.disabled = false;
+      btn.textContent = 'Ver otra vez el giro';
+      if (navigator.vibrate) { try { navigator.vibrate([40, 60, 120]); } catch (e) { /* sin vibración */ } }
+      res.scrollIntoView({ behavior: r ? 'auto' : 'smooth', block: 'center' });
+      // Si mientras giraba cambió el día o la fase, se pone al día ahora.
+      if (tazEstado().fase + '|' + tazEstado().fecha !== tazClave) renderTaz(true);
     });
   }
 
