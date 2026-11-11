@@ -3652,7 +3652,7 @@
   // carga con el efecto (nadie se libra).
   const TAZ_ESPECIALES = [
     { id: 'beben', icono: '🍻', corto: 'Bebe todo el grupo', titulo: '¡Bebe todo el grupo!',
-      texto: 'Hoy no se libra nadie: bebéis todos.', veces: 1 },
+      texto: 'Hoy no se libra nadie: todos os bebéis 2 chupitos seguidos.', veces: 1 },
     { id: 'elige', icono: '👉', corto: 'El siguiente elige', titulo: '¡El siguiente elige!',
       aviso: 'Se vuelve a tirar: a quien le toque elige quién hace el castigo.',
       efecto: n => `${n} elige quién del grupo hace el castigo.`, retira: true, veces: 1 },
@@ -3698,7 +3698,6 @@
     { t: 'Ser el camarero del grupo durante 1 hora: pides todo tú.', donde: 'mundo' },
     { t: 'Pasar 30 minutos sin decir ni «sí» ni «no».', donde: 'mundo' },
     { t: 'Hablar solo en inglés durante 1 hora. Por cada palabra en español, bebes.', donde: 'mundo' },
-    { t: 'Terminar todas tus frases con «khrap» (la coletilla educada de los hombres en tailandés).', donde: 'mundo' },
     { t: 'Ser el fotógrafo oficial de la noche: si al final falta la foto de algún momento, castigo.', donde: 'th' },
     { t: 'Llevar puesto toda la noche un accesorio ridículo que elija el grupo.', donde: 'mundo' },
     { t: 'Ser el jefe: eliges el siguiente bar y nadie puede protestar.', donde: 'th' },
