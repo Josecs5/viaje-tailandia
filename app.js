@@ -3675,9 +3675,42 @@
   const TAZ_FIN = '2026-12-09';
   const TAZ_VENTANA = [12, 24];          // se desbloquea entre las 12:00 y medianoche
   const TAZ_UTC_OFFSET = 7 * 3600e3;     // hora de Tailandia
-  // Castigo de cada día ('AAAA-MM-DD' → texto, o lista de dos textos los días
-  // de reto doble). De momento, vacío.
-  const TAZ_CASTIGOS = {};
+  // Retos de «Taz dice que tienes que…». `donde` limita los días en que puede
+  // salir cada uno (ver tazPuede): 'mundo' = cualquier día, también los de
+  // viaje; 'th' = estando en Tailandia; 'bkk' = Bangkok; 'tuktuk' = Tailandia
+  // menos Phi Phi; 'madrid' = el 24 en Madrid; 'pronto' = Tailandia y la hora
+  // Taz se abre antes de las 21:00.
+  const TAZ_RETOS = [
+    { t: 'Beberte 2 chupitos del tirón.', donde: 'mundo' },
+    { t: 'Que un tailandés te enseñe una frase en su idioma. Tienes que usarla toda la noche, y cada vez que se te olvide, bebes.', donde: 'th' },
+    { t: 'Hacerte una foto con gente de 5 países distintos antes de medianoche.', donde: 'pronto' },
+    { t: 'Presentarte a un grupo de guiris como un famoso español (cantante, futbolista de Segunda…) y aguantar el papel 5 minutos.', donde: 'th' },
+    { t: 'Hacer de reportero de Callejeros Tailandia: grabarte entrevistando a un desconocido sobre algo absurdo.', donde: 'th' },
+    { t: 'Dejar que un desconocido elija tu próximo chupito, y bebértelo sin preguntar.', donde: 'th' },
+    { t: 'Cambiar algo tuyo (gorra, pulsera, gafas) por algo de un desconocido.', donde: 'mundo' },
+    { t: 'Pedirle a la banda o al DJ una canción española y bailarla delante de todos.', donde: 'th' },
+    { t: 'Regatear un souvenir hasta la mitad del precio. Si no lo consigues, chupito.', donde: 'th' },
+    { t: 'Comprarte la camiseta más fea que encuentren los demás y llevarla puesta el día siguiente.', donde: 'th' },
+    { t: 'Negociar un tuk-tuk solo con gestos, sin decir ni una palabra.', donde: 'tuktuk' },
+    { t: 'Comerte un bicho de los puestos de Khao San Road (escorpión, grillo, gusano).', donde: 'bkk' },
+    { t: 'Pedir un plato «Thai spicy» y acabártelo.', donde: 'th' },
+    { t: 'Reto del 7-Eleven: los demás eligen qué te comes o te bebes con 100 baht.', donde: 'th' },
+    { t: 'Ser el camarero del grupo durante 1 hora: pides todo tú.', donde: 'mundo' },
+    { t: 'Pasar 30 minutos sin decir ni «sí» ni «no».', donde: 'mundo' },
+    { t: 'Hablar solo en inglés durante 1 hora. Por cada palabra en español, bebes.', donde: 'mundo' },
+    { t: 'Terminar todas tus frases con «khrap» (la coletilla educada de los hombres en tailandés).', donde: 'mundo' },
+    { t: 'Ser el fotógrafo oficial de la noche: si al final falta la foto de algún momento, castigo.', donde: 'th' },
+    { t: 'Llevar puesto toda la noche un accesorio ridículo que elija el grupo.', donde: 'mundo' },
+    { t: 'Ser el jefe: eliges el siguiente bar y nadie puede protestar.', donde: 'th' },
+    { t: 'Apostar 10 euros en la casa de apuestas más cercana.', donde: 'madrid' }
+  ];
+  // Retos «de verdad» que le salen primero a Beltrán… hasta que Taz se apiada.
+  const TAZ_RETOS_DUROS = [
+    'Tatuarte la cara de Taz en el culo esta misma noche, en el primer estudio que encuentres.',
+    'Raparte la cabeza al cero y afeitarte una ceja.',
+    'Subirte al ring de Muay Thai contra un tailandés de 50 kilos y aguantar 3 asaltos.'
+  ];
+  const TAZ_BROMA_ID = 'beltran';
   const tazFoto = p => `icons/caras/${p.id}.webp`;
 
   // PRNG con semilla (mulberry32) + hash de texto: mismo resultado en todos lados.
@@ -3748,6 +3781,78 @@
     return plan;
   })();
 
+  // Dónde estáis cada día del viaje (según el itinerario).
+  function tazZona(f) {
+    if (f <= '2026-11-24') return 'madrid';
+    if (f <= '2026-11-28') return 'bkk';
+    if (f <= '2026-12-02') return 'cnx';
+    if (f <= '2026-12-04') return 'krabi';
+    if (f <= '2026-12-06') return 'phiphi';
+    if (f <= '2026-12-08') return 'phuket';
+    return 'vuelta';
+  }
+  function tazPuede(reto, fecha, min) {
+    const z = tazZona(fecha);
+    const th = z !== 'madrid' && z !== 'vuelta';
+    switch (reto.donde) {
+      case 'mundo': return true;
+      case 'madrid': return z === 'madrid';
+      case 'bkk': return z === 'bkk';
+      case 'tuktuk': return th && z !== 'phiphi';
+      case 'pronto': return th && min <= 21 * 60;
+      default: return th;
+    }
+  }
+  const tazNumRetos = plan => {
+    const c = TAZ_CASILLAS[plan.casilla];
+    if (c.esp == null) return 1;
+    const e = TAZ_ESPECIALES[c.esp];
+    return !e.retira ? 0 : e.id === 'doble' ? 2 : 1;
+  };
+
+  // Retos de cada día ('AAAA-MM-DD' → lista de textos): al azar con semilla
+  // propia, sin repetir, solo donde se pueden hacer; primero los huecos con
+  // menos opciones (días de viaje) para que no se queden sin reto.
+  const TAZ_RETOS_PLAN = (() => {
+    const rnd = mulberry32(hashStr('Retos de la hora Taz · Tailandia 2026'));
+    const huecos = [];
+    Object.keys(TAZ_PLAN).forEach(f => {
+      for (let k = 0; k < tazNumRetos(TAZ_PLAN[f]); k++) huecos.push({ f, k, r: rnd() });
+    });
+    const opciones = h => TAZ_RETOS.map((_, i) => i).filter(i => tazPuede(TAZ_RETOS[i], h.f, TAZ_PLAN[h.f].min));
+    huecos.forEach(h => { h.n = opciones(h).length; });
+    huecos.sort((a, b) => a.n - b.n || a.r - b.r);
+    const usados = new Set();
+    const out = {};
+    huecos.forEach(h => {
+      let libres = opciones(h).filter(i => !usados.has(i));
+      if (!libres.length) libres = TAZ_RETOS.map((_, i) => i).filter(i => !usados.has(i) && TAZ_RETOS[i].donde === 'mundo');
+      if (!libres.length) return;
+      const i = libres[Math.floor(rnd() * libres.length)];
+      usados.add(i);
+      (out[h.f] = out[h.f] || [])[h.k] = TAZ_RETOS[i].t;
+    });
+    // Reto duro de mentira para cada turno de Beltrán (uno distinto cada vez).
+    let b = 0;
+    Object.keys(TAZ_PLAN).forEach(f => {
+      const p = TAZ_PLAN[f];
+      const c = TAZ_CASILLAS[p.segunda != null ? p.segunda : p.casilla];
+      if (c.persona != null && TAZ_GENTE[c.persona].id === TAZ_BROMA_ID) {
+        (out[f] = out[f] || []).duro = TAZ_RETOS_DUROS[b++ % TAZ_RETOS_DUROS.length];
+      }
+    });
+    return out;
+  })();
+
+  // Retos del día; en modo prueba, unos al azar.
+  function tazRetosDe(fecha, plan) {
+    if (TAZ_RETOS_PLAN[fecha]) return TAZ_RETOS_PLAN[fecha];
+    const azar = TAZ_RETOS.slice().sort(() => Math.random() - 0.5).map(r => r.t);
+    const out = azar.slice(0, tazNumRetos(plan));
+    out.duro = TAZ_RETOS_DUROS[Math.floor(Math.random() * TAZ_RETOS_DUROS.length)];
+    return out;
+  }
+
   function tazAhora() {
     let ms = Date.now() + TAZ_UTC_OFFSET;
     // Solo en local: ?taz=2026-11-26T20:30 simula esa hora de Tailandia (pruebas).
@@ -3767,7 +3872,9 @@
     if (!q) return null;
     if (!tazDemoPlan) {
       const personas = TAZ_CASILLAS.map((c, i) => (c.persona != null ? i : -1)).filter(i => i >= 0);
-      const azar = personas[Math.floor(Math.random() * personas.length)];
+      const forzada = TAZ_CASILLAS.findIndex(c => c.persona != null &&
+        TAZ_GENTE[c.persona].id === new URLSearchParams(location.search).get('tazpersona'));
+      const azar = forzada >= 0 ? forzada : personas[Math.floor(Math.random() * personas.length)];
       const k = TAZ_ESPECIALES.findIndex(e => e.id === q);
       tazDemoPlan = k < 0
         ? { casilla: azar, segunda: null }
@@ -3826,7 +3933,7 @@
   // o la casilla «Bebe todo el grupo».
   function tazResultadoHTML(fecha, plan) {
     const c = TAZ_CASILLAS[plan.casilla];
-    const castigos = [].concat(TAZ_CASTIGOS[fecha] || []);
+    const castigos = tazRetosDe(fecha, plan);
     const cajaCastigo = (label, txt) => `
         <div class="taz-castigo${txt ? '' : ' is-empty'}">
           <span class="taz-castigo__label">${esc(label)}</span>
@@ -3845,13 +3952,27 @@
 
     const persona = TAZ_GENTE[TAZ_CASILLAS[plan.segunda != null ? plan.segunda : plan.casilla].persona];
     const efecto = plan.segunda != null ? TAZ_ESPECIALES[c.esp] : null;
+    const label = efecto && efecto.id === 'elige'
+      ? `Taz dice que quien elija ${persona.nombre} tiene que…`
+      : 'Taz dice que tienes que…';
     let cajas;
     if (efecto && efecto.id === 'doble') {
-      cajas = cajaCastigo('Taz dice que tienes que… (1 de 2)', castigos[0]) + cajaCastigo('Taz dice que tienes que… (2 de 2)', castigos[1]);
-    } else if (efecto && efecto.id === 'elige') {
-      cajas = cajaCastigo(`Taz dice que quien elija ${persona.nombre} tiene que…`, castigos[0]);
+      cajas = cajaCastigo(label + ' (1 de 2)', castigos[0]) + cajaCastigo(label + ' (2 de 2)', castigos[1]);
     } else {
-      cajas = cajaCastigo('Taz dice que tienes que…', castigos[0]);
+      cajas = cajaCastigo(label, castigos[0]);
+    }
+    // Beltrán: primero un reto durísimo… y luego Taz se apiada.
+    if (persona.id === TAZ_BROMA_ID && castigos.duro) {
+      cajas = `
+        <div class="taz-broma">
+          <div class="taz-castigo taz-castigo--duro">
+            <span class="taz-castigo__label">${esc(label)}</span>
+            <p>${esc(castigos.duro)}</p>
+          </div>
+          <p class="taz-broma__sello" aria-hidden="true">¡Taz no mata a Taz!</p>
+        </div>
+        <p class="taz-broma__nota"><span aria-hidden="true">🌪️</span> Taz no mata a Taz: por eso haces el reto normal.</p>
+        <div class="taz-res__cajas">${cajas}</div>`;
     }
     return `
         <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">
@@ -3859,6 +3980,22 @@
         <p class="taz-res__nombre">${esc(persona.nombre)}</p>
         ${efecto ? `<p class="taz-efecto"><span class="taz-efecto__ico">${esc(efecto.icono)}</span><span><strong>${esc(efecto.titulo)}</strong> ${esc(efecto.efecto(persona.nombre))}</span></p>` : ''}
         ${cajas}`;
+  }
+
+  // Broma de Beltrán: reto duro (4 s) → sello «¡Taz no mata a Taz!» → reto normal.
+  function tazBroma(res, directo) {
+    if (!res.querySelector('.taz-broma')) return;
+    if (directo) { res.dataset.broma = 'final'; return; }
+    res.dataset.broma = 'duro';
+    setTimeout(() => {
+      res.dataset.broma = 'sello';
+      if (navigator.vibrate) { try { navigator.vibrate(200); } catch (e) { /* sin vibración */ } }
+    }, 4000);
+    setTimeout(() => {
+      res.dataset.broma = 'final';
+      const cajas = res.querySelector('.taz-res__cajas');
+      if (cajas) cajas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 5600);
   }
 
   // Aviso sobre la rueda cuando cae en una especial que obliga a volver a tirar.
@@ -3966,6 +4103,7 @@
     const centroDe = casilla => casilla * TAZ_SEG + TAZ_SEG / 2;
     const reducido = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    if (visto) tazBroma(res, true);
     tazGiro = visto ? 360 - centroDe(final) : 0;
     tazGirando = false;
     rueda.style.transform = `rotate(${tazGiro}deg)`;
@@ -4031,6 +4169,7 @@
       res.classList.remove('is-in');
       void res.offsetWidth;
       res.classList.add('is-in');
+      tazBroma(res, r);
       btn.disabled = false;
       btn.textContent = 'Ver otra vez el giro';
       if (navigator.vibrate) { try { navigator.vibrate([40, 60, 120]); } catch (e) { /* sin vibración */ } }
