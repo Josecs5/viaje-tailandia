@@ -29,7 +29,9 @@ es una ruleta diaria con las caras de los 7: cada día del viaje se
 desbloquea a una hora sorpresa (entre las 12:00 y las 24:00, hora de
 Tailandia) y la ruleta elige a uno, o cae en una casilla especial: bebe
 todo el grupo, o se vuelve a tirar y a quien salga elige quién hace el
-castigo (el siguiente elige) o carga con dos (reto doble). La persona y la hora salen de la fecha
+castigo (el siguiente elige) o carga con dos (reto doble). Algunos días hay doble
+hora Taz: una de día (12:00–19:00) y otra de noche (21:00–24:00) con un
+reto de discoteca. La persona y la hora salen de la fecha
 y una semilla fija, así que todos los móviles ven lo mismo sin servidor, y
 solo se puede ver la del día en curso. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del

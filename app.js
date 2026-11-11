@@ -3673,22 +3673,26 @@
   })();
   const TAZ_INICIO = '2026-11-24';
   const TAZ_FIN = '2026-12-09';
-  const TAZ_VENTANA = [12, 24];          // se desbloquea entre las 12:00 y medianoche
+  const TAZ_VENTANA = [12, 24];          // día con un solo turno: entre las 12:00 y medianoche
+  const TAZ_VENTANA_DIA = [12, 19];      // días con turno de noche: el de día…
+  const TAZ_VENTANA_NOCHE = [21, 24];    // …y el de noche (discoteca)
+  const tazHora = h => (h === 24 ? 'las 24:00' : `las ${pad2(h)}:00`);
   const TAZ_UTC_OFFSET = 7 * 3600e3;     // hora de Tailandia
   // Retos de «Taz dice que tienes que…». `donde` limita los días en que puede
   // salir cada uno (ver tazPuede): 'mundo' = cualquier día, también los de
   // viaje; 'th' = estando en Tailandia; 'bkk' = Bangkok; 'tuktuk' = Tailandia
   // menos Phi Phi; 'madrid' = el 24 en Madrid; 'pronto' = Tailandia y la hora
-  // Taz se abre antes de las 21:00.
+  // Taz se abre antes de las 21:00. `disco`: reto de discoteca, solo para el
+  // turno de noche (los días que lo hay).
   const TAZ_RETOS = [
     { t: 'Beberte 2 chupitos del tirón.', donde: 'mundo' },
     { t: 'Que un tailandés te enseñe una frase en su idioma. Tienes que usarla toda la noche, y cada vez que se te olvide, bebes.', donde: 'th' },
     { t: 'Hacerte una foto con gente de 5 países distintos antes de medianoche.', donde: 'pronto' },
-    { t: 'Presentarte a un grupo de guiris como un famoso español (cantante, futbolista de Segunda…) y aguantar el papel 5 minutos.', donde: 'th' },
+    { t: 'Presentarte a un grupo de guiris como un famoso español (cantante, futbolista de Segunda…) y aguantar el papel 5 minutos.', donde: 'th', disco: true },
     { t: 'Hacer de reportero de Callejeros Tailandia: grabarte entrevistando a un desconocido sobre algo absurdo.', donde: 'th' },
-    { t: 'Dejar que un desconocido elija tu próximo chupito, y bebértelo sin preguntar.', donde: 'th' },
+    { t: 'Dejar que un desconocido elija tu próximo chupito, y bebértelo sin preguntar.', donde: 'th', disco: true },
     { t: 'Cambiar algo tuyo (gorra, pulsera, gafas) por algo de un desconocido.', donde: 'mundo' },
-    { t: 'Pedirle a la banda o al DJ una canción española y bailarla delante de todos.', donde: 'th' },
+    { t: 'Pedirle a la banda o al DJ una canción española y bailarla delante de todos.', donde: 'th', disco: true },
     { t: 'Regatear un souvenir hasta la mitad del precio. Si no lo consigues, chupito.', donde: 'th' },
     { t: 'Comprarte la camiseta más fea que encuentren los demás y llevarla puesta el día siguiente.', donde: 'th' },
     { t: 'Negociar un tuk-tuk solo con gestos, sin decir ni una palabra.', donde: 'tuktuk' },
@@ -3700,7 +3704,7 @@
     { t: 'Hablar solo en inglés durante 1 hora. Por cada palabra en español, bebes.', donde: 'mundo' },
     { t: 'Ser el fotógrafo oficial de la noche: si al final falta la foto de algún momento, castigo.', donde: 'th' },
     { t: 'Llevar puesto toda la noche un accesorio ridículo que elija el grupo.', donde: 'mundo' },
-    { t: 'Ser el jefe: eliges el siguiente bar y nadie puede protestar.', donde: 'th' },
+    { t: 'Ser el jefe: eliges el siguiente bar y nadie puede protestar.', donde: 'th', disco: true },
     { t: 'Apostar 10 euros en la casa de apuestas más cercana.', donde: 'madrid' }
   ];
   // Retos «de verdad» que le salen primero a Beltrán… hasta que Taz se apiada.
@@ -3727,11 +3731,13 @@
     return h >>> 0;
   }
 
-  // Plan del viaje (casilla, segunda tirada si toca y minuto de desbloqueo):
+  // Plan del viaje: cada día, uno o dos turnos ({ clave: 'dia'|'noche',
+  // casilla, segunda tirada si toca, minuto de desbloqueo }):
   // - cada especial sale `veces` días al azar, nunca dos especiales seguidas;
-  // - los turnos de persona (días normales y segundas tiradas) salen de tandas
-  //   barajadas de los 7: nadie repite hasta que han salido todos, y nunca
-  //   dos turnos seguidos.
+  // - tantos días con turno de noche (discoteca) como retos de discoteca, en
+  //   días en Tailandia; el turno de noche siempre cae en una persona;
+  // - los turnos de persona salen, por orden, de tandas barajadas de los 7:
+  //   nadie repite hasta que han salido todos, y nunca dos turnos seguidos.
   const TAZ_PLAN = (() => {
     const rnd = mulberry32(hashStr('La hora Taz · Tailandia 2026'));
     const barajar = arr => {
@@ -3756,8 +3762,13 @@
       if (i !== undefined) esp[i] = k;
     });
 
+    const nNoches = TAZ_RETOS.filter(r => r.disco).length;
+    const noche = new Array(n).fill(false);
+    barajar(dias.map((_, i) => i).filter(i => tazEnTailandia(dias[i])))
+      .slice(0, nNoches).forEach(i => { noche[i] = true; });
+
     const conPersona = esp.map(k => k === null || !!TAZ_ESPECIALES[k].retira);
-    const nTurnos = conPersona.filter(Boolean).length;
+    const nTurnos = conPersona.filter(Boolean).length + nNoches;
     const orden = [];
     while (orden.length < nTurnos) {
       const p = barajar(TAZ_GENTE.map((_, i) => i));
@@ -3766,16 +3777,22 @@
     }
 
     const casillaDe = pred => TAZ_CASILLAS.findIndex(pred);
+    const minuto = ([h0, h1]) => h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60);
     const plan = {};
-    const [h0, h1] = TAZ_VENTANA;
     let o = 0;
     dias.forEach((d, i) => {
       const persona = conPersona[i] ? orden[o++] : null;
       const cPersona = persona === null ? null : casillaDe(c => c.persona === persona);
-      plan[d] = esp[i] === null
-        ? { casilla: cPersona, segunda: null }
-        : { casilla: casillaDe(c => c.esp === esp[i]), segunda: cPersona };
-      plan[d].min = h0 * 60 + Math.floor(rnd() * (h1 - h0) * 60);
+      const dia = esp[i] === null
+        ? { clave: 'dia', casilla: cPersona, segunda: null }
+        : { clave: 'dia', casilla: casillaDe(c => c.esp === esp[i]), segunda: cPersona };
+      dia.min = minuto(noche[i] ? TAZ_VENTANA_DIA : TAZ_VENTANA);
+      const turnos = [dia];
+      if (noche[i]) {
+        const pn = orden[o++];
+        turnos.push({ clave: 'noche', casilla: casillaDe(c => c.persona === pn), segunda: null, min: minuto(TAZ_VENTANA_NOCHE) });
+      }
+      plan[d] = { turnos };
     });
     return plan;
   })();
@@ -3790,9 +3807,13 @@
     if (f <= '2026-12-08') return 'phuket';
     return 'vuelta';
   }
+  function tazEnTailandia(f) {
+    const z = tazZona(f);
+    return z !== 'madrid' && z !== 'vuelta';
+  }
   function tazPuede(reto, fecha, min) {
     const z = tazZona(fecha);
-    const th = z !== 'madrid' && z !== 'vuelta';
+    const th = tazEnTailandia(fecha);
     switch (reto.donde) {
       case 'mundo': return true;
       case 'madrid': return z === 'madrid';
@@ -3802,52 +3823,64 @@
       default: return th;
     }
   }
-  const tazNumRetos = plan => {
-    const c = TAZ_CASILLAS[plan.casilla];
+  const tazNumRetos = turno => {
+    const c = TAZ_CASILLAS[turno.casilla];
     if (c.esp == null) return 1;
     const e = TAZ_ESPECIALES[c.esp];
     return !e.retira ? 0 : e.id === 'doble' ? 2 : 1;
   };
+  const tazPersonaDe = turno => {
+    const c = TAZ_CASILLAS[turno.segunda != null ? turno.segunda : turno.casilla];
+    return c.persona != null ? TAZ_GENTE[c.persona] : null;
+  };
 
-  // Retos de cada día ('AAAA-MM-DD' → lista de textos): al azar con semilla
-  // propia, sin repetir, solo donde se pueden hacer; primero los huecos con
-  // menos opciones (días de viaje) para que no se queden sin reto.
-  const TAZ_RETOS_PLAN = (() => {
+  // Retos de cada turno (turno.retos): al azar con semilla propia, sin repetir,
+  // solo donde se pueden hacer; los de discoteca, solo en los turnos de noche.
+  // Primero los huecos con menos opciones (días de viaje) para que no se
+  // queden sin reto. A Beltrán, además, un reto duro de mentira (turno.duro).
+  (() => {
     const rnd = mulberry32(hashStr('Retos de la hora Taz · Tailandia 2026'));
     const huecos = [];
     Object.keys(TAZ_PLAN).forEach(f => {
-      for (let k = 0; k < tazNumRetos(TAZ_PLAN[f]); k++) huecos.push({ f, k, r: rnd() });
+      TAZ_PLAN[f].turnos.forEach(t => {
+        t.retos = [];
+        for (let k = 0; k < tazNumRetos(t); k++) huecos.push({ f, t, k, r: rnd() });
+      });
     });
-    const opciones = h => TAZ_RETOS.map((_, i) => i).filter(i => tazPuede(TAZ_RETOS[i], h.f, TAZ_PLAN[h.f].min));
+    const vale = (i, h) => {
+      const reto = TAZ_RETOS[i];
+      return h.t.clave === 'noche' ? !!reto.disco : !reto.disco && tazPuede(reto, h.f, h.t.min);
+    };
+    const opciones = h => TAZ_RETOS.map((_, i) => i).filter(i => vale(i, h));
     huecos.forEach(h => { h.n = opciones(h).length; });
     huecos.sort((a, b) => a.n - b.n || a.r - b.r);
     const usados = new Set();
-    const out = {};
     huecos.forEach(h => {
       let libres = opciones(h).filter(i => !usados.has(i));
-      if (!libres.length) libres = TAZ_RETOS.map((_, i) => i).filter(i => !usados.has(i) && TAZ_RETOS[i].donde === 'mundo');
+      if (!libres.length) {
+        libres = TAZ_RETOS.map((_, i) => i).filter(i => !usados.has(i) &&
+          (h.t.clave === 'noche' ? TAZ_RETOS[i].disco : !TAZ_RETOS[i].disco && TAZ_RETOS[i].donde === 'mundo'));
+      }
       if (!libres.length) return;
       const i = libres[Math.floor(rnd() * libres.length)];
       usados.add(i);
-      (out[h.f] = out[h.f] || [])[h.k] = TAZ_RETOS[i].t;
+      h.t.retos[h.k] = TAZ_RETOS[i].t;
     });
-    // Reto duro de mentira para cada turno de Beltrán (uno distinto cada vez).
     let b = 0;
     Object.keys(TAZ_PLAN).forEach(f => {
-      const p = TAZ_PLAN[f];
-      const c = TAZ_CASILLAS[p.segunda != null ? p.segunda : p.casilla];
-      if (c.persona != null && TAZ_GENTE[c.persona].id === TAZ_BROMA_ID) {
-        (out[f] = out[f] || []).duro = TAZ_RETOS_DUROS[b++ % TAZ_RETOS_DUROS.length];
-      }
+      TAZ_PLAN[f].turnos.forEach(t => {
+        const p = tazPersonaDe(t);
+        if (p && p.id === TAZ_BROMA_ID) t.duro = TAZ_RETOS_DUROS[b++ % TAZ_RETOS_DUROS.length];
+      });
     });
-    return out;
   })();
 
-  // Retos del día; en modo prueba, unos al azar.
-  function tazRetosDe(fecha, plan) {
-    if (TAZ_RETOS_PLAN[fecha]) return TAZ_RETOS_PLAN[fecha];
-    const azar = TAZ_RETOS.slice().sort(() => Math.random() - 0.5).map(r => r.t);
-    const out = azar.slice(0, tazNumRetos(plan));
+  // Retos del turno; en modo prueba, unos al azar.
+  function tazRetosDe(turno) {
+    if (turno.retos) return turno.retos;
+    const noche = turno.clave === 'noche';
+    const azar = TAZ_RETOS.filter(r => !!r.disco === noche).sort(() => Math.random() - 0.5).map(r => r.t);
+    const out = azar.slice(0, tazNumRetos(turno));
     out.duro = TAZ_RETOS_DUROS[Math.floor(Math.random() * TAZ_RETOS_DUROS.length)];
     return out;
   }
@@ -3862,24 +3895,38 @@
     const d = new Date(ms);
     return { fecha: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes() };
   }
-  // Solo en local: ?tazdemo=beben|elige|doble|normal fuerza esa casilla con una
-  // persona al azar, para ver cómo queda sin destripar el sorteo de verdad.
-  let tazDemoPlan = null;
+  // Solo en local: ?tazdemo=beben|elige|doble|normal|noche fuerza esa casilla
+  // con una persona al azar (o la de ?tazpersona=), para ver cómo queda sin
+  // destripar el sorteo de verdad.
+  let tazDemoEstado = null;
   function tazDemo() {
     if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return null;
-    const q = new URLSearchParams(location.search).get('tazdemo');
+    const qs = new URLSearchParams(location.search);
+    const q = qs.get('tazdemo');
     if (!q) return null;
-    if (!tazDemoPlan) {
-      const personas = TAZ_CASILLAS.map((c, i) => (c.persona != null ? i : -1)).filter(i => i >= 0);
-      const forzada = TAZ_CASILLAS.findIndex(c => c.persona != null &&
-        TAZ_GENTE[c.persona].id === new URLSearchParams(location.search).get('tazpersona'));
-      const azar = forzada >= 0 ? forzada : personas[Math.floor(Math.random() * personas.length)];
+    if (!tazDemoEstado) {
+      const personas = TAZ_CASILLAS.map((c, i) => (c.persona != null ? i : -1)).filter(i => i >= 0)
+        .sort(() => Math.random() - 0.5);
+      const forzada = TAZ_CASILLAS.findIndex(c => c.persona != null && TAZ_GENTE[c.persona].id === qs.get('tazpersona'));
+      const azar = forzada >= 0 ? forzada : personas[0];
+      const otra = personas.find(i => i !== azar);
       const k = TAZ_ESPECIALES.findIndex(e => e.id === q);
-      tazDemoPlan = k < 0
-        ? { casilla: azar, segunda: null }
-        : { casilla: TAZ_CASILLAS.findIndex(c => c.esp === k), segunda: TAZ_ESPECIALES[k].retira ? azar : null };
+      if (q === 'noche') {
+        tazDemoEstado = {
+          plan: { clave: 'noche', casilla: azar, segunda: null },
+          anterior: { clave: 'dia', casilla: otra, segunda: null }
+        };
+      } else {
+        tazDemoEstado = {
+          plan: k < 0
+            ? { clave: 'dia', casilla: azar, segunda: null }
+            : { clave: 'dia', casilla: TAZ_CASILLAS.findIndex(c => c.esp === k), segunda: TAZ_ESPECIALES[k].retira ? azar : null },
+          siguiente: qs.has('tazconnoche') ? { clave: 'noche' } : null
+        };
+      }
+      ['plan', 'anterior'].forEach(x => { if (tazDemoEstado[x]) tazDemoEstado[x].retos = tazRetosDe(tazDemoEstado[x]); });
     }
-    return { fase: 'abierta', fecha: 'demo-' + q, min: 0, demo: true, plan: tazDemoPlan };
+    return Object.assign({ fase: 'abierta', fecha: 'demo-' + q, min: 0, demo: true, anterior: null, siguiente: null }, tazDemoEstado);
   }
 
   function tazEstado() {
@@ -3888,9 +3935,16 @@
     const a = tazAhora();
     if (a.fecha < TAZ_INICIO) return Object.assign({ fase: 'antes' }, a);
     if (a.fecha > TAZ_FIN) return Object.assign({ fase: 'despues' }, a);
-    const plan = TAZ_PLAN[a.fecha];
-    return Object.assign({ fase: a.min >= plan.min ? 'abierta' : 'cerrada', plan }, a);
+    const turnos = TAZ_PLAN[a.fecha].turnos;
+    let idx = -1;
+    turnos.forEach((t, i) => { if (a.min >= t.min) idx = i; });
+    if (idx < 0) return Object.assign({ fase: 'cerrada', turnos, siguiente: turnos[0] }, a);
+    return Object.assign({
+      fase: 'abierta', turnos, plan: turnos[idx],
+      anterior: turnos[idx - 1] || null, siguiente: turnos[idx + 1] || null
+    }, a);
   }
+  const tazClaveDe = st => [st.fase, st.fecha, st.plan ? st.plan.clave : ''].join('|');
 
   const TAZ_DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
   const TAZ_MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -3898,9 +3952,9 @@
     const d = new Date(f + 'T00:00Z');
     return `${TAZ_DIAS[d.getUTCDay()]} ${d.getUTCDate()} de ${TAZ_MESES[d.getUTCMonth()]}`;
   };
-  const tazVistoKey = f => 'taz-visto-' + f;
-  const tazVisto = f => { try { return localStorage.getItem(tazVistoKey(f)) === '1'; } catch (e) { return false; } };
-  const tazMarcarVisto = f => { if (f.startsWith('demo')) return; try { localStorage.setItem(tazVistoKey(f), '1'); } catch (e) { /* sin almacenamiento */ } };
+  const tazVistoKey = (f, clave) => 'taz-visto-' + f + (clave === 'noche' ? '-noche' : '');
+  const tazVisto = (f, clave) => { try { return localStorage.getItem(tazVistoKey(f, clave)) === '1'; } catch (e) { return false; } };
+  const tazMarcarVisto = (f, clave) => { if (f.startsWith('demo')) return; try { localStorage.setItem(tazVistoKey(f, clave), '1'); } catch (e) { /* sin almacenamiento */ } };
 
   const TAZ_SEG = 360 / TAZ_CASILLAS.length;
   let tazClave = '';
@@ -3930,9 +3984,9 @@
 
   // Tarjeta del resultado: persona (con el efecto de la especial, si la hubo)
   // o la casilla «Bebe todo el grupo».
-  function tazResultadoHTML(fecha, plan) {
+  function tazResultadoHTML(plan) {
     const c = TAZ_CASILLAS[plan.casilla];
-    const castigos = tazRetosDe(fecha, plan);
+    const castigos = tazRetosDe(plan);
     const cajaCastigo = (label, txt) => `
         <div class="taz-castigo${txt ? '' : ' is-empty'}">
           <span class="taz-castigo__label">${esc(label)}</span>
@@ -3975,10 +4029,26 @@
     }
     return `
         <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">
-        <p class="taz-res__kicker">Hoy le toca a</p>
+        <p class="taz-res__kicker">${plan.clave === 'noche' ? 'Esta noche le toca a' : 'Hoy le toca a'}</p>
         <p class="taz-res__nombre">${esc(persona.nombre)}</p>
         ${efecto ? `<p class="taz-efecto"><span class="taz-efecto__ico">${esc(efecto.icono)}</span><span><strong>${esc(efecto.titulo)}</strong> ${esc(efecto.efecto(persona.nombre))}</span></p>` : ''}
         ${cajas}`;
+  }
+
+  // Resumen del turno de día cuando ya se ha abierto el de noche.
+  function tazResumenHTML(turno) {
+    const c = TAZ_CASILLAS[turno.casilla];
+    const persona = tazPersonaDe(turno);
+    const retos = tazRetosDe(turno).filter(Boolean);
+    const quien = persona
+      ? `<img src="${tazFoto(persona)}" alt="" width="40" height="40"><strong>${esc(persona.nombre)}</strong>`
+      : `<span class="taz-resumen__ico" aria-hidden="true">${esc(TAZ_ESPECIALES[c.esp].icono)}</span><strong>${esc(TAZ_ESPECIALES[c.esp].titulo)}</strong>`;
+    return `
+      <div class="taz-resumen">
+        <p class="taz-resumen__titulo"><span aria-hidden="true">☀️</span> La hora Taz de esta tarde</p>
+        <p class="taz-resumen__quien">${quien}</p>
+        ${retos.map(r => `<p class="taz-resumen__reto">${esc(r)}</p>`).join('')}
+      </div>`;
   }
 
   // Broma de Beltrán: reto duro (4 s) → sello «¡Taz no mata a Taz!» → reto normal.
@@ -4045,7 +4115,7 @@
     const root = $('#taz-body');
     if (!root) return;
     const st = tazEstado();
-    const clave = st.fase + '|' + st.fecha;
+    const clave = tazClaveDe(st);
     if (!forzar && clave === tazClave) return;
     if (tazGirando && !forzar) return;   // no cortar un giro en marcha
     tazClave = clave;
@@ -4062,10 +4132,13 @@
         texto = 'El viaje ha terminado. Taz por fin descansa.';
         if (sub) sub.textContent = 'Hasta el próximo viaje.';
       } else {
-        titulo = 'Hoy hay hora Taz';
-        texto = st.min < TAZ_VENTANA[0] * 60
-          ? `Se desbloqueará a una hora sorpresa entre las ${pad2(TAZ_VENTANA[0])}:00 y las 24:00 (hora de Tailandia).`
-          : 'Se desbloqueará a una hora sorpresa antes de medianoche (hora de Tailandia). Estad atentos.';
+        const doble = st.turnos.length > 1;
+        const [h0, h1] = doble ? TAZ_VENTANA_DIA : TAZ_VENTANA;
+        titulo = doble ? 'Hoy hay doble hora Taz' : 'Hoy hay hora Taz';
+        texto = st.min < h0 * 60
+          ? `Se desbloqueará a una hora sorpresa entre ${tazHora(h0)} y ${tazHora(h1)} (hora de Tailandia).`
+          : `Se desbloqueará a una hora sorpresa antes de ${h1 === 24 ? 'medianoche' : tazHora(h1)} (hora de Tailandia). Estad atentos.`;
+        if (doble) texto += ` Y esta noche, otra de discoteca entre ${tazHora(TAZ_VENTANA_NOCHE[0])} y ${tazHora(TAZ_VENTANA_NOCHE[1])}.`;
         if (sub) sub.textContent = cap(tazFechaLarga(st.fecha)) + ' · Taz está girando…';
       }
       root.innerHTML = `
@@ -4081,18 +4154,33 @@
       return;
     }
 
-    // Abierta: ruleta del día
-    const visto = tazVisto(st.fecha);
+    // Abierta: ruleta del turno en curso
     const plan = st.plan;
+    const esNoche = plan.clave === 'noche';
+    const visto = tazVisto(st.fecha, plan.clave);
     const final = plan.segunda != null ? plan.segunda : plan.casilla;
-    if (sub) sub.textContent = (st.demo ? 'Modo prueba' : cap(tazFechaLarga(st.fecha))) + ' · ¡Ha llegado la hora Taz!';
+    const turnoTxt = esNoche
+      ? '<p class="taz__turno taz__turno--noche"><span aria-hidden="true">🌙</span> Hora Taz de noche · discoteca</p>'
+      : (st.siguiente ? '<p class="taz__turno"><span aria-hidden="true">☀️</span> Hora Taz de día</p>' : '');
+    if (sub) {
+      sub.textContent = (st.demo ? 'Modo prueba' : cap(tazFechaLarga(st.fecha))) +
+        (esNoche ? ' · 🌙 ¡Hora Taz de noche!' : ' · ¡Ha llegado la hora Taz!');
+    }
+    const proxima = st.siguiente ? `
+      <div class="taz-proxima">
+        <span class="taz-proxima__ico" aria-hidden="true">🌙</span>
+        <p><strong>Esta noche hay otra hora Taz, de discoteca.</strong> Se desbloqueará a una hora sorpresa entre ${tazHora(TAZ_VENTANA_NOCHE[0])} y ${tazHora(TAZ_VENTANA_NOCHE[1])}.</p>
+      </div>` : '';
     root.innerHTML = `
-      <div class="taz__ruleta-card">
+      <div class="taz__ruleta-card${esNoche ? ' taz__ruleta-card--noche' : ''}">
+        ${turnoTxt}
         ${tazRuedaHTML()}
         <button class="btn btn--accent btn--block taz__girar" type="button">${visto ? 'Ver otra vez el giro' : '¡Girar la ruleta!'}</button>
       </div>
-      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>${tazResultadoHTML(st.fecha, plan)}
-      </div>`;
+      <div class="taz-res" aria-live="polite" ${visto ? '' : 'hidden'}>${tazResultadoHTML(plan)}
+      </div>
+      ${proxima}
+      ${st.anterior ? tazResumenHTML(st.anterior) : ''}`;
 
     const ruleta = root.querySelector('.ruleta');
     const rueda = root.querySelector('.ruleta__rueda');
@@ -4163,7 +4251,7 @@
 
       // Tras el torbellino: la persona elegida y el castigo.
       tazGirando = false;
-      tazMarcarVisto(st.fecha);
+      tazMarcarVisto(st.fecha, plan.clave);
       res.hidden = false;
       res.classList.remove('is-in');
       void res.offsetWidth;
@@ -4174,7 +4262,7 @@
       if (navigator.vibrate) { try { navigator.vibrate([40, 60, 120]); } catch (e) { /* sin vibración */ } }
       res.scrollIntoView({ behavior: r ? 'auto' : 'smooth', block: 'center' });
       // Si mientras giraba cambió el día o la fase, se pone al día ahora.
-      if (tazEstado().fase + '|' + tazEstado().fecha !== tazClave) renderTaz(true);
+      if (tazClaveDe(tazEstado()) !== tazClave) renderTaz(true);
     });
   }
 

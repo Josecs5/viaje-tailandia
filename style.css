@@ -1442,6 +1442,51 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 @keyframes tazTic { 40% { transform: rotate(-16deg); } }
 .taz__girar { font-size: var(--step-2); }
 
+/* Doble hora Taz: etiqueta del turno, ruleta de noche, aviso y resumen */
+.taz__turno {
+  width: fit-content;
+  margin: 0 auto var(--space-12);
+  padding: 2px var(--space-12);
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--lime);
+  border-radius: var(--radius-pill);
+}
+.taz__turno--noche { color: #fff; background: #6c3bff; box-shadow: 0 0 14px 2px rgba(165, 107, 255, 0.7); }
+.taz__ruleta-card--noche {
+  background:
+    radial-gradient(circle at 15% 12%, rgba(165, 107, 255, 0.45), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(255, 61, 149, 0.4), transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(34, 211, 180, 0.3), transparent 50%),
+    #0d0f2b;
+}
+.taz-proxima {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  margin-top: var(--space-20);
+  padding: var(--space-12) var(--space-16);
+  color: #fff;
+  background: #1d1446;
+  border: var(--stroke);
+  border-radius: var(--radius-l);
+  box-shadow: var(--pop);
+}
+.taz-proxima__ico { flex: none; font-size: 30px; }
+.taz-resumen {
+  margin-top: var(--space-20);
+  padding: var(--space-12) var(--space-16);
+  background: var(--card);
+  border: 2px dashed var(--edge);
+  border-radius: var(--radius-l);
+}
+.taz-resumen__titulo { font-family: var(--font-display); font-weight: 800; color: var(--ink-2); }
+.taz-resumen__quien { display: flex; align-items: center; gap: var(--space-10); margin-top: var(--space-8); font-size: var(--step-2); }
+.taz-resumen__quien img { width: 40px; height: 40px; border: 2px solid var(--edge); border-radius: 50%; }
+.taz-resumen__ico { display: grid; place-items: center; width: 40px; height: 40px; color: var(--lime); background: #161a3c; border-radius: 50%; font-weight: 800; }
+.taz-resumen__reto { margin-top: var(--space-6); color: var(--ink-2); }
+
 /* Torbellino de Taz (aparece al pararse la ruleta, antes de revelar) */
 .ruleta__rueda, .ruleta__eje { transition: filter 300ms ease; }
 .ruleta.is-tornado .ruleta__rueda,
