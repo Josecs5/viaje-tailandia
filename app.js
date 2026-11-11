@@ -3847,11 +3847,11 @@
     const efecto = plan.segunda != null ? TAZ_ESPECIALES[c.esp] : null;
     let cajas;
     if (efecto && efecto.id === 'doble') {
-      cajas = cajaCastigo('Castigo 1', castigos[0]) + cajaCastigo('Castigo 2', castigos[1]);
+      cajas = cajaCastigo('Taz dice que tienes que… (1 de 2)', castigos[0]) + cajaCastigo('Taz dice que tienes que… (2 de 2)', castigos[1]);
     } else if (efecto && efecto.id === 'elige') {
-      cajas = cajaCastigo(`Castigo · lo hace quien elija ${persona.nombre}`, castigos[0]);
+      cajas = cajaCastigo(`Taz dice que quien elija ${persona.nombre} tiene que…`, castigos[0]);
     } else {
-      cajas = cajaCastigo('Castigo', castigos[0]);
+      cajas = cajaCastigo('Taz dice que tienes que…', castigos[0]);
     }
     return `
         <img class="taz-res__cara" src="${tazFoto(persona)}" alt="${esc(persona.nombre)}" width="140" height="140">

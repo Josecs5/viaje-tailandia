@@ -1631,7 +1631,7 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
   color: var(--text);
 }
 .taz-castigo.is-empty { background: transparent; border-style: dashed; color: var(--ink-2); }
-.taz-castigo__label { display: block; font-family: var(--font-display); font-weight: 800; font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.08em; }
+.taz-castigo__label { display: block; font-family: var(--font-display); font-weight: 800; font-size: var(--step-1); }
 .taz-castigo p { margin-top: var(--space-4); }
 
 @media (prefers-reduced-motion: reduce) {
