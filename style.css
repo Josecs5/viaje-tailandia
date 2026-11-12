@@ -844,9 +844,6 @@ input[type="date"], input[type="time"], input[type="datetime-local"] { min-heigh
 .itin-outlook p { margin: 0; }
 .itin-outlook p + p { margin-top: var(--space-6); color: var(--ink-2); }
 
-.day-diario { margin-top: var(--space-16); }
-.day-diario__label { margin: 0 0 var(--space-6); font-family: var(--font-display); font-size: var(--step-2); font-weight: 800; font-stretch: 90%; }
-
 /* Línea de tiempo: una carretera con su línea central */
 .timeline { display: flex; flex-direction: column; }
 .slot {

@@ -2661,7 +2661,6 @@
 
     if (!day.items.length) {
       if (!pd && !embebido) wrap.appendChild(notice('Día libre — sin actividades planificadas.'));
-      wrap.appendChild(diarioBlock(day));
       return wrap;
     }
 
@@ -2691,7 +2690,6 @@
       wrap.appendChild(row);
     }
 
-    wrap.appendChild(diarioBlock(day));
     return wrap;
   }
 
@@ -2766,7 +2764,7 @@
     return box;
   }
   // Días sin itinerario (Phi Phi, Phuket): logística fija + opciones para
-  // cualquiera de los días, y debajo la agenda y el diario de cada día.
+  // cualquiera de los días, y debajo la agenda de cada día.
   function grupoBlock(g, days) {
     const gd = days.filter(d => g.dias.includes(d.date));
     const wrap = el('section', 'day day--grupo');
@@ -2788,26 +2786,6 @@
     if (g.ideas.length) html += franjasHtml([{ f: 'Ideas sueltas', e: g.ideas }]);
     wrap.insertAdjacentHTML('beforeend', html);
     gd.forEach(d => wrap.appendChild(dayBlock(d, true)));
-    return wrap;
-  }
-
-  // Diario de viaje: solo texto. Sin re-render al escribir: nada más en la
-  // tarjeta depende de este texto, así que el handler solo actualiza el
-  // state y guarda.
-  function diarioBlock(day) {
-    const wrap = el('div', 'day-diario');
-    const label = el('p', 'day-diario__label');
-    label.textContent = '📝 Diario del día';
-    const ta = el('textarea', 'day-diario__text');
-    ta.placeholder = 'Escribe algo sobre este día…';
-    ta.value = state.diario[day.date] || '';
-    ta.rows = 3;
-    ta.addEventListener('input', () => {
-      const v = ta.value;
-      if (v) state.diario[day.date] = v; else delete state.diario[day.date];
-      save();
-    });
-    wrap.append(label, ta);
     return wrap;
   }
 

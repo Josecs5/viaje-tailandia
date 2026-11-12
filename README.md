@@ -38,9 +38,7 @@ solo se puede ver la del día en curso. Datos
 incluye una checklist de **tareas antes de viajar** (visado, validez del
 pasaporte, vacunas, facturar los vuelos con su fecha límite calculada en
 cuanto los añadas...) y una **lista de equipaje** curada para el clima
-tropical y los templos, con checklist, ítems propios y borrado. Cada día del
-Itinerario tiene un campo de **diario de viaje** para anotar cómo fue esa
-jornada.
+tropical y los templos, con checklist, ítems propios y borrado.
 
 Todo se guarda en `localStorage` del navegador: los datos no salen del dispositivo.
 
