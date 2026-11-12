@@ -16,7 +16,7 @@ import respaldo from './taz-horario.json';
 
 const HORARIO_URL = 'https://raw.githubusercontent.com/Josecs5/viaje-tailandia/main/bot/taz-horario.json';
 const APP_URL = 'https://josecs5.github.io/viaje-tailandia/#taz';
-const FOTO_URL = 'https://josecs5.github.io/viaje-tailandia/icons/taz.png?v=2';
+const GIF_URL = 'https://josecs5.github.io/viaje-tailandia/icons/taz-aviso.gif';
 
 async function cargarHorario() {
   for (let intento = 0; intento < 2; intento++) {
@@ -66,9 +66,9 @@ async function telegram(env, metodo, cuerpo) {
 async function avisar(env, texto) {
   const boton = { inline_keyboard: [[{ text: '🎡 Abrir la ruleta', url: APP_URL }]] };
   try {
-    await telegram(env, 'sendPhoto', { chat_id: env.TELEGRAM_CHAT, photo: FOTO_URL, caption: texto, reply_markup: boton });
+    await telegram(env, 'sendAnimation', { chat_id: env.TELEGRAM_CHAT, animation: GIF_URL, caption: texto, reply_markup: boton });
   } catch (e) {
-    // Si la foto falla, al menos el texto.
+    // Si el gif falla, al menos el texto.
     console.error(e.message);
     await telegram(env, 'sendMessage', { chat_id: env.TELEGRAM_CHAT, text: texto + '\n\n' + APP_URL, reply_markup: boton });
   }
