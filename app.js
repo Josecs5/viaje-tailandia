@@ -342,23 +342,25 @@
       checkin: '2026-11-25', checkout: '2026-11-29', zona: 'Bangkok', reserva: '',
       link: 'https://maps.app.goo.gl/F2rpoZidDawh629j8',
       notas: '4 noches. 84 € (21 €/noche).' },
-    { id: 'seed-al-cnx', nombre: 'Comfy Boutique House',
-      loc: { texto: '10 Wiangbua Soi 6, Chang Phueak, 50300 Chiang Mai, Tailandia', lat: 18.8079134, lng: 98.9793114 },
+    // Coordenadas de los alojamientos de la versión 3: las del enlace de
+    // Google Maps que pasó el usuario.
+    { id: 'seed-al-cnx', nombre: 'The Hive House',
+      loc: { texto: 'Chiang Mai', lat: 18.8081166, lng: 98.9801344 },
       checkin: '2026-11-29', checkout: '2026-12-03', zona: 'Chiang Mai', reserva: '',
-      link: 'https://maps.app.goo.gl/BFcokj1bJzJH9dw5A',
-      notas: '4 noches. 130 € (33 €/noche). Check-in hecho sobre las 11:00.' },
-    { id: 'seed-al-krabi', nombre: 'KG Private Pool Villas Soi 9', loc: { texto: '1003/2 Soi-9, Ao Nang, Mueang Krabi District, Krabi 81180, Tailandia', lat: 8.0376719, lng: 98.8380055 },
+      link: 'https://maps.app.goo.gl/ejrrcSt2r9EHRTuX6',
+      notas: '4 noches. 81 € (21 €/noche).' },
+    { id: 'seed-al-krabi', nombre: 'Arabella Ao Nang', loc: { texto: 'Ao Nang, Krabi', lat: 8.0435798, lng: 98.8395241 },
       checkin: '2026-12-03', checkout: '2026-12-05', zona: 'Krabi / Ao Nang', reserva: '',
-      link: 'https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=/maps/place//data%3D!4m2!3m1!1s0x3051eb023f252ce1:0xb9002739da0a9f01%3Fsa%3DX%26ved%3D1t:8290%26ictx%3D111&ved=2ahUKEwiAv4WY6-SWAxUl3AIHHeALCT0Q4kB6BAgtEAM&usg=AOvVaw33Gpn54xYr-WA3JpsQsO-w',
-      notas: '2 noches. 55 € (27,5 €/noche).' },
+      link: 'https://maps.app.goo.gl/3odtNNmC8gcNRreh8',
+      notas: '2 noches. 55 € (27,5 €/noche).\nBooking: https://www.booking.com/hotel/th/arabella-ao-nang-private-pool-villa.html' },
     { id: 'seed-al-phiphi', nombre: 'Phi Phi Maiyada Resort', loc: { texto: 'Koh Phi Phi', lat: 7.7392054, lng: 98.7661381 },
       checkin: '2026-12-05', checkout: '2026-12-07', zona: 'Koh Phi Phi', reserva: '',
       link: 'https://maps.app.goo.gl/piuyjui1VFbBoaESA',
       notas: '2 noches. 66 € (33 €/noche).' },
-    { id: 'seed-al-phuket', nombre: 'Nariya Bayfront Phuket', loc: { texto: 'Bahía de Chalong, Phuket', lat: 7.817411, lng: 98.3432381 },
+    { id: 'seed-al-phuket', nombre: 'Happy Family Villa 2', loc: { texto: 'Phuket', lat: 7.8411528, lng: 98.35736 },
       checkin: '2026-12-07', checkout: '2026-12-09', zona: 'Phuket', reserva: '',
-      link: 'https://maps.app.goo.gl/kdHjJBtdoEawLF4q8',
-      notas: '2 noches, última etapa del viaje. 98 € (49 €/noche).' }
+      link: 'https://maps.app.goo.gl/jMYnUxK8GDJ68sTQ7',
+      notas: '2 noches, última etapa del viaje. 80 € (40 €/noche).\nBooking: https://www.booking.com/hotel/th/5-bedrooms-pool-villa-behide-phuket-zoo.es.html' }
   ];
 
   // Fotos: URLs directas de Wikimedia Commons, un archivo real y verificado
@@ -455,17 +457,17 @@
     fantasea: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Phuket_FantaSea_2023.jpg/960px-Phuket_FantaSea_2023.jpg'
   };
 
-  // Gastos del plan (versión 2): lo ya pagado o previsto por persona, en €.
+  // Gastos del plan (versión 3): lo ya pagado o previsto por persona, en €.
   // Se cargan como gastos normales para que salgan en el resumen de Gastos.
+  // Total: 1.228 €.
   const GASTOS_SEED = [
     { id: 'seed-ga-vuelo', fecha: '2026-11-24', concepto: 'Vuelo Madrid → Bangkok / Phuket → Madrid', categoria: 'Transporte', moneda: 'EUR', importe: 616, notas: '' },
+    { id: 'seed-ga-vuelos-internos', fecha: '2026-11-29', concepto: 'Vuelos Bangkok → Chiang Mai / Chiang Mai → Krabi', categoria: 'Transporte', moneda: 'EUR', importe: 246, notas: '' },
     { id: 'seed-ga-bkk', fecha: '2026-11-25', concepto: 'Hotel Bangkok (25/11 → 29/11)', categoria: 'Alojamiento', moneda: 'EUR', importe: 84, notas: '21 €/noche' },
-    { id: 'seed-ga-vuelo-cnx', fecha: '2026-11-29', concepto: 'Vuelo Bangkok → Chiang Mai', categoria: 'Transporte', moneda: 'EUR', importe: 70, notas: '' },
-    { id: 'seed-ga-cnx', fecha: '2026-11-29', concepto: 'Villa Chiang Mai (29/11 → 03/12)', categoria: 'Alojamiento', moneda: 'EUR', importe: 130, notas: '33 €/noche' },
-    { id: 'seed-ga-vuelo-kbv', fecha: '2026-12-03', concepto: 'Vuelo Chiang Mai → Krabi', categoria: 'Transporte', moneda: 'EUR', importe: 140, notas: '' },
+    { id: 'seed-ga-cnx', fecha: '2026-11-29', concepto: 'Villa Chiang Mai (29/11 → 03/12)', categoria: 'Alojamiento', moneda: 'EUR', importe: 81, notas: '21 €/noche' },
     { id: 'seed-ga-aonang', fecha: '2026-12-03', concepto: 'Villa Ao Nang (03/12 → 05/12)', categoria: 'Alojamiento', moneda: 'EUR', importe: 55, notas: '27,5 €/noche' },
     { id: 'seed-ga-phiphi', fecha: '2026-12-05', concepto: 'Villa Phi Phi (05/12 → 07/12)', categoria: 'Alojamiento', moneda: 'EUR', importe: 66, notas: '33 €/noche' },
-    { id: 'seed-ga-phuket', fecha: '2026-12-07', concepto: 'Villa Phuket (07/12 → 09/12)', categoria: 'Alojamiento', moneda: 'EUR', importe: 98, notas: '49 €/noche' }
+    { id: 'seed-ga-phuket', fecha: '2026-12-07', concepto: 'Villa Phuket (07/12 → 09/12)', categoria: 'Alojamiento', moneda: 'EUR', importe: 80, notas: '40 €/noche' }
   ];
 
   /* ----------------------------------------------------------
@@ -495,8 +497,8 @@
   };
 
   const H_BKK = 'Prince Palace Bangkok';
-  const H_CNX = 'Comfy Boutique House';
-  const H_KBV = 'KG Private Pool Villas Soi 9';
+  const H_CNX = 'The Hive House';
+  const H_KBV = 'Arabella Ao Nang';
 
   // Noche del 26, repetida el 27.
   const NOCHE_BKK = [
@@ -532,7 +534,7 @@
     '2026-11-26': {
       zona: 'Bangkok', titulo: 'Bangkok monumental', hotel: H_BKK,
       franjas: [
-        { f: 'Mañana', h: '08:30–14:00', e: [
+        { f: 'Mañana', e: [
           'IMPORTANTE: camiseta de manga corta (hombro tapado) + pantalón largo (rodilla tapada).',
           { n: 'Gran Palacio', p: '500 baht', foto: 'granPalacio', desc: 'Antigua residencia oficial de los reyes de Tailandia desde 1782, con pabellones y capillas cubiertos de oro.' },
           { n: 'Wat Phra Kaew (Buda Esmeralda)', p: 'gratis con el Gran Palacio', foto: 'watPhraKaew', desc: 'El templo más sagrado del país, dentro del Gran Palacio; guarda el Buda Esmeralda, tallado en jade.' },
@@ -542,13 +544,15 @@
           'Ruta: https://maps.app.goo.gl/h9gyGeDbTPiyEA2z9'
         ] },
         { f: 'Comida', e: [
-          'Supanniga Eating Room (Michelin, Tha Tien). Reserva confirmada a las 15:00.',
-          { alt: 'Supanniga Eating Room', foto: 'thaTien', desc: 'Supanniga está en el muelle de Tha Tien, al lado de Wat Pho: cocina casera tailandesa de recetas de familia, con terraza que mira al río y a Wat Arun.' }
+          { n: 'Supanniga Eating Room (Michelin, Tha Tien)', x: 'Reserva confirmada a las 15:00.', l: [['Web', 'https://www.supannigaeatingroom.com/']],
+            foto: 'thaTien', desc: 'Supanniga está en el muelle de Tha Tien, al lado de Wat Pho: cocina casera tailandesa de recetas de familia, con terraza que mira al río y a Wat Arun.' }
         ] },
-        { f: 'Tarde', h: 'idea', e: [
-          'Ir a Talat Noi (Chinatown antiguo) y luego a Chinatown moderno, picar algo e ir al hotel.',
-          { n: 'Talat Noi (Chinatown antiguo)', foto: 'talatNoi', desc: 'Barrio histórico chino junto al río, con talleres antiguos, callejones estrechos y arte urbano.' },
-          { n: 'Chinatown moderno', foto: 'yaowarat', desc: 'Yaowarat, la calle principal del barrio chino, con puestos de comida callejera y neones por la noche.' }
+        { f: 'Tarde', e: [
+          { n: '1. Sampeng Market' },
+          { n: '2. Song Wat Road' },
+          { n: '3. Talat Noi', foto: 'talatNoi', desc: 'Barrio histórico chino junto al río, con talleres antiguos, callejones estrechos y arte urbano.' },
+          'Cena: Yaowarat Road (puestos de comida callejera china).',
+          { alt: 'Yaowarat Road', foto: 'yaowarat', desc: 'Yaowarat, la calle principal del barrio chino, con puestos de comida callejera y neones por la noche.' }
         ] },
         { f: 'Noche', e: ['IMPORTANTE: las discotecas normalmente van de 21:00 a 02:00.'].concat(NOCHE_BKK) }
       ]
@@ -621,18 +625,19 @@
       zona: 'Chiang Mai', titulo: 'Vuelo a Chiang Mai y primera toma de contacto', hotel: H_CNX,
       franjas: [
         { f: 'Mañana', e: [
-          'Vuelo DMK → CNX con Thai Lion Air (SL510), de 11:30 a 12:45, directo. Por persona: sin artículo personal, maleta de cabina de 23 × 36 × 56 cm (máx. 7 kg) y maleta facturada de máx. 20 kg.',
+          'Vuelo DMK → CNX con Thai Lion Air (SL510), de 11:30 a 12:45, directo. Por persona: sin artículo personal, maleta de cabina de 23 × 36 × 56 cm (máx. 7 kg) y maleta facturada de máx. 20 kg.'
+        ] },
+        { f: 'Comida', e: [
+          'Reserva a las 14:00 en Baan Landai — https://www.baan-landai.com/en/old-town/menu/',
+          { alt: 'Baan Landai', foto: 'lannaComida', desc: 'Baan Landai, en el casco antiguo: cocina tailandesa y del norte (Lanna). En la foto, entrantes típicos del norte: nam prik noom (salsa de chile verde asado), salchicha sai ua y corteza de cerdo.' }
+        ] },
+        { f: 'Tarde', e: [
           { n: 'Wat Chiang Man (chedi de 1296)', p: 'gratis', foto: 'watChiangMan', desc: 'El templo más antiguo de Chiang Mai, fundado en 1296 por el rey Mengrai al construir la ciudad.' },
           { n: 'Wat Phra Singh (peazo buda)', p: 'gratis', foto: 'watPhraSingh', desc: 'Templo principal de Chiang Mai, con una de las imágenes de Buda más veneradas del norte.' },
           { n: 'Wat Phan Tao (madera de teca)', p: 'gratis', foto: 'watPhanTao', desc: 'Pequeño templo hecho entero de madera de teca, antiguo pabellón real.' },
           { n: 'Wat Chedi Luang (súper chedi)', p: '50 baht', foto: 'watChediLuang', desc: 'Templo con una gran chedi en ruinas del siglo XIV que fue el edificio más alto de Chiang Mai.' },
           'Ruta completa del día: https://maps.app.goo.gl/SxTY2nh6g4TQtYJR6'
         ] },
-        { f: 'Comida', e: [
-          'Reserva a las 14:00 en Baan Landai — https://www.baan-landai.com/en/old-town/menu/',
-          { alt: 'Baan Landai', foto: 'lannaComida', desc: 'Baan Landai, en el casco antiguo: cocina tailandesa y del norte (Lanna). En la foto, entrantes típicos del norte: nam prik noom (salsa de chile verde asado), salchicha sai ua y corteza de cerdo.' }
-        ] },
-        { f: 'Tarde', e: ['Después de comer no hay nada programado; podemos descansar en la casa con unas birras o...'] },
         { f: 'Noche', e: [
           { n: '(Solo los domingos) Sunday Walking Street, a tope de 18:00 a 23:00', foto: 'sundayWalkingStreet', desc: 'Mercado peatonal que ocupa la calle principal del casco antiguo los domingos por la tarde.' },
           'Por la noche, fiesta en Zoe in Yellow.',
@@ -681,7 +686,7 @@
     },
 
     '2026-12-02': {
-      zona: 'Chiang Mai', titulo: 'Chiang Mai clásico', hotel: H_CNX,
+      zona: 'Chiang Mai', titulo: 'Últimos templos y adrenalina', hotel: H_CNX,
       franjas: [
         { f: 'Mañana', e: [
           'Mañana chill, dos templos en la jungla, cogemos Grab a todos lados: Doi Suthep y Wat Pha Lat. Volvemos a Chiang Mai.',
@@ -705,11 +710,8 @@
     '2026-12-03': {
       zona: 'Krabi (Ao Nang)', titulo: 'Vuelo al sur y llegada a Krabi', hotel: H_KBV,
       franjas: [
-        { f: 'Mañana', e: ['Vuelo CNX → KBV con Thai AirAsia (FD3076), de 12:55 a 14:55, directo. Por persona: 1 artículo personal (bajo el asiento), maleta de cabina de 23 × 36 × 56 cm (máx. 5 kg) y maleta facturada de máx. 20 kg. Pendiente: buscar el transfer del aeropuerto a la casa.'] },
-        { f: 'Mediodía', e: [
-          'Playa de Ao Nang y comer por la zona. O hacer alguna actividad extrema o unas clases de cocina tailandesa. Meter la ruta de las 4 islas o algo así.',
-          { n: 'Playa de Ao Nang', foto: 'aoNang', desc: 'La playa principal de Ao Nang, con los acantilados de piedra caliza de la costa de Krabi al fondo.' }
-        ] },
+        { f: 'Mañana', e: ['Vuelo CNX → KBV con Thai AirAsia (FD3076), de 12:55 a 14:55, directo. Por persona: 1 artículo personal (bajo el asiento), maleta de cabina de 23 × 36 × 56 cm (máx. 5 kg) y maleta facturada de máx. 20 kg.', 'Transfer: pendiente.'] },
+        { f: 'Comida', e: ['Donde Dios nos diga.'] },
         { f: 'Tarde', e: [
           'Ao Nang Beach → Monkey Trail (https://rubenwanderlust.com/ao-nang-beach-monkey-trail-pai-plong-beach/) → Pai Plong Beach → Pai Plong Pier.',
           { alt: 'Monkey Trail', foto: 'monosAoNang', desc: 'El Monkey Trail es una pasarela de madera pegada a la roca que une el final de la playa de Ao Nang con la cala de Pai Plong. Está llena de monos: nada de comida ni bolsas a la vista.' }
@@ -717,8 +719,7 @@
         { f: 'Noche', e: [
           'A casa a apañarnos, cenar y pasear por el Ao Nang Landmark Night Market. Después de cenar, combates de Muay Thai y/o salir de fiesta.',
           { alt: 'Ao Nang Landmark Night Market', foto: 'mercadoAoNang', desc: 'El Ao Nang Landmark Night Market está en la avenida principal, cerca de la playa: puestos de comida callejera, batidos de fruta, ropa y recuerdos, con mesas para cenar allí mismo. En la foto, un puesto de fruta de un mercado de Ao Nang.' }
-        ] },
-        { f: 'Pendiente', e: ['Investigar si se puede hacer este día el tour de las 4 islas y que nos deje en Railay para hacerla por la tarde; así ganamos un día en Tailandia.'] }
+        ] }
       ]
     },
 
@@ -752,8 +753,10 @@
       id: 'phiphi', dias: ['2026-12-05', '2026-12-06'],
       zona: 'Islas Phi Phi', hotel: 'Phi Phi Maiyada Resort (noches del 5 y del 6)',
       logistica: [
-        'Sábado 5, mañana: levantarse prontito y coger el ferry/speedboat de Ao Nang a Phi Phi sobre las 08:00. Llegada a las 10:00, check-in y vuelta rápida por el centro para comer.',
-        { alt: 'Ferry de Ao Nang a Phi Phi', foto: 'ferryPhiPhi', desc: 'Desde Ao Nang, los ferris y lanchas rápidas a Phi Phi salen del muelle de Nopparat Thara, al final de la playa. El ferry tarda unas 2 h (suele parar en Railay) y la lancha rápida, menos de 1 h. Se llega al muelle de Tonsai, donde se paga una pequeña tasa de entrada a la isla. En la foto, a bordo del ferry de Krabi a Phi Phi.' },
+        { n: 'Sábado 5, traslado: ferry o speedboat de Nopparat Thara Pier a Tonsai Pier',
+          x: 'Ferry: 1,5–2 h, 600 THB. Speedboat, alias «narcolancha»: 1 h, 1.000 THB.',
+          l: [['12Go', 'https://12go.asia/en/checkout/2cb5074d'], ['Bundhaya Speedboat', 'https://www.bundhayaspeedboat.com/search?from=AO_NANG&to=PHIPHI&date=2026-12-05&adult=1&child=0&infant=0']],
+          foto: 'ferryPhiPhi', desc: 'Desde Ao Nang, los ferris y lanchas rápidas a Phi Phi salen del muelle de Nopparat Thara, al final de la playa. El ferry tarda unas 2 h (suele parar en Railay) y la lancha rápida, menos de 1 h. Se llega al muelle de Tonsai, donde se paga una pequeña tasa de entrada a la isla. En la foto, a bordo del ferry de Krabi a Phi Phi.' },
         'Si vamos a Maya Bay, hay que madrugar MUCHO.'
       ],
       secciones: [
@@ -789,12 +792,13 @@
         'Long Beach.',
         'Ver el atardecer desde el mirador o en la playa de Loh Dalum.',
         'Paradas típicas del tour por la isla (buscar tour): Loh Samah Bay, Maya Bay, Pi Leh Lagoon, Viking Cave, Monkey Beach, Bamboo Island.',
-        'Noches: cenita y fiesta.'
+        'Noches: cenita y fiesta.',
+        'Domingo 6 por la tarde: chill, que estaremos cansados.'
       ]
     },
     {
       id: 'phuket', dias: ['2026-12-07', '2026-12-08'],
-      zona: 'Phuket', hotel: 'Nariya Bayfront Phuket (noches del 7 y del 8)',
+      zona: 'Phuket', hotel: 'Happy Family Villa 2 (noches del 7 y del 8)',
       logistica: [
         { n: 'Lunes 7, traslado: ferry de Phi Phi a Phuket', p: '500–700 THB', x: 'Unas 2 h.',
           l: [['Horarios', 'https://www.visitthailandtoday.com/guides/phi-phi-to-phuket'], ['Reservar', 'https://www.directferries.ie/koh_phi_phi_phuket_ferry.htm']],
@@ -934,7 +938,7 @@
   // Versión de los datos precargados. Al subirla, migrarSeeds aplica una
   // sola vez, en orden, los pasos que le falten a lo que cada móvil ya tenía
   // guardado.
-  const SEED_V = 9;
+  const SEED_V = 10;
 
   function migrarSeeds(s) {
     if (s.seedV >= SEED_V) return s;
@@ -946,6 +950,7 @@
     // v7 y v8 cambiaban los vuelos internos antiguos; v9 los sustituye
     // enteros, así que ya no hace falta pasar por ellos.
     if (s.seedV < 9) aplicarVuelosComprados(s);
+    if (s.seedV < 10) aplicarPlanV3(s);
     s.seedV = SEED_V;
     setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }, 0);
     return s;
@@ -996,6 +1001,23 @@
       v.equipaje = n.equipaje;
       v.notas = n.notas;
     });
+  }
+
+  // v10 (plan versión 3): alojamientos nuevos en Chiang Mai, Ao Nang y Phuket
+  // (se conserva el localizador que haya apuntado cada uno) y la lista de
+  // gastos del plan sustituida entera: los dos vuelos internos pasan a una
+  // sola línea. Los gastos que haya añadido cada uno no se tocan.
+  function aplicarPlanV3(s) {
+    const clon = x => JSON.parse(JSON.stringify(x));
+    ['seed-al-cnx', 'seed-al-krabi', 'seed-al-phuket'].forEach(id => {
+      const n = ALOJ_SEED.find(a => a.id === id);
+      const i = s.alojamientos.findIndex(a => a.id === id);
+      if (!n) return;
+      const nuevo = clon(n);
+      if (i >= 0) { nuevo.reserva = s.alojamientos[i].reserva || ''; s.alojamientos[i] = nuevo; }
+      else s.alojamientos.push(nuevo);
+    });
+    s.gastos = s.gastos.filter(g => !/^seed-ga-/.test(g.id || '')).concat(clon(GASTOS_SEED));
   }
 
   // v6: equipaje incluido en la ida y la vuelta con Qatar. Si alguien ya
@@ -2023,7 +2045,7 @@
     return `<div class="item__title">${esc(a.nombre || 'Alojamiento')}</div>
       <div class="item__meta">${a.checkin ? fmtFecha(a.checkin, true) : '—'} → ${a.checkout ? fmtFecha(a.checkout, true) : '—'}${noches ? ' · ' + noches + ' noche' + (noches !== 1 ? 's' : '') : ''}</div>
       <div class="item__meta">${locLine(a.loc)}${a.zona ? ' · ' + esc(a.zona) : ''}</div>
-      ${a.notas ? `<div class="item__meta">${escLines(a.notas)}</div>` : ''}
+      ${a.notas ? `<div class="item__meta">${linkify(a.notas).split('\n').join('<br>')}</div>` : ''}
       ${a.reserva ? `<div class="item__meta">Reserva: ${esc(a.reserva)}</div>` : ''}
       ${a.link ? `<a class="btn btn--accent btn--sm aloj-link" href="${esc(a.link)}" target="_blank" rel="noopener">Ver alojamiento ›</a>` : ''}`;
   }
@@ -3470,10 +3492,9 @@
     intro: 'Referencia orientativa de coste fijo por persona para este viaje (vuelos + alojamiento), calculada al planificarlo — no incluye comida, entradas ni actividades, y no es un gasto real ni una reserva confirmada.',
     items: [
       'Vuelos internacionales (Madrid–Bangkok / Phuket–Madrid): ~616 € por persona.',
-      'Vuelo interno Bangkok–Chiang Mai: ~70 € por persona.',
-      'Vuelo interno Chiang Mai–Krabi: ~140 € por persona.',
-      'Alojamiento, todas las noches del viaje: ~415 € por persona.',
-      'Total aproximado (vuelos + alojamiento, sin comidas ni actividades): ~1.241 € por persona.'
+      'Vuelos internos (Bangkok–Chiang Mai y Chiang Mai–Krabi): ~246 € por persona.',
+      'Alojamiento, todas las noches del viaje: ~366 € por persona.',
+      'Total aproximado (vuelos + alojamiento, sin comidas ni actividades): ~1.228 € por persona.'
     ]
   };
 
